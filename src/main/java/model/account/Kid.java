@@ -9,8 +9,6 @@ public class Kid extends User {
 
     @Override
     public String welcomeText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Hello ").append(this.getName()).append("!");
-        return sb.toString();
+        return "Hello " + this.getName() + "!";
     }
 }
