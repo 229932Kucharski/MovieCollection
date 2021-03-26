@@ -1,19 +1,23 @@
 package model.account;
 
+import model.account.password.PasswordHashing;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 public abstract class Account {
 
     private final String name;
     private byte[] password;
-    private final Date registerDate;
+    private final LocalDate registerDate;
 
-    public Account(String name, byte[] password) {
+    public Account(String name, String password) {
         this.name = name;
-        this.password = password;
-        registerDate = new Date();
+        setPassword(password);
+        registerDate = LocalDate.now();
     }
 
+    public abstract String welcomeText();
 
     public String getName() {
         return name;
@@ -23,11 +27,13 @@ public abstract class Account {
         return password;
     }
 
-    public void setPassword(byte[] password) {
-        this.password = password;
+    public void setPassword(String password) {
+        if(password != null) {
+            this.password = PasswordHashing.hashPassword(password);
+        }
     }
 
-    public Date getDate() {
+    public LocalDate getRegisterDate() {
         return registerDate;
     }
 

@@ -2,7 +2,7 @@ package model.account;
 
 public abstract class Supervisor extends Account{
 
-    public Supervisor(String name, byte[] password) {
+    public Supervisor(String name, String password) {
         super(name, password);
     }
 

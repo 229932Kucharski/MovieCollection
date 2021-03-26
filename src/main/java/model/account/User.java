@@ -1,14 +1,15 @@
 package model.account;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public class User extends Account{
+public abstract class User extends Account{
 
     private String email;
     private char gender;
-    private Date birthDate;
+    private LocalDate birthDate;
 
-    public User(String name, byte[] password, String email, char gender, Date birthDate) {
+    public User(String name, String password, String email, char gender, LocalDate birthDate) {
         super(name, password);
         this.email = email;
         this.gender = gender;
@@ -31,11 +32,13 @@ public class User extends Account{
         this.gender = gender;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
+
+
 }
