@@ -7,8 +7,8 @@ public class Season {
     private LocalDate seasonPremiere;
 
     public Season(Integer numberOfEpisodes, LocalDate seasonPremiere) {
-        this.numberOfEpisodes = numberOfEpisodes;
-        this.seasonPremiere = seasonPremiere;
+        setNumberOfEpisodes(numberOfEpisodes);
+        setSeasonPremiere(seasonPremiere);
     }
 
     public Integer getNumberOfEpisodes() {
@@ -17,5 +17,16 @@ public class Season {
 
     public LocalDate getSeasonPremiere() {
         return seasonPremiere;
+    }
+
+    public void setNumberOfEpisodes(Integer numberOfEpisodes) {
+        if(numberOfEpisodes <= 0) {
+            throw new IllegalArgumentException("Liczba odcinków nie może byc <= 0");
+        }
+        this.numberOfEpisodes = numberOfEpisodes;
+    }
+
+    public void setSeasonPremiere(LocalDate seasonPremiere) {
+        this.seasonPremiere = seasonPremiere;
     }
 }

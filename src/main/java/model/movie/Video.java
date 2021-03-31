@@ -1,6 +1,7 @@
 package model.movie;
 
-import java.awt.*;
+import javafx.scene.image.Image;
+
 import java.time.LocalDate;
 
 public abstract class Video {
@@ -14,16 +15,17 @@ public abstract class Video {
     protected Double averageRate;
     protected Integer ageRestriction;
 
+
     public Video(String title, String country, Genres genre, String director, Image cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction) {
-        this.title = title;
-        this.country = country;
-        this.genre = genre;
-        this.director = director;
-        this.cover = cover;
-        this.premiereDate = premiereDate;
-        this.description = description;
-        this.averageRate = averageRate;
-        this.ageRestriction = ageRestriction;
+        setTitle(title);
+        setCountry(country);
+        setGenre(genre);
+        setDirector(director);
+        setCover(cover);
+        setPremiereDate(premiereDate);
+        setDescription(description);
+        setAverageRate(averageRate);
+        setAgeRestriction(ageRestriction);
     }
 
     public void addComment(){
@@ -66,5 +68,63 @@ public abstract class Video {
     public Integer getAgeRestriction() {
         return ageRestriction;
     }
+
+    public void setTitle(String title) {
+        if(title.length() == 0) {
+            throw new IllegalArgumentException("Tytuł nie może być pusty");
+        }
+        this.title = title;
+    }
+
+    public void setCountry(String country) {
+        if(country.length() == 0) {
+            throw new IllegalArgumentException("Nazwa kraju nie może być pusta");
+        }
+        this.country = country;
+    }
+
+    public void setGenre(Genres genre) {
+        this.genre = genre;
+    }
+
+    public void setDirector(String director) {
+        if(director.length() == 0) {
+            throw new IllegalArgumentException("Nazwa reżysera nie może być pusta");
+        }
+        this.director = director;
+    }
+
+    public void setCover(Image cover) {
+        this.cover = cover;
+    }
+
+    public void setPremiereDate(LocalDate premiereDate) {
+        this.premiereDate = premiereDate;
+    }
+
+    public void setDescription(String description) {
+        if(description.length() == 0) {
+            throw new IllegalArgumentException("Opis nie może być pusty");
+        }
+        this.description = description;
+    }
+
+    public void setAverageRate(Double averageRate) {
+        this.averageRate = averageRate;
+    }
+
+    public void setAgeRestriction(Integer ageRestriction) {
+        if(ageRestriction < 0 || ageRestriction > 18) {
+            throw new IllegalArgumentException("Podano nieprawidłowe ograniczenie wiekowe");
+        }
+        this.ageRestriction = ageRestriction;
+    }
+    //TO DO
+    public void updateRate() {
+
+    }
+
+
+
 
 }

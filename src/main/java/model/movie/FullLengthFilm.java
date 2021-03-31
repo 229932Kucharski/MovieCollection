@@ -1,6 +1,8 @@
 package model.movie;
 
-import java.awt.*;
+
+import javafx.scene.image.Image;
+
 import java.time.LocalDate;
 
 public class FullLengthFilm extends Movie {
