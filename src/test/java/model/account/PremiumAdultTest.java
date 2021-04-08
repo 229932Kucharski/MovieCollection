@@ -1,5 +1,7 @@
 package model.account;
 
+import model.account.user.Adult;
+import model.account.user.PremiumAdult;
 import org.junit.Assert;
 import org.junit.Test;
 import java.time.LocalDate;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="loginAnchorPane" prefHeight="557.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+   <children>
+      <TextField fx:id="loginTextField" layoutX="163.0" layoutY="122.0" />
+      <Text layoutX="163.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" />
+      <Text layoutX="163.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="72.951171875" />
+      <ToggleButton layoutX="224.0" layoutY="240.0" mnemonicParsing="false" onAction="#login" prefHeight="52.0" prefWidth="88.0" text="Login" />
+      <ToggleButton layoutX="336.0" layoutY="457.0" mnemonicParsing="false" onAction="#signUp" prefHeight="52.0" prefWidth="88.0" text="Sign up" />
+      <Text layoutX="336.0" layoutY="447.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No account?" />
+      <PasswordField fx:id="passwordField" layoutX="161.0" layoutY="183.0" />
+      <Label fx:id="loginInfoLabel" layoutX="161.0" layoutY="217.0" prefHeight="17.0" prefWidth="149.0" />
+   </children>
+</AnchorPane>

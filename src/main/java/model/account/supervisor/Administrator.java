@@ -1,4 +1,4 @@
-package model.account;
+package model.account.supervisor;
 
 public class Administrator extends Supervisor{
     public Administrator(String name, String password) {

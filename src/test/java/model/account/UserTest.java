@@ -1,5 +1,8 @@
 package model.account;
 
+import model.account.user.Adult;
+import model.account.user.Kid;
+import model.account.user.PremiumAdult;
 import org.junit.Assert;
 import org.junit.Test;
 import java.time.LocalDate;
@@ -25,10 +28,11 @@ public class UserTest {
     @Test
     public void welcomeTextTest() {
         Adult user = new Adult("Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
+        PremiumAdult user1 = new PremiumAdult("Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
         Kid user2 = new Kid("Jan", "qwerty", "test@wp.pl", 'M', date2);
         Assert.assertNotEquals(user.welcomeText(), user2.welcomeText());
+        Assert.assertNotEquals(user.welcomeText(), user1.welcomeText());
     }
-
 
 
     @Test

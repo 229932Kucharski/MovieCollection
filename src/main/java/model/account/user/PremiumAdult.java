@@ -1,4 +1,4 @@
-package model.account;
+package model.account.user;
 
 import java.time.LocalDate;
 import java.util.Calendar;

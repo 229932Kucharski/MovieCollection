@@ -1,9 +1,11 @@
-package model.account;
+package model.account.user;
+
+import model.account.Account;
 
 import java.time.LocalDate;
 import java.time.Period;
 
-public abstract class User extends Account{
+public abstract class User extends Account {
 
     private String email;
     private char gender;
@@ -20,7 +22,10 @@ public abstract class User extends Account{
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws IllegalArgumentException{
+        if(email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Wrong email");
+        }
         this.email = email;
     }
 

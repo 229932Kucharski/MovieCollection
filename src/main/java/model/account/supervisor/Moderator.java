@@ -1,4 +1,4 @@
-package model.account;
+package model.account.supervisor;
 
 public class Moderator extends Supervisor {
     public Moderator(String name, String password) {
