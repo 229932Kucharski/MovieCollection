@@ -1,6 +1,8 @@
 package model.account.user;
 
 import model.account.Account;
+import model.exception.AgeException;
+import model.exception.EmailException;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,7 +15,14 @@ public abstract class User extends Account {
 
     public User(String name, String password, String email, char gender, LocalDate birthDate) throws IllegalArgumentException{
         super(name, password);
-        this.email = email;
+        setEmail(email);
+        setGender(gender);
+        setBirthDate(birthDate);
+    }
+
+    public User(String name, byte[] password, String email, char gender, LocalDate birthDate) throws IllegalArgumentException{
+        super(name, password);
+        setEmail(email);
         setGender(gender);
         setBirthDate(birthDate);
     }
@@ -22,9 +31,9 @@ public abstract class User extends Account {
         return email;
     }
 
-    public void setEmail(String email) throws IllegalArgumentException{
+    public void setEmail(String email) throws EmailException{
         if(email == null || !email.contains("@")) {
-            throw new IllegalArgumentException("Wrong email");
+            throw new EmailException("Wrong email");
         }
         this.email = email;
     }
@@ -45,11 +54,11 @@ public abstract class User extends Account {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) throws IllegalArgumentException{
+    public void setBirthDate(LocalDate birthDate) throws AgeException{
         LocalDate now = LocalDate.now();
         Period period = Period.between(birthDate, now);
         if(period.getYears() < 8) {
-            throw new IllegalArgumentException("You are too young");
+            throw new AgeException("You are too young");
         }
         this.birthDate = birthDate;
     }

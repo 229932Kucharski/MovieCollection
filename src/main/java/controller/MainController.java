@@ -1,10 +1,15 @@
 package controller;
 
+import app.App;
+import javafx.scene.layout.AnchorPane;
+
 public class MainController {
 
 
-    public void logOut() {
+    public AnchorPane mainAnchorPane;
 
+    public void logOut() {
+        App.changeScene(mainAnchorPane, "loginWindow");
     }
 
 }

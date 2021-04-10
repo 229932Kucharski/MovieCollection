@@ -3,8 +3,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="637.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="637.0" prefWidth="926.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <children>
       <ToggleButton layoutX="41.0" layoutY="49.0" mnemonicParsing="false" onAction="#logOut" text="Log out" />
    </children>
