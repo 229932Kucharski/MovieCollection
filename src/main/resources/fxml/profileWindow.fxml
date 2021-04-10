@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="785.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
+   <children>
+      <VBox layoutX="24.0" layoutY="105.0" prefHeight="125.0" prefWidth="330.0" spacing="6.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Age:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register date:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Button mnemonicParsing="false" text="Modify data" />
+         </children>
+      </VBox>
+      <Text layoutX="24.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Favourite videos:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <VBox layoutX="24.0" layoutY="337.0" prefHeight="420.0" prefWidth="503.0" />
+      <Text layoutX="229.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your profile">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
