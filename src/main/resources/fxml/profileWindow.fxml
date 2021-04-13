@@ -2,35 +2,87 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="664.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
+<AnchorPane fx:id="profileAnchorPane" prefHeight="664.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
    <children>
       <VBox layoutX="24.0" layoutY="105.0" prefHeight="125.0" prefWidth="330.0" spacing="6.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Age:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register date:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Age:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="ageText" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register date:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="registerDateText" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="emailText" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="phoneNumber" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
             <Button mnemonicParsing="false" text="Modify data" />
+            <Button mnemonicParsing="false" onAction="#deleteAccount" text="Delete account" />
          </children>
       </VBox>
       <Text layoutX="24.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Favourite videos:">
@@ -38,7 +90,10 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <VBox layoutX="24.0" layoutY="342.0" prefHeight="267.0" prefWidth="503.0" />
+      <VBox layoutX="24.0" layoutY="342.0" prefHeight="267.0" prefWidth="503.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#back" text="Back" />
+         </children></VBox>
       <Text layoutX="229.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your profile">
          <font>
             <Font size="26.0" />

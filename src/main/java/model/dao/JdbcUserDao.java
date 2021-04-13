@@ -3,10 +3,8 @@ package model.dao;
 import model.account.Account;
 import model.account.user.Adult;
 import model.account.user.Kid;
-import model.account.user.User;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -76,8 +74,14 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public void delete(Account obj) {
-
+    public void delete(Account obj) throws SQLException {
+        String deleteUser ="DELETE FROM account WHERE name=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
+            preparedStatement.setString(1, obj.getName());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     @Override

@@ -30,7 +30,7 @@ public class LoginController {
         String password = passwordField.getText();
 
         // TODO
-        if(login.equals("mila")) {
+        if(login.equals("admin")) {
             App.changeScene(loginAnchorPane, "mainWindow");
             return;
         }
@@ -55,6 +55,8 @@ public class LoginController {
             setLoginWarning("Login or password incorrect");
             return;
         }
+
+        UserController.setUser((User) user);
         App.changeScene(loginAnchorPane, "mainWindow");
     }
 

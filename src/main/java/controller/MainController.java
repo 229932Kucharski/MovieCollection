@@ -9,6 +9,8 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.movie.Genres;
 
@@ -16,14 +18,17 @@ import java.io.IOException;
 
 public class MainController {
 
-
     public AnchorPane mainAnchorPane;
     public SplitMenuButton genreSearcher;
+    public Text welcomeText;
+
+
     public void initialize() {
+        welcomeText.setText(UserController.getUser().welcomeText());
         MenuItem mi = new MenuItem(Genres.Action.name());
         MenuItem mi2 = new MenuItem(Genres.Adventure.name());
         MenuItem mi3 = new MenuItem(Genres.Comedy.name());
-        MenuItem mi4 = new MenuItem(Genres.Drama.name().toString());
+        MenuItem mi4 = new MenuItem(Genres.Drama.name());
         MenuItem mi5 = new MenuItem(Genres.Fantasy.name());
         MenuItem mi6 = new MenuItem(Genres.Horror.name());
         MenuItem mi7 = new MenuItem(Genres.Romance.name());
@@ -36,17 +41,12 @@ public class MainController {
     }
 
     public void logOut() {
+        UserController.logout();
         App.changeScene(mainAnchorPane, "loginWindow");
     }
 
-    public void showProfile(ActionEvent actionEvent) throws IOException {
-        Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        Pane root = fxmlLoader.load(getClass().getResource("/fxml/profileWindow.fxml").openStream());
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.setTitle("Your profile");
-        stage.showAndWait();
+    public void showProfile() throws IOException {
+        App.changeScene(mainAnchorPane, "profileWindow");
     }
 
 }
