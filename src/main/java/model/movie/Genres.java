@@ -1,5 +1,6 @@
 package model.movie;
 
+
 public enum Genres {
     Action,
     Adventure,
@@ -12,5 +13,4 @@ public enum Genres {
     ScienceFiction,
     Thriller,
     Western
-
 }

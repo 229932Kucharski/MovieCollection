@@ -1,12 +1,10 @@
 package model.movie;
 
 
-import javafx.scene.image.Image;
-
 import java.time.LocalDate;
 
 public class FullLengthFilm extends Movie {
-    public FullLengthFilm(String title, String country, Genres genre, String director, Image cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction, Integer timeDuration) {
-        super(title, country, genre, director, cover, premiereDate, description, averageRate, ageRestriction, timeDuration);
+    public FullLengthFilm(int id, String title, String country, Genres genre, String director, byte[] cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction, Integer timeDuration) {
+        super(id, title, country, genre, director, cover, premiereDate, description, averageRate, ageRestriction, timeDuration);
     }
 }

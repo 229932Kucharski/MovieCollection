@@ -12,9 +12,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.dao.JdbcMovieDao;
 import model.movie.Genres;
+import model.movie.Movie;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MainController {
 
@@ -22,9 +26,10 @@ public class MainController {
     public SplitMenuButton genreSearcher;
     public Text welcomeText;
 
+    private List<Movie> movies;
 
-    public void initialize() {
-        welcomeText.setText(UserController.getUser().welcomeText());
+    public void initialize(){
+        //welcomeText.setText(UserController.getUser().welcomeText());
         MenuItem mi = new MenuItem(Genres.Action.name());
         MenuItem mi2 = new MenuItem(Genres.Adventure.name());
         MenuItem mi3 = new MenuItem(Genres.Comedy.name());
@@ -37,6 +42,18 @@ public class MainController {
         MenuItem mi10 = new MenuItem(Genres.Western.name());
         MenuItem mi11 = new MenuItem(Genres.ScienceFiction.name());
         genreSearcher.getItems().addAll(mi,mi2,mi3,mi4,mi5,mi6,mi7,mi8,mi9,mi10,mi11);
+
+        try (JdbcMovieDao movieDao = new JdbcMovieDao()) {
+            movies = movieDao.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (Movie e : movies) {
+            System.out.println(e.toString());
+        }
 
     }
 

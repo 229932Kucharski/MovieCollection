@@ -1,22 +1,22 @@
 package model.movie;
 
-import javafx.scene.image.Image;
-
 import java.time.LocalDate;
 
 public abstract class Video {
+    protected int id;
     protected String title;
     protected String country;
     protected Genres genre;
     protected String director;
-    protected Image cover;
+    protected byte[] cover;
     protected LocalDate premiereDate;
     protected String description;
     protected Double averageRate;
     protected Integer ageRestriction;
 
 
-    public Video(String title, String country, Genres genre, String director, Image cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction) {
+    public Video(int id, String title, String country, Genres genre, String director, byte[] cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction) {
+        this.id = id;
         setTitle(title);
         setCountry(country);
         setGenre(genre);
@@ -49,7 +49,7 @@ public abstract class Video {
         return director;
     }
 
-    public Image getCover() {
+    public byte[] getCover() {
         return cover;
     }
 
@@ -94,7 +94,7 @@ public abstract class Video {
         this.director = director;
     }
 
-    public void setCover(Image cover) {
+    public void setCover(byte[] cover) {
         this.cover = cover;
     }
 
@@ -124,7 +124,19 @@ public abstract class Video {
 
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return new org.apache.commons.lang3.builder.ToStringBuilder(this)
+                .append("id", id)
+                .append("title", title)
+                .append("country", country)
+                .append("genre", genre)
+                .append("director", director)
+                .append("cover", cover)
+                .append("premiereDate", premiereDate)
+                .append("description", description)
+                .append("averageRate", averageRate)
+                .append("ageRestriction", ageRestriction)
+                .toString();
+    }
 }

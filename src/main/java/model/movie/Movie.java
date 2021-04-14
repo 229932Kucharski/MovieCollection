@@ -1,17 +1,15 @@
 package model.movie;
 
 
-import javafx.scene.image.Image;
-
 import java.time.LocalDate;
 
-public class Movie extends Video {
+public abstract class Movie extends Video {
     private Integer timeDuration;
 
 
 
-    public Movie(String title, String country, Genres genre, String director, Image cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction, Integer timeDuration) {
-        super(title, country, genre, director, cover, premiereDate, description, averageRate, ageRestriction);
+    public Movie(int id, String title, String country, Genres genre, String director, byte[] cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction, Integer timeDuration) {
+        super(id, title, country, genre, director, cover, premiereDate, description, averageRate, ageRestriction);
         setTimeDuration(timeDuration);
     }
 

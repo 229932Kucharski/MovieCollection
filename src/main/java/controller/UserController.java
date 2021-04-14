@@ -1,11 +1,6 @@
 package controller;
 
-import model.account.user.Adult;
-import model.account.user.Kid;
 import model.account.user.User;
-
-import java.time.LocalDate;
-import java.time.Period;
 
 public class UserController {
 
