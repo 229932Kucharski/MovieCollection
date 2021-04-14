@@ -1,6 +1,7 @@
 package model.movie;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public abstract class Video {
     protected int id;
@@ -13,6 +14,7 @@ public abstract class Video {
     protected String description;
     protected Double averageRate;
     protected Integer ageRestriction;
+    protected List<Comment> comments;
 
 
     public Video(int id, String title, String country, Genres genre, String director, byte[] cover, LocalDate premiereDate, String description, Double averageRate, Integer ageRestriction) {
@@ -31,6 +33,14 @@ public abstract class Video {
     public void addComment(){
     }
     public void deleteComment(Integer id) {
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public String getTitle() {

@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.dao.JdbcMovieDao;
+import model.movie.Comment;
 import model.movie.Genres;
 import model.movie.Movie;
 
@@ -51,7 +52,14 @@ public class MainController {
             e.printStackTrace();
         }
 
+
+
         for (Movie e : movies) {
+            List<Comment> comments = e.getComments();
+            if(comments.size() > 0) {
+                System.out.println(comments.get(0));
+            }
+
             System.out.println(e.toString());
         }
 

@@ -2,10 +2,7 @@ package model.dao;
 
 import model.account.user.Adult;
 import model.account.user.Kid;
-import model.movie.FullLengthFilm;
-import model.movie.Genres;
-import model.movie.Movie;
-import model.movie.ShortFilm;
+import model.movie.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -66,13 +63,22 @@ public class JdbcMovieDao implements Dao<Movie>{
                 int ageRestriction = resultSet.getInt(10);
                 int timeDuration = resultSet.getInt(11);
 
+                List<Comment> comments = null;
+                try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+                    comments = commentDao.findAllForMovie(id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 if(timeDuration != 0) {
                     FullLengthFilm film = new FullLengthFilm(id, title, country, Genres.valueOf(genre), director,
                             cover, premiereDate, description, avgRate, ageRestriction, timeDuration);
+                    film.setComments(comments);
                     movies.add(film);
                 } else {
                     ShortFilm film = new ShortFilm(id, title, country, Genres.valueOf(genre), director,
                             cover, premiereDate, description, avgRate, ageRestriction, timeDuration);
+                    film.setComments(comments);
                     movies.add(film);
                 }
             }
