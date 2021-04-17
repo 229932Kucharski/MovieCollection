@@ -161,7 +161,7 @@ public class SignUpController {
         try (JdbcUserDao userDao = new JdbcUserDao()) {
             userDao.add(newUser);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Database dont work - signupController");
         }
 
         App.changeScene(signUpAnchorPane, "loginWindow");

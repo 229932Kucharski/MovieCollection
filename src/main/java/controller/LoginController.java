@@ -24,7 +24,6 @@ public class LoginController {
     public PasswordField passwordField;
     public Label loginInfoLabel;
 
-
     public void login() {
         String login = loginTextField.getText();
         String password = passwordField.getText();
