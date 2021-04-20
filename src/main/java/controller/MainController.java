@@ -1,19 +1,17 @@
 package controller;
 
 import app.App;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitMenuButton;
-import javafx.scene.image.Image;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.dao.JdbcMovieDao;
-import model.movie.Comment;
 import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
@@ -24,12 +22,34 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class MainController {
+    // KLASA WIERSZA
+    public static class CustomRow {
+        private String title;
+        private String genre;
 
+        public CustomRow(String title, String genre) {
+            this.title = title;
+            this.genre = genre;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     public AnchorPane mainAnchorPane;
     public SplitMenuButton genreSearcher;
     public Text welcomeText;
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    public VBox vBoxList;
+
     private List<Movie> movies;
+    private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
+
 
     public void initialize(){
         //welcomeText.setText(UserController.getUser().welcomeText());
@@ -56,15 +76,29 @@ public class MainController {
             e.printStackTrace();
         }
 
+        final ListView<CustomRow> listView = new ListView<CustomRow>(movieList);
+        listView.setPrefSize(200, 500);
+        listView.setEditable(true);
 
-//        for (Movie e : movies) {
-//            List<Comment> comments = e.getComments();
-//            if(comments.size() > 0) {
-//                System.out.println(comments.get(0));
-//            }
-//
-//            System.out.println(e.toString());
-//        }
+        for(Movie movie : movies) {
+            movieList.add(new CustomRow(movie.getTitle(), movie.getGenre().toString()));
+        }
+        listView.setItems(movieList);
+        vBoxList.getChildren().add(listView);
+
+        listView.setCellFactory(new Callback<ListView<CustomRow>, ListCell<CustomRow>>() {
+            @Override
+            public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
+                return new CustomListCell();
+            }
+        });
+
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomRow>() {
+            @Override
+            public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
+                System.out.println(t1.getTitle());
+            }
+        });
 
     }
 
@@ -76,6 +110,34 @@ public class MainController {
 
     public void showProfile() throws IOException {
         App.changeScene(mainAnchorPane, "profileWindow");
+    }
+
+    // KLASA KOMORKI
+    private class CustomListCell extends ListCell<CustomRow> {
+        private HBox content;
+        private Text title;
+        private Text genre;
+
+        public CustomListCell() {
+            super();
+            title = new Text();
+            genre = new Text();
+            VBox vBox = new VBox(title, genre);
+            content = new HBox(new Label("Graphic"), vBox);
+            content.setSpacing(10);
+        }
+
+        @Override
+        protected void updateItem(CustomRow item, boolean empty) {
+            super.updateItem(item, empty);
+            if(item != null && !empty) {
+                title.setText(item.getTitle());
+                genre.setText(item.getGenre());
+                setGraphic(content);
+            } else {
+                setGraphic(null);
+            }
+        }
     }
 
 }
