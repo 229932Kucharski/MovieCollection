@@ -1,0 +1,12 @@
+.text-area{
+    -fx-background-color: #fff, #fff;
+    -fx-opacity: 1;
+}
+
+.text-area .content {
+    -fx-background-color: #fff;
+}
+
+.text-area:focused .content {
+    -fx-background-color: #fff;
+}

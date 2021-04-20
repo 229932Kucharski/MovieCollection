@@ -17,4 +17,6 @@ public class UserController {
     public static void logout() {
         user = null;
     }
+
+
 }

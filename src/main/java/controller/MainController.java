@@ -69,6 +69,7 @@ public class MainController {
         try (JdbcMovieDao movieDao = new JdbcMovieDao()) {
             logger.info("Getting list of movies");
             movies = movieDao.findAll();
+            MovieController.setMovies(movies);
         } catch (SQLException e) {
             logger.warn("Cant get movies from database");
             e.printStackTrace();
@@ -77,6 +78,7 @@ public class MainController {
         }
 
         final ListView<CustomRow> listView = new ListView<CustomRow>(movieList);
+        listView.getItems().clear();
         listView.setPrefSize(200, 500);
         listView.setEditable(true);
 
@@ -96,7 +98,10 @@ public class MainController {
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomRow>() {
             @Override
             public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
-                System.out.println(t1.getTitle());
+                if(t1 != null) {
+                    MovieController.setPickedMovie(MovieController.getMovieByTitle(t1.getTitle()));
+                    App.changeScene(mainAnchorPane, "filmWindow");
+                }
             }
         });
 
