@@ -16,6 +16,8 @@ import model.dao.JdbcMovieDao;
 import model.movie.Comment;
 import model.movie.Genres;
 import model.movie.Movie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,7 +28,7 @@ public class MainController {
     public AnchorPane mainAnchorPane;
     public SplitMenuButton genreSearcher;
     public Text welcomeText;
-
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     private List<Movie> movies;
 
     public void initialize(){
@@ -45,13 +47,14 @@ public class MainController {
         genreSearcher.getItems().addAll(mi,mi2,mi3,mi4,mi5,mi6,mi7,mi8,mi9,mi10,mi11);
 
         try (JdbcMovieDao movieDao = new JdbcMovieDao()) {
+            logger.info("Getting list of movies");
             movies = movieDao.findAll();
         } catch (SQLException e) {
+            logger.warn("Cant get movies from database");
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
 
 //        for (Movie e : movies) {
@@ -66,6 +69,7 @@ public class MainController {
     }
 
     public void logOut() {
+        logger.info("User has been logged out");
         UserController.logout();
         App.changeScene(mainAnchorPane, "loginWindow");
     }

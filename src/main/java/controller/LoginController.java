@@ -1,20 +1,22 @@
 package controller;
 
 import app.App;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import model.account.Account;
 import model.account.password.PasswordHashing;
+import model.account.user.Adult;
 import model.account.user.User;
-import model.dao.Dao;
 import model.dao.JdbcUserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class LoginController {
@@ -23,6 +25,7 @@ public class LoginController {
     public AnchorPane loginAnchorPane;
     public PasswordField passwordField;
     public Label loginInfoLabel;
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     public void login() {
         String login = loginTextField.getText();
@@ -30,6 +33,9 @@ public class LoginController {
 
         // TODO
         if(login.equals("admin")) {
+            User user = new Adult("John", "qwerty", "@temp@O.pl", 'M', LocalDate.of(1999, 10, 16), null);
+            UserController.setUser(user);
+            logger.info("Logging as admin");
             App.changeScene(loginAnchorPane, "mainWindow");
             return;
         }
@@ -56,10 +62,12 @@ public class LoginController {
         }
 
         UserController.setUser((User) user);
+        logger.info("User " + user.getName() + " has logged in");
         App.changeScene(loginAnchorPane, "mainWindow");
     }
 
     private void setLoginWarning(String mess) {
+        logger.warn(mess);
         loginInfoLabel.setText(mess);
         loginInfoLabel.setStyle("-fx-text-fill: red");
     }

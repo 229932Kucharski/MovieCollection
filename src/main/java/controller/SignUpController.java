@@ -12,6 +12,8 @@ import model.dao.JdbcUserDao;
 import model.exception.AgeException;
 import model.exception.EmailException;
 import model.exception.PasswordException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -31,6 +33,7 @@ public class SignUpController {
     public PasswordField passwordField;
     public Label loginWarning;
     public Label passwordInfoLabel;
+    private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
     @FXML
     public void initialize() {
@@ -68,15 +71,7 @@ public class SignUpController {
         String login = loginTextField.getText();
         String pass = passwordField.getText();
         String email = emailTextField.getText();
-        char gender;
-        if (femaleRadio.isSelected()) {
-            gender = 'K';
-        } else if(maleRadio.isSelected()) {
-            gender = 'M';
-        }
         LocalDate dateOfBirth = dateDatePicker.getValue();
-        System.out.println(dateOfBirth);
-        String phoneNum = phoneNumber.getText();
 
         if(login.equals("")) {
             loginWarning.setText("Login cant be empty");
@@ -159,9 +154,10 @@ public class SignUpController {
             }
         }
         try (JdbcUserDao userDao = new JdbcUserDao()) {
+            logger.info("Adding new user");
             userDao.add(newUser);
         } catch (Exception e) {
-            System.out.println("Database dont work - signupController");
+            logger.info("Cant add new user");
         }
 
         App.changeScene(signUpAnchorPane, "loginWindow");

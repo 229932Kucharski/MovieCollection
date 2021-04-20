@@ -1,7 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -11,12 +10,14 @@ import model.account.password.PasswordHashing;
 import model.account.user.Adult;
 import model.account.user.User;
 import model.dao.JdbcUserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
-import java.util.Objects;
+
 
 public class ProfileController {
     public Text nameText;
@@ -32,7 +33,7 @@ public class ProfileController {
     public Button savePassword;
     public Text passwordWarning;
     User user;
-
+    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
     public void initialize(){
         passwordChangeVBox.setVisible(false);
@@ -57,10 +58,10 @@ public class ProfileController {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
-                System.out.println("SS");
                 try(JdbcUserDao userDao = new JdbcUserDao()){
                     UserController.logout();
                     userDao.delete(user);
+                    logger.info("Account has been deleted");
                     Stage stage = (Stage) profileAnchorPane.getScene().getWindow();
                     stage.close();
                     App.changeScene(profileAnchorPane, "loginWindow");
@@ -100,6 +101,18 @@ public class ProfileController {
             setPasswordWarning("Password is too short");
             return;
         }
+
+        user.setPassword(newPassTextField.getText());
+
+        try {
+            JdbcUserDao userDao = new JdbcUserDao();
+            userDao.update(user);
+        } catch (SQLException e) {
+            logger.warn("Cant change password");
+            e.printStackTrace();
+        }
+
+        logger.info("User " + user.getName() + " changed password");
         setPasswordWarning("Password has been changed");
     }
 

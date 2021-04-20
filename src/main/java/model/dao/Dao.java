@@ -6,7 +6,7 @@ import java.util.List;
 public interface Dao<T> extends AutoCloseable{
 
     void add(T obj) throws SQLException;
-    void update(T obj);
+    void update(T obj) throws SQLException;
     void delete(T obj) throws SQLException;
     List<T> findAll() throws SQLException;
     T findById(int id);

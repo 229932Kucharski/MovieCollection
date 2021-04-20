@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
@@ -16,35 +18,36 @@ import java.sql.SQLException;
 public class App extends Application{
 
     private DatabaseController databaseController;
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     @Override
     public void start(Stage stage) throws Exception {
+        logger.info("Application is starting");
 
         try {
             databaseController = new DatabaseController();
             databaseController.createDatabase();
         } catch (SQLException e) {
-            System.out.println("Database was already created");
+            logger.info("Database was already created");
         }
 
         try {
             databaseController.createAccount();
         } catch (SQLException e) {
-            System.out.println("Table account was already created");
+            logger.info("Table account was already created");
         }
 
         try {
             databaseController.createMovie();
         } catch (SQLException e) {
-            System.out.println("Table account was already created");
+            logger.info("Table movie was already created");
         }
 
         try {
             databaseController.createComment();
         } catch (SQLException e) {
-            System.out.println("Table account was already created");
+            logger.info("Table comment was already created");
         }
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource("/fxml/loginWindow.fxml"));
         AnchorPane anchorPane = loader.load();
@@ -67,6 +70,7 @@ public class App extends Application{
             stage.show();
         }
         catch (IOException e) {
+            logger.error("Cant load new window");
             e.printStackTrace();
         }
     }

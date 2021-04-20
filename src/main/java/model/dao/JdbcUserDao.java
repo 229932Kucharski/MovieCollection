@@ -3,10 +3,12 @@ package model.dao;
 import model.account.Account;
 import model.account.user.Adult;
 import model.account.user.Kid;
+import model.account.user.User;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUserDao implements Dao<Account> {
@@ -69,8 +71,15 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public void update(Account obj) {
-
+    public void update(Account obj) throws SQLException {
+        String deleteUser ="UPDATE account SET password = ? WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
+            preparedStatement.setBytes(1, obj.getPassword());
+            preparedStatement.setString(2, obj.getName());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     @Override
@@ -85,8 +94,38 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public List<Account> findAll() {
-        return null;
+    public List<Account> findAll() throws SQLException {
+        String getUsers = "select * from account";
+        Account user = null;
+        List<Account> users = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getUsers)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String login = resultSet.getString(1);
+                byte[]pass = resultSet.getBytes(2);
+                Date registerDate = resultSet.getDate(3);
+                String email = resultSet.getString(4);
+                char gender = resultSet.getString(5).charAt(0);
+                Date birthDate = resultSet.getDate(6);
+                String phoneNumber = resultSet.getString(7);
+                boolean isPremium = resultSet.getBoolean(8);
+                if (login == null) {
+                    return null;
+                }
+                LocalDate birthDateLoc = birthDate.toLocalDate();
+                Period period = Period.between(LocalDate.now(), birthDateLoc);
+                if(period.getYears() >= 18) {
+                    user = new Adult(login, pass, email, gender, birthDateLoc, phoneNumber);
+                    users.add(user);
+                } else {
+                    user = new Kid(login, pass, email, gender, birthDateLoc);
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return users;
     }
 
     @Override
