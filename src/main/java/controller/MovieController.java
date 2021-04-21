@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.scene.image.Image;
 import model.movie.Movie;
 
 import java.util.List;
@@ -33,4 +34,9 @@ public class MovieController {
     public static void setPickedMovie(Movie movie) {
         MovieController.pickedMovie = movie;
     }
+
+    public static Image getImage(Movie movie) {
+        return new Image("/img/movieCover/" + movie.getId() + ".jpg");
+    }
+
 }

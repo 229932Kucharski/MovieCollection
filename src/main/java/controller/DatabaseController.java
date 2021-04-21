@@ -52,7 +52,7 @@ public class DatabaseController {
                 "country varchar(50), " +
                 "genre varchar(50), " +
                 "director varchar(50), " +
-                "cover binary(200), " +
+                "cover varbinary(MAX), " +
                 "premiereDate date, " +
                 "description varchar(500), " +
                 "avgRate float, " +

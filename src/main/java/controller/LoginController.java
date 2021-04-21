@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class LoginController {
@@ -34,7 +33,7 @@ public class LoginController {
         // TODO
         if(login.equals("admin")) {
             User user = new Adult("John", "qwerty", "@temp@O.pl", 'M', LocalDate.of(1999, 10, 16), null);
-            UserController.setUser(user);
+            UserController.setLoggedUser(user);
             logger.info("Logging as admin");
             App.changeScene(loginAnchorPane, "mainWindow");
             return;
@@ -61,7 +60,7 @@ public class LoginController {
             return;
         }
 
-        UserController.setUser((User) user);
+        UserController.setLoggedUser((User) user);
         logger.info("User " + user.getName() + " has logged in");
         App.changeScene(loginAnchorPane, "mainWindow");
     }

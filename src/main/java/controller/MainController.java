@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import model.dao.JdbcMovieDao;
 import model.movie.Genres;
+import model.movie.ImageConverter;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +27,18 @@ import java.util.List;
 public class MainController {
     // KLASA WIERSZA
     public static class CustomRow {
+        private Image image;
         private String title;
         private String genre;
 
-        public CustomRow(String title, String genre) {
+        public CustomRow(Image image, String title, String genre) {
+            this.image = image;
             this.title = title;
             this.genre = genre;
+        }
+
+        public Image getImage() {
+            return image;
         }
 
         public String getTitle() {
@@ -51,7 +60,7 @@ public class MainController {
     private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
 
 
-    public void initialize(){
+    public void initialize() throws IOException {
         //welcomeText.setText(UserController.getUser().welcomeText());
         MenuItem mi = new MenuItem(Genres.Action.name());
         MenuItem mi2 = new MenuItem(Genres.Adventure.name());
@@ -67,7 +76,6 @@ public class MainController {
         genreSearcher.getItems().addAll(mi,mi2,mi3,mi4,mi5,mi6,mi7,mi8,mi9,mi10,mi11);
 
         try (JdbcMovieDao movieDao = new JdbcMovieDao()) {
-            logger.info("Getting list of movies");
             movies = movieDao.findAll();
             MovieController.setMovies(movies);
         } catch (SQLException e) {
@@ -83,7 +91,8 @@ public class MainController {
         listView.setEditable(true);
 
         for(Movie movie : movies) {
-            movieList.add(new CustomRow(movie.getTitle(), movie.getGenre().toString()));
+            ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+            movieList.add(new CustomRow(MovieController.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
         }
         listView.setItems(movieList);
         vBoxList.getChildren().add(listView);
@@ -122,13 +131,15 @@ public class MainController {
         private HBox content;
         private Text title;
         private Text genre;
+        private ImageView image;
 
         public CustomListCell() {
             super();
             title = new Text();
             genre = new Text();
+            image = new ImageView();
             VBox vBox = new VBox(title, genre);
-            content = new HBox(new Label("Graphic"), vBox);
+            content = new HBox(image, vBox);
             content.setSpacing(10);
         }
 
@@ -138,6 +149,9 @@ public class MainController {
             if(item != null && !empty) {
                 title.setText(item.getTitle());
                 genre.setText(item.getGenre());
+                image.setImage(item.getImage());
+                image.setPreserveRatio(true);
+                image.setFitHeight(150);
                 setGraphic(content);
             } else {
                 setGraphic(null);

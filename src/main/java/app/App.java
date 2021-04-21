@@ -1,5 +1,6 @@
 package app;
 import controller.DatabaseController;
+import controller.UserController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,12 +8,17 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.account.user.User;
+import model.dao.JdbcUserDao;
+import model.movie.ImageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class App extends Application{
@@ -48,6 +54,14 @@ public class App extends Application{
         } catch (SQLException e) {
             logger.info("Table comment was already created");
         }
+
+        try{
+            JdbcUserDao userDao = new JdbcUserDao();
+            UserController.setUsers(userDao.findAll());
+        } catch (SQLException e) {
+            logger.warn("Cant get list of users");
+        }
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource("/fxml/loginWindow.fxml"));
         AnchorPane anchorPane = loader.load();

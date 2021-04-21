@@ -37,7 +37,7 @@ public class ProfileController {
 
     public void initialize(){
         passwordChangeVBox.setVisible(false);
-        user = UserController.getUser();
+        user = UserController.getLoggedUser();
         nameText.setText(user.getName());
         ageText.setText(String.valueOf(Period.between(user.getBirthDate(), LocalDate.now()).getYears()));
         registerDateText.setText(user.getRegisterDate().toString());

@@ -1,21 +1,38 @@
 package controller;
 
+import model.account.Account;
 import model.account.user.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserController {
 
-    private static User user;
+    private static User loggedUser;
+    private static List<User> users;
 
-    public static User getUser() {
-        return user;
+    public static List<User> getUsers() {
+        return users;
     }
 
-    public static void setUser(User user) {
-        UserController.user = user;
+    public static void setUsers(List<Account> accounts) {
+        List<User> users = new ArrayList<>();
+        for(Account a : accounts) {
+            users.add((User) a);
+        }
+        UserController.users = users;
+    }
+
+    public static User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public static void setLoggedUser(User loggedUser) {
+        UserController.loggedUser = loggedUser;
     }
 
     public static void logout() {
-        user = null;
+        loggedUser = null;
     }
 
 

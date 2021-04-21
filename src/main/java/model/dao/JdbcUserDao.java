@@ -3,7 +3,6 @@ package model.dao;
 import model.account.Account;
 import model.account.user.Adult;
 import model.account.user.Kid;
-import model.account.user.User;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -129,8 +128,36 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public Account findById(int id) {
-        return null;
+    public Account findById(int id) throws SQLException {
+        String getUser = "select * from account where userId=?";
+        Account user = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getUser)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String login = resultSet.getString(1);
+                byte[]pass = resultSet.getBytes(2);
+                Date registerDate = resultSet.getDate(3);
+                String email = resultSet.getString(4);
+                char gender = resultSet.getString(5).charAt(0);
+                Date birthDate = resultSet.getDate(6);
+                String phoneNumber = resultSet.getString(7);
+                boolean isPremium = resultSet.getBoolean(8);
+                if (login == null) {
+                    return null;
+                }
+                LocalDate birthDateLoc = birthDate.toLocalDate();
+                Period period = Period.between(LocalDate.now(), birthDateLoc);
+                if(period.getYears() >= 18) {
+                    user = new Adult(login, pass, email, gender, birthDateLoc, phoneNumber);
+                } else {
+                    user = new Kid(login, pass, email, gender, birthDateLoc);
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return user;
     }
 
     @Override

@@ -4,10 +4,12 @@ import model.account.user.Adult;
 import model.account.user.Kid;
 import model.movie.*;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class JdbcMovieDao implements Dao<Movie>{
@@ -35,8 +37,15 @@ public class JdbcMovieDao implements Dao<Movie>{
     }
 
     @Override
-    public void update(Movie obj) {
-
+    public void update(Movie obj) throws SQLException {
+        String deleteUser ="UPDATE movie SET cover = ? WHERE movieId = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
+            preparedStatement.setBytes(1, ImageConverter.imageToByteArray(obj.getId()));
+            preparedStatement.setInt(2, obj.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | IOException e) {
+            throw new SQLException(e);
+        }
     }
 
     @Override
