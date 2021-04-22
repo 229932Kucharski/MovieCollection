@@ -1,7 +1,7 @@
 ##############################
 ## Local
 ##############################
-src/main/resources/img/*
+src/main/resources/img/movieCover/*
 
 ##############################
 ## Java

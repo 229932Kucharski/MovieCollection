@@ -30,9 +30,12 @@ public abstract class Video {
         setAgeRestriction(ageRestriction);
     }
 
-    public void addComment(){
-    }
+
     public void deleteComment(Integer id) {
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(0, comment);
     }
 
     public List<Comment> getComments() {

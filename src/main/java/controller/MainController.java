@@ -91,7 +91,9 @@ public class MainController {
         listView.setEditable(true);
 
         for(Movie movie : movies) {
-            ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+            if(movie.getCover() != null) {
+                ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+            }
             movieList.add(new CustomRow(MovieController.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
         }
         listView.setItems(movieList);
@@ -151,7 +153,7 @@ public class MainController {
                 genre.setText(item.getGenre());
                 image.setImage(item.getImage());
                 image.setPreserveRatio(true);
-                image.setFitHeight(150);
+                image.setFitWidth(100);
                 setGraphic(content);
             } else {
                 setGraphic(null);

@@ -32,7 +32,7 @@ public class LoginController {
 
         // TODO
         if(login.equals("admin")) {
-            User user = new Adult("John", "qwerty", "@temp@O.pl", 'M', LocalDate.of(1999, 10, 16), null);
+            User user = new Adult(0, "John", "qwerty", "@temp@O.pl", 'M', LocalDate.of(1999, 10, 16), null);
             UserController.setLoggedUser(user);
             logger.info("Logging as admin");
             App.changeScene(loginAnchorPane, "mainWindow");

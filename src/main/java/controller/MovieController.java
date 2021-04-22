@@ -36,7 +36,10 @@ public class MovieController {
     }
 
     public static Image getImage(Movie movie) {
-        return new Image("/img/movieCover/" + movie.getId() + ".jpg");
+        if(movie.getCover() == null) {
+            return new Image("/img/noCover.jpg");
+        } else {
+            return new Image("/img/movieCover/" + movie.getId() + ".jpg");
+        }
     }
-
 }

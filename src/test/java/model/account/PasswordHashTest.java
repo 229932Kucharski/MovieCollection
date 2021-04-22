@@ -14,7 +14,7 @@ public class PasswordHashTest {
 
     @Test
     public void passwordTest() {
-        Adult user = new Adult("Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
+        Adult user = new Adult(1, "Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
         Assert.assertArrayEquals(user.getPassword(), PasswordHashing.hashPassword("qwerty"));
         Assert.assertFalse(Arrays.equals(user.getPassword(), PasswordHashing.hashPassword("qwert")));
         Assert.assertThrows(IllegalArgumentException.class, () -> {

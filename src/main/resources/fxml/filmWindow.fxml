@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TextArea?>
@@ -59,8 +60,9 @@
             <Button mnemonicParsing="false" text="Submit" />
          </children>
       </HBox>
-      <TextArea layoutX="107.0" layoutY="431.0" prefHeight="56.0" prefWidth="329.0" wrapText="true" />
-      <Button layoutX="457.0" layoutY="431.0" mnemonicParsing="false" text="Add Comment" />
+      <TextArea fx:id="commentTextArea" layoutX="107.0" layoutY="431.0" prefHeight="56.0" prefWidth="329.0" wrapText="true" />
+      <Button layoutX="457.0" layoutY="431.0" mnemonicParsing="false" onAction="#addComment" text="Add Comment" />
+      <Label fx:id="charactersLeftLabel" layoutX="322.0" layoutY="487.0" prefHeight="17.0" prefWidth="114.0" />
       <VBox fx:id="vBoxComment" layoutX="108.0" layoutY="534.0" prefHeight="233.0" prefWidth="442.0" stylesheets="@../style/textarea.css" />
       <Text fx:id="commentsNumber" layoutX="110.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments (0)" />
    </children>

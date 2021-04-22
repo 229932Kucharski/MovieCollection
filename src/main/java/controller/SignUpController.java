@@ -127,7 +127,7 @@ public class SignUpController {
         Period period = Period.between(dateOfBirth, LocalDate.now());
         if (period.getYears() >= 18) {
             try{
-                newUser = new Adult(login, pass, email, gender, dateOfBirth, phoneNum);
+                newUser = new Adult(1, login, pass, email, gender, dateOfBirth, phoneNum);
             } catch (PasswordException e) {
                 loginWarning.setText("Password is too short");
                 return;
@@ -141,7 +141,7 @@ public class SignUpController {
 
         } else {
             try{
-                newUser = new Kid(login, pass, email, gender, dateOfBirth);
+                newUser = new Kid(1, login, pass, email, gender, dateOfBirth);
             } catch (PasswordException e) {
                 loginWarning.setText("Password is too short");
                 return;
@@ -157,6 +157,7 @@ public class SignUpController {
             logger.info("Adding new user");
             userDao.add(newUser);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info("Cant add new user");
         }
 

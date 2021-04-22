@@ -100,6 +100,7 @@ public class JdbcUserDao implements Dao<Account> {
         try (PreparedStatement preparedStatement = connection.prepareStatement(getUsers)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+
                 String login = resultSet.getString(1);
                 byte[]pass = resultSet.getBytes(2);
                 Date registerDate = resultSet.getDate(3);
@@ -107,17 +108,18 @@ public class JdbcUserDao implements Dao<Account> {
                 char gender = resultSet.getString(5).charAt(0);
                 Date birthDate = resultSet.getDate(6);
                 String phoneNumber = resultSet.getString(7);
-                boolean isPremium = resultSet.getBoolean(8);
+                int userId = resultSet.getInt(8);
+                boolean isPremium = resultSet.getBoolean(9);
                 if (login == null) {
                     return null;
                 }
                 LocalDate birthDateLoc = birthDate.toLocalDate();
                 Period period = Period.between(LocalDate.now(), birthDateLoc);
                 if(period.getYears() >= 18) {
-                    user = new Adult(login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                     users.add(user);
                 } else {
-                    user = new Kid(login, pass, email, gender, birthDateLoc);
+                    user = new Kid(userId, login, pass, email, gender, birthDateLoc);
                     users.add(user);
                 }
             }
@@ -142,16 +144,17 @@ public class JdbcUserDao implements Dao<Account> {
                 char gender = resultSet.getString(5).charAt(0);
                 Date birthDate = resultSet.getDate(6);
                 String phoneNumber = resultSet.getString(7);
-                boolean isPremium = resultSet.getBoolean(8);
+                int userId = resultSet.getInt(8);
+                boolean isPremium = resultSet.getBoolean(9);
                 if (login == null) {
                     return null;
                 }
                 LocalDate birthDateLoc = birthDate.toLocalDate();
                 Period period = Period.between(LocalDate.now(), birthDateLoc);
                 if(period.getYears() >= 18) {
-                    user = new Adult(login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                 } else {
-                    user = new Kid(login, pass, email, gender, birthDateLoc);
+                    user = new Kid(userId, login, pass, email, gender, birthDateLoc);
                 }
             }
         } catch (SQLException e) {
@@ -169,6 +172,7 @@ public class JdbcUserDao implements Dao<Account> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+
                 String login = resultSet.getString(1);
                 byte[]pass = resultSet.getBytes(2);
                 Date registerDate = resultSet.getDate(3);
@@ -176,17 +180,17 @@ public class JdbcUserDao implements Dao<Account> {
                 char gender = resultSet.getString(5).charAt(0);
                 Date birthDate = resultSet.getDate(6);
                 String phoneNumber = resultSet.getString(7);
-                boolean isPremium = resultSet.getBoolean(8);
+                int userId = resultSet.getInt(8);
+                boolean isPremium = resultSet.getBoolean(9);
                 if (login == null) {
-                    System.out.println("Cant find user");
                     return null;
                 }
                 LocalDate birthDateLoc = birthDate.toLocalDate();
                 Period period = Period.between(LocalDate.now(), birthDateLoc);
                 if(period.getYears() >= 18) {
-                    user = new Adult(login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                 } else {
-                    user = new Kid(login, pass, email, gender, birthDateLoc);
+                    user = new Kid(userId, login, pass, email, gender, birthDateLoc);
                 }
             }
         } catch (SQLException e) {

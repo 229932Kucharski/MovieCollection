@@ -15,7 +15,7 @@ public class UserTest {
 
     @Test
     public void createUserTest() {
-        Adult user = new Adult("Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
+        Adult user = new Adult(1, "Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
         Assert.assertEquals(user.getName(), "Jan");
         Assert.assertNotNull(user.getPassword());
         Assert.assertEquals(user.getEmail(), "test@wp.pl");
@@ -27,9 +27,9 @@ public class UserTest {
 
     @Test
     public void welcomeTextTest() {
-        Adult user = new Adult("Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
-        PremiumAdult user1 = new PremiumAdult("Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
-        Kid user2 = new Kid("Jan", "qwerty", "test@wp.pl", 'M', date2);
+        Adult user = new Adult(1, "Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
+        PremiumAdult user1 = new PremiumAdult(3, "Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
+        Kid user2 = new Kid(2, "Jan", "qwerty", "test@wp.pl", 'M', date2);
         Assert.assertNotEquals(user.welcomeText(), user2.welcomeText());
         Assert.assertNotEquals(user.welcomeText(), user1.welcomeText());
     }
@@ -38,9 +38,9 @@ public class UserTest {
     @Test
     public void wrongBirthDayTest() {
         Assert.assertThrows(IllegalArgumentException.class, () -> {
-            Kid user = new Kid("Jan", "qwerty", "test@wp.pl", 'M', date3);
+            Kid user = new Kid(1, "Jan", "qwerty", "test@wp.pl", 'M', date3);
         });
-        Kid user = new Kid("Jan", "qwerty", "test@wp.pl", 'M', date2);
+        Kid user = new Kid(2, "Jan", "qwerty", "test@wp.pl", 'M', date2);
         Assert.assertEquals("Jan", user.getName());
     }
 

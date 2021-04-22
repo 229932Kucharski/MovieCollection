@@ -7,13 +7,13 @@ public class Adult extends User {
 
     private String phoneNumber;
 
-    public Adult(String name, String password, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
-        super(name, password, email, gender, birthDate);
+    public Adult(int id, String name, String password, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
+        super(id, name, password, email, gender, birthDate);
         this.phoneNumber = phoneNumber;
     }
 
-    public Adult(String name, byte[] password, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
-        super(name, password, email, gender, birthDate);
+    public Adult(int id, String name, byte[] password, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
+        super(id, name, password, email, gender, birthDate);
         this.phoneNumber = phoneNumber;
     }
 

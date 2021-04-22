@@ -27,7 +27,17 @@ public class JdbcCommentDao implements Dao<Comment> {
 
     @Override
     public void add(Comment obj) throws SQLException {
-
+        String addComment ="insert into comment(userId, videoId, content, commentDate) VALUES "
+                + "(?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(addComment)) {
+            preparedStatement.setInt(1, obj.getUserId());
+            preparedStatement.setInt(2, obj.getVideoId());
+            preparedStatement.setString(3, obj.getContent());
+            preparedStatement.setDate(4, Date.valueOf(obj.getCommentDate()));
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     @Override
@@ -71,7 +81,7 @@ public class JdbcCommentDao implements Dao<Comment> {
                 LocalDate commentDate = resultSet.getDate(5).toLocalDate();
 
                 Comment comment = new Comment(id, userId, videoId, content, commentDate);
-                comments.add(comment);
+                comments.add(0, comment);
             }
         } catch (SQLException e) {
             throw new SQLException(e);
