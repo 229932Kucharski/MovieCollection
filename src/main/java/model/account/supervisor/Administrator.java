@@ -1,5 +1,4 @@
 package model.account.supervisor;
-
 import model.account.user.User;
 
 import java.time.LocalDate;

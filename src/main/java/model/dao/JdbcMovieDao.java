@@ -1,15 +1,11 @@
 package model.dao;
 
-import model.account.user.Adult;
-import model.account.user.Kid;
 import model.movie.*;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JdbcMovieDao implements Dao<Movie>{

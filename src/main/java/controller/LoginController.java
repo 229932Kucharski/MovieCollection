@@ -7,14 +7,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import model.account.Account;
 import model.account.password.PasswordHashing;
-import model.account.user.Adult;
 import model.account.user.User;
 import model.dao.JdbcUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Arrays;
 
 
@@ -35,7 +33,7 @@ public class LoginController {
             setLoginWarning("Login or password incorrect");
             return;
         }
-        Account user = null;
+        User user = null;
         try(JdbcUserDao userDao = new JdbcUserDao()) {
             user = userDao.findByName(login);
         } catch (SQLException e) {
@@ -52,7 +50,7 @@ public class LoginController {
             return;
         }
 
-        UserController.setLoggedUser((User) user);
+        UserController.setLoggedUser(user);
         logger.info("User " + user.getName() + " has logged in");
         App.changeScene(loginAnchorPane, "mainWindow");
     }

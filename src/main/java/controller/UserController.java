@@ -19,10 +19,10 @@ public class UserController {
         return loggedUser.getName().equals("admin");
     }
 
-    public static void setUsers(List<Account> accounts) {
-        List<User> users = new ArrayList<>();
+    public static void setUsers(List<User> accounts) {
+        List<model.account.user.User> users = new ArrayList<>();
         for(Account a : accounts) {
-            users.add((User) a);
+            users.add((model.account.user.User) a);
         }
         UserController.users = users;
     }

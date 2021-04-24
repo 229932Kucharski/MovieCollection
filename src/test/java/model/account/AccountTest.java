@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import java.time.LocalDate;
 
-public class UserTest {
+public class AccountTest {
 
     private final LocalDate date = LocalDate.of(1999, 10, 16);
     private final LocalDate date2 = LocalDate.of(2005, 10, 16);

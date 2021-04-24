@@ -5,7 +5,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,9 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import model.account.user.Adult;
-import model.account.user.Kid;
-import model.account.user.User;
 import model.dao.JdbcMovieDao;
 import model.movie.Genres;
 import model.movie.ImageConverter;
@@ -122,7 +118,11 @@ public class MainController {
     }
 
     public void showProfile() throws IOException {
-        App.changeScene(mainAnchorPane, "profileWindow");
+        if(UserController.isAdmin()) {
+            App.changeScene(mainAnchorPane, "profileListWindow");
+        } else {
+            App.changeScene(mainAnchorPane, "profileWindow");
+        }
     }
 
     public void addFilm() {

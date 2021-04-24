@@ -5,9 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import model.account.Account;
-import model.account.password.PasswordHashing;
 import model.account.user.Adult;
 import model.account.user.Kid;
+import model.account.user.User;
 import model.dao.JdbcUserDao;
 import model.exception.AgeException;
 import model.exception.EmailException;
@@ -110,7 +110,7 @@ public class SignUpController {
         LocalDate dateOfBirth = dateDatePicker.getValue();
         String phoneNum = phoneNumber.getText();
 
-        Account user = null;
+        User user = null;
         try (JdbcUserDao userDao = new JdbcUserDao()) {
             user = userDao.findByName(login);
         } catch (SQLException e) {
@@ -123,7 +123,7 @@ public class SignUpController {
             return;
         }
 
-        Account newUser = null;
+        User newUser = null;
         Period period = Period.between(dateOfBirth, LocalDate.now());
         if (period.getYears() >= 18) {
             try{

@@ -4,6 +4,7 @@ import model.account.Account;
 import model.account.supervisor.Administrator;
 import model.account.user.Adult;
 import model.account.user.Kid;
+import model.account.user.User;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcUserDao implements Dao<Account> {
+public class JdbcUserDao implements Dao<User> {
 
     private final String url = "jdbc:sqlserver://localhost;databaseName=movieCollection";
     private final String username = "sa";
@@ -30,7 +31,7 @@ public class JdbcUserDao implements Dao<Account> {
 
 
     @Override
-    public void add(Account obj) throws SQLException {
+    public void add(User obj) throws SQLException {
 
         String insertUser ="insert into account(name, password, registerDate, email, gender, birthDate, phoneNumber, premiumUser) VALUES "
                 + "(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -71,7 +72,7 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public void update(Account obj) throws SQLException {
+    public void update(User obj) throws SQLException {
         String deleteUser ="UPDATE account SET password = ? WHERE name = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
             preparedStatement.setBytes(1, obj.getPassword());
@@ -83,7 +84,7 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public void delete(Account obj) throws SQLException {
+    public void delete(User obj) throws SQLException {
         String deleteUser ="DELETE FROM account WHERE name=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
             preparedStatement.setString(1, obj.getName());
@@ -94,10 +95,10 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public List<Account> findAll() throws SQLException {
+    public List<User> findAll() throws SQLException {
         String getUsers = "select * from account";
-        Account user = null;
-        List<Account> users = new ArrayList<>();
+        User user = null;
+        List<User> users = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(getUsers)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -134,9 +135,9 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public Account findById(int id) throws SQLException {
+    public User findById(int id) throws SQLException {
         String getUser = "select * from account where userId=?";
-        Account user = null;
+        User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(getUser)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -171,9 +172,9 @@ public class JdbcUserDao implements Dao<Account> {
     }
 
     @Override
-    public Account findByName(String name) throws SQLException {
+    public User findByName(String name) throws SQLException {
         String getUser = "select * from account where name=?";
-        Account user = null;
+        User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(getUser)) {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
