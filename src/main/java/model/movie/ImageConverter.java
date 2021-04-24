@@ -20,6 +20,15 @@ public class ImageConverter {
         return bos.toByteArray();
     }
 
+    public static byte[] imageToByteArray(String path) throws IOException {
+
+        File file = new File(path);
+        BufferedImage bImage= ImageIO.read(file);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "jpg", bos);
+        return bos.toByteArray();
+    }
+
     public static void byteArrayToImage(int movieId, byte[] data) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
         BufferedImage bImage = ImageIO.read(bis);

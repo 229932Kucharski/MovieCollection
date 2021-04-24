@@ -30,14 +30,6 @@ public class LoginController {
         String login = loginTextField.getText();
         String password = passwordField.getText();
 
-        // TODO
-        if(login.equals("admin")) {
-            User user = new Adult(0, "John", "qwerty", "@temp@O.pl", 'M', LocalDate.of(1999, 10, 16), null);
-            UserController.setLoggedUser(user);
-            logger.info("Logging as admin");
-            App.changeScene(loginAnchorPane, "mainWindow");
-            return;
-        }
 
         if(login.equals("") || password.equals("")) {
             setLoginWarning("Login or password incorrect");

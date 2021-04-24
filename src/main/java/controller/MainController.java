@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import model.account.user.Adult;
+import model.account.user.Kid;
+import model.account.user.User;
 import model.dao.JdbcMovieDao;
 import model.movie.Genres;
 import model.movie.ImageConverter;
@@ -25,43 +29,22 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class MainController {
-    // KLASA WIERSZA
-    public static class CustomRow {
-        private Image image;
-        private String title;
-        private String genre;
-
-        public CustomRow(Image image, String title, String genre) {
-            this.image = image;
-            this.title = title;
-            this.genre = genre;
-        }
-
-        public Image getImage() {
-            return image;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getGenre() {
-            return genre;
-        }
-    }
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     public AnchorPane mainAnchorPane;
     public SplitMenuButton genreSearcher;
     public Text welcomeText;
     public VBox vBoxList;
+    public TextField searchTextField;
+    public ListView<CustomRow> listView;
+    public Button addFilmButton;
 
     private List<Movie> movies;
     private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
 
 
     public void initialize() throws IOException {
-        //welcomeText.setText(UserController.getUser().welcomeText());
+        welcomeText.setText(UserController.getLoggedUser().welcomeText());
         MenuItem mi = new MenuItem(Genres.Action.name());
         MenuItem mi2 = new MenuItem(Genres.Adventure.name());
         MenuItem mi3 = new MenuItem(Genres.Comedy.name());
@@ -75,6 +58,10 @@ public class MainController {
         MenuItem mi11 = new MenuItem(Genres.ScienceFiction.name());
         genreSearcher.getItems().addAll(mi,mi2,mi3,mi4,mi5,mi6,mi7,mi8,mi9,mi10,mi11);
 
+        if(UserController.isAdmin()) {
+            addFilmButton.setVisible(true);
+        }
+
         try (JdbcMovieDao movieDao = new JdbcMovieDao()) {
             movies = movieDao.findAll();
             MovieController.setMovies(movies);
@@ -85,11 +72,15 @@ public class MainController {
             e.printStackTrace();
         }
 
-        final ListView<CustomRow> listView = new ListView<CustomRow>(movieList);
+        addMoviesToListView();
+
+    }
+
+    private void addMoviesToListView() throws IOException {
+        listView = new ListView<CustomRow>(movieList);
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
         listView.setEditable(true);
-
         for(Movie movie : movies) {
             if(movie.getCover() != null) {
                 ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
@@ -115,7 +106,13 @@ public class MainController {
                 }
             }
         });
+    }
 
+    public void search() throws IOException {
+        String searchString = searchTextField.getText();
+        movies = MovieController.getMoviesBySearch(searchString);
+        vBoxList.getChildren().remove(listView);
+        addMoviesToListView();
     }
 
     public void logOut() {
@@ -126,6 +123,35 @@ public class MainController {
 
     public void showProfile() throws IOException {
         App.changeScene(mainAnchorPane, "profileWindow");
+    }
+
+    public void addFilm() {
+        App.changeScene(mainAnchorPane, "addFilmWindow");
+    }
+
+    // KLASA WIERSZA
+    public static class CustomRow {
+        private Image image;
+        private String title;
+        private String genre;
+
+        public CustomRow(Image image, String title, String genre) {
+            this.image = image;
+            this.title = title;
+            this.genre = genre;
+        }
+
+        public Image getImage() {
+            return image;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
     }
 
     // KLASA KOMORKI

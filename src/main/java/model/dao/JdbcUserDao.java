@@ -1,6 +1,7 @@
 package model.dao;
 
 import model.account.Account;
+import model.account.supervisor.Administrator;
 import model.account.user.Adult;
 import model.account.user.Kid;
 
@@ -114,8 +115,11 @@ public class JdbcUserDao implements Dao<Account> {
                     return null;
                 }
                 LocalDate birthDateLoc = birthDate.toLocalDate();
-                Period period = Period.between(LocalDate.now(), birthDateLoc);
-                if(period.getYears() >= 18) {
+                Period period = Period.between(birthDateLoc, LocalDate.now());
+                if(login.equals("admin")) {
+                    user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
+                }
+                else if(period.getYears() >= 18) {
                     user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                     users.add(user);
                 } else {
@@ -150,8 +154,11 @@ public class JdbcUserDao implements Dao<Account> {
                     return null;
                 }
                 LocalDate birthDateLoc = birthDate.toLocalDate();
-                Period period = Period.between(LocalDate.now(), birthDateLoc);
-                if(period.getYears() >= 18) {
+                Period period = Period.between(birthDateLoc, LocalDate.now());
+                if(login.equals("admin")) {
+                    user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
+                }
+                else if(period.getYears() >= 18) {
                     user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                 } else {
                     user = new Kid(userId, login, pass, email, gender, birthDateLoc);
@@ -186,8 +193,11 @@ public class JdbcUserDao implements Dao<Account> {
                     return null;
                 }
                 LocalDate birthDateLoc = birthDate.toLocalDate();
-                Period period = Period.between(LocalDate.now(), birthDateLoc);
-                if(period.getYears() >= 18) {
+                Period period = Period.between(birthDateLoc, LocalDate.now());
+                if(login.equals("admin")) {
+                    user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
+                }
+                else if(period.getYears() >= 18) {
                     user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                 } else {
                     user = new Kid(userId, login, pass, email, gender, birthDateLoc);

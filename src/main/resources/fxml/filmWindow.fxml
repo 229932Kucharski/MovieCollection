@@ -14,6 +14,7 @@
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="788.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FilmController">
    <children>
+      <Button fx:id="deleteButton" layoutX="550.0" layoutY="21.0" mnemonicParsing="false" onAction="#deleteMovie" prefHeight="40.0" prefWidth="91.0" text="Delete" visible="false" />
       <Button layoutX="37.0" layoutY="33.0" mnemonicParsing="false" onAction="#previous" text="Back" />
       <Text layoutX="314.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <HBox layoutX="265.0" layoutY="177.0" prefHeight="145.0" prefWidth="359.0">

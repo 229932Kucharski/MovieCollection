@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="mainAnchorPane" prefHeight="778.0" prefWidth="629.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddFilmController">
+   <children>
+      <Text layoutX="118.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add new film" textAlignment="CENTER" wrappingWidth="392.08984375">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Text>
+      <TextField fx:id="titleTextField" layoutX="51.0" layoutY="148.0" prefHeight="25.0" prefWidth="291.0" />
+      <Button layoutX="51.0" layoutY="672.0" mnemonicParsing="false" onAction="#previous" prefHeight="58.0" prefWidth="135.0" text="Cancle" />
+      <Button layoutX="443.0" layoutY="672.0" mnemonicParsing="false" onAction="#addFilm" prefHeight="58.0" prefWidth="135.0" text="Add" />
+      <TextField fx:id="countryTextField" layoutX="51.0" layoutY="195.0" prefHeight="25.0" prefWidth="291.0" />
+      <TextField fx:id="directorTextField" layoutX="51.0" layoutY="298.0" prefHeight="25.0" prefWidth="291.0" />
+      <DatePicker fx:id="premiereDatePicker" layoutX="51.0" layoutY="353.0" />
+      <TextArea fx:id="descriptionTextArea" layoutX="51.0" layoutY="409.0" prefHeight="200.0" prefWidth="291.0" />
+      <TextField fx:id="avgRateTextField" layoutX="452.0" layoutY="446.0" prefHeight="25.0" prefWidth="117.0" />
+      <TextField fx:id="ageTextField" layoutX="452.0" layoutY="497.0" prefHeight="25.0" prefWidth="117.0" />
+      <TextField fx:id="timeTextField" layoutX="452.0" layoutY="555.0" prefHeight="25.0" prefWidth="117.0" />
+      <ImageView fx:id="coverImage" fitHeight="228.0" fitWidth="174.0" layoutX="395.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" />
+      <Button layoutX="471.0" layoutY="389.0" mnemonicParsing="false" onAction="#chooseCover" text="Choose a cover" />
+      <Text layoutX="51.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="62.44140625" />
+      <Text layoutX="51.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country" wrappingWidth="62.44140625" />
+      <Text layoutX="51.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genre" wrappingWidth="62.44140625" />
+      <ChoiceBox fx:id="genreChoiceBox" layoutX="51.0" layoutY="250.0" prefHeight="25.0" prefWidth="291.0" />
+      <Text layoutX="51.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Director" wrappingWidth="62.44140625" />
+      <Text layoutX="51.0" layoutY="349.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Premiere date" wrappingWidth="98.0" />
+      <Text layoutX="51.0" layoutY="406.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="98.0" />
+      <Text layoutX="452.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Average rate" wrappingWidth="98.0" />
+      <Text layoutX="452.0" layoutY="493.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Age restriction" wrappingWidth="98.0" />
+      <Text layoutX="452.0" layoutY="551.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time duration" wrappingWidth="98.0" />
+      <Label fx:id="warnMessage" layoutX="443.0" layoutY="642.0" prefHeight="17.0" prefWidth="98.0" />
+   </children>
+</AnchorPane>

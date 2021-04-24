@@ -15,6 +15,10 @@ public class UserController {
         return users;
     }
 
+    public static boolean isAdmin() {
+        return loggedUser.getName().equals("admin");
+    }
+
     public static void setUsers(List<Account> accounts) {
         List<User> users = new ArrayList<>();
         for(Account a : accounts) {

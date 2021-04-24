@@ -5,15 +5,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.account.user.User;
 import model.dao.JdbcCommentDao;
+import model.dao.JdbcMovieDao;
 import model.dao.JdbcUserDao;
 import model.movie.Comment;
 import model.movie.Movie;
@@ -39,15 +42,19 @@ public class FilmController {
     public VBox vBoxComment;
     public ImageView coverImage;
     public TextArea commentTextArea;
-    public Button addComment;
     public Label charactersLeftLabel;
     public ListView<CustomRow> listView;
+    public Button deleteButton;
 
     private List<Comment> comments;
     private static final ObservableList<CustomRow> commentList = FXCollections.observableArrayList();
 
     public void initialize() throws Exception {
         Movie movie = MovieController.getPickedMovie();
+
+        if(UserController.isAdmin()) {
+            deleteButton.setVisible(true);
+        }
 
         coverImage.setImage(MovieController.getImage(movie));
         coverImage.setFitWidth(250);
@@ -74,10 +81,7 @@ public class FilmController {
                 }
             }
         });
-        List<Comment> tempComments = MovieController.getPickedMovie().getComments();
-        System.out.println(tempComments);
-        //Collections.reverse(tempComments);
-        comments = tempComments;
+        comments = MovieController.getPickedMovie().getComments();
         commentsNumber.setText("Comments (" + comments.size() + ")");
         listView = new ListView<CustomRow>(commentList);
         listView.getItems().clear();
@@ -133,6 +137,31 @@ public class FilmController {
     public void previous() {
         MovieController.setPickedMovie(null);
         App.changeScene(mainAnchorPane, "mainWindow");
+    }
+
+    public void deleteMovie() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete movie");
+        alert.setContentText("Do you want to delete this movie?");
+        ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(okButton, noButton);
+        alert.showAndWait().ifPresent(type -> {
+            if (type == okButton) {
+                try(JdbcMovieDao movieDao = new JdbcMovieDao()){
+                    movieDao.delete(MovieController.getPickedMovie());
+                    MovieController.setPickedMovie(null);
+                    logger.info("Movie has been deleted");
+                    Stage stage = (Stage) mainAnchorPane.getScene().getWindow();
+                    stage.close();
+                    App.changeScene(mainAnchorPane, "mainWindow");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                alert.close();
+            }
+        });
     }
 
 

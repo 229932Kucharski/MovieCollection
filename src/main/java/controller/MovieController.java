@@ -3,6 +3,7 @@ package controller;
 import javafx.scene.image.Image;
 import model.movie.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieController {
@@ -18,6 +19,20 @@ public class MovieController {
         MovieController.movies = movies;
     }
 
+    public static void setPickedMovie(Movie movie) {
+        MovieController.pickedMovie = movie;
+    }
+
+    public static List<Movie> getMoviesBySearch(String title) {
+        List<Movie> tempMovies = new ArrayList<>();
+        for(Movie movie : movies) {
+            if(movie.getTitle().toLowerCase().contains(title.toLowerCase())){
+                tempMovies.add(movie);
+            }
+        }
+        return tempMovies;
+    }
+
     public static Movie getMovieByTitle(String title) {
         for(Movie movie : movies) {
             if(movie.getTitle().equals(title)) {
@@ -29,10 +44,6 @@ public class MovieController {
 
     public static Movie getPickedMovie() {
         return pickedMovie;
-    }
-
-    public static void setPickedMovie(Movie movie) {
-        MovieController.pickedMovie = movie;
     }
 
     public static Image getImage(Movie movie) {

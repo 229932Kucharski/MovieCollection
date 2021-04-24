@@ -1,12 +1,16 @@
 package model.account.supervisor;
 
-public class Administrator extends Supervisor{
-    public Administrator(String name, String password) {
-        super(name, password);
+import model.account.user.User;
+
+import java.time.LocalDate;
+
+public class Administrator extends User {
+    public Administrator(int id, String name, byte[] password, String email, char gender, LocalDate birthDate) {
+        super(id, name, password, email, gender, birthDate);
     }
 
     @Override
     public String welcomeText() {
-        return null;
+        return "GOD MODE";
     }
 }

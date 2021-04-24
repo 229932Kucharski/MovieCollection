@@ -47,8 +47,25 @@ public class JdbcCommentDao implements Dao<Comment> {
 
     @Override
     public void delete(Comment obj) throws SQLException {
-
+        String deleteComment ="DELETE FROM comment WHERE commentId=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteComment)) {
+            preparedStatement.setInt(1, obj.getCommentId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
+
+    public void deleteCommentsFromMovie(int movieId) throws SQLException {
+        String deleteComments ="DELETE FROM comment WHERE videoId=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteComments)) {
+            preparedStatement.setInt(1, movieId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
 
     @Override
     public List<Comment> findAll() throws SQLException {
@@ -91,6 +108,6 @@ public class JdbcCommentDao implements Dao<Comment> {
 
     @Override
     public void close() throws Exception {
-
+        connection.close();
     }
 }

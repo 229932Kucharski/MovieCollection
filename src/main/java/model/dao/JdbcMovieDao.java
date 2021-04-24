@@ -33,7 +33,24 @@ public class JdbcMovieDao implements Dao<Movie>{
 
     @Override
     public void add(Movie obj) throws SQLException {
+        String insertMovie ="insert into movie(title, country, genre, director, cover, premiereDate, description, avgRate, ageRestriction, timeDuration) VALUES "
+                + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertMovie)) {
+            preparedStatement.setString(1, obj.getTitle());
+            preparedStatement.setString(2, obj.getCountry());
+            preparedStatement.setString(3, obj.getGenre().toString());
+            preparedStatement.setString(4, obj.getDirector());
+            preparedStatement.setBytes(5, obj.getCover());
+            preparedStatement.setDate(6, Date.valueOf(obj.getPremiereDate()));
+            preparedStatement.setString(7, obj.getDescription());
+            preparedStatement.setDouble(8, obj.getAverageRate());
+            preparedStatement.setInt(9, obj.getAgeRestriction());
+            preparedStatement.setInt(10, obj.getTimeDuration());
+            preparedStatement.executeUpdate();
 
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     @Override
@@ -50,7 +67,15 @@ public class JdbcMovieDao implements Dao<Movie>{
 
     @Override
     public void delete(Movie obj) throws SQLException {
-
+        JdbcCommentDao commentDao = new JdbcCommentDao();
+        commentDao.deleteCommentsFromMovie(obj.getId());
+        String deleteMovie ="DELETE FROM movie WHERE movieId=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteMovie)) {
+            preparedStatement.setInt(1, obj.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     @Override
@@ -109,6 +134,6 @@ public class JdbcMovieDao implements Dao<Movie>{
 
     @Override
     public void close() throws Exception {
-
+        connection.close();
     }
 }
