@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -13,7 +14,11 @@
             <Font size="41.0" />
          </font>
       </Text>
-      <VBox fx:id="vBoxList" layoutX="69.0" layoutY="99.0" prefHeight="560.0" prefWidth="544.0" />
+      <VBox fx:id="vBoxList" layoutX="57.0" layoutY="191.0" prefHeight="529.0" prefWidth="544.0" />
       <Button layoutX="39.0" layoutY="30.0" mnemonicParsing="false" onAction="#previous" prefHeight="55.0" prefWidth="79.0" text="Return" />
+      <TextField fx:id="usernameTextField" layoutX="79.0" layoutY="134.0" prefHeight="25.0" prefWidth="282.0" promptText="Write username" />
+      <Button layoutX="373.0" layoutY="134.0" mnemonicParsing="false" onAction="#searchByName" text="Search" />
+      <Button layoutX="482.0" layoutY="45.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="42.0" prefWidth="99.0" text="Delete" />
+      <Button fx:id="promoteButton" layoutX="482.0" layoutY="92.0" mnemonicParsing="false" onAction="#promoteUser" prefHeight="42.0" prefWidth="99.0" text="Promote" />
    </children>
 </AnchorPane>

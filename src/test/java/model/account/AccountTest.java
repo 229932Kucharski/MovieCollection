@@ -28,7 +28,7 @@ public class AccountTest {
     @Test
     public void welcomeTextTest() {
         Adult user = new Adult(1, "Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
-        PremiumAdult user1 = new PremiumAdult(3, "Jan", "qwerty", "test@wp.pl", 'M', date, "111222333");
+        PremiumAdult user1 = new PremiumAdult(3, "Jan", "qwerty".getBytes(), "test@wp.pl", 'M', date, "111222333");
         Kid user2 = new Kid(2, "Jan", "qwerty", "test@wp.pl", 'M', date2);
         Assert.assertNotEquals(user.welcomeText(), user2.welcomeText());
         Assert.assertNotEquals(user.welcomeText(), user1.welcomeText());

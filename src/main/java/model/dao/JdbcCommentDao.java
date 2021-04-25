@@ -66,6 +66,15 @@ public class JdbcCommentDao implements Dao<Comment> {
         }
     }
 
+    public void deleteCommentsOfUser(int userId) throws SQLException {
+        String deleteComments ="DELETE FROM comment WHERE userId=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteComments)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
 
     @Override
     public List<Comment> findAll() throws SQLException {

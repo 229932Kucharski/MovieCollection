@@ -4,6 +4,7 @@ import model.account.Account;
 import model.account.supervisor.Administrator;
 import model.account.user.Adult;
 import model.account.user.Kid;
+import model.account.user.PremiumAdult;
 import model.account.user.User;
 
 import java.sql.*;
@@ -73,10 +74,16 @@ public class JdbcUserDao implements Dao<User> {
 
     @Override
     public void update(User obj) throws SQLException {
-        String deleteUser ="UPDATE account SET password = ? WHERE name = ?";
+        String deleteUser ="UPDATE account SET password = ?, premiumUser = ? WHERE name = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
             preparedStatement.setBytes(1, obj.getPassword());
-            preparedStatement.setString(2, obj.getName());
+            if(obj instanceof PremiumAdult) {
+                preparedStatement.setBoolean(2, true);
+            } else {
+                preparedStatement.setBoolean(2, false);
+            }
+
+            preparedStatement.setString(3, obj.getName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -119,8 +126,10 @@ public class JdbcUserDao implements Dao<User> {
                 Period period = Period.between(birthDateLoc, LocalDate.now());
                 if(login.equals("admin")) {
                     user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
-                }
-                else if(period.getYears() >= 18) {
+                } else if(isPremium) {
+                    user = new PremiumAdult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    users.add(user);
+                } else if(period.getYears() >= 18) {
                     user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                     users.add(user);
                 } else {
@@ -158,8 +167,9 @@ public class JdbcUserDao implements Dao<User> {
                 Period period = Period.between(birthDateLoc, LocalDate.now());
                 if(login.equals("admin")) {
                     user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
-                }
-                else if(period.getYears() >= 18) {
+                } else if(isPremium) {
+                    user = new PremiumAdult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                } else if(period.getYears() >= 18) {
                     user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                 } else {
                     user = new Kid(userId, login, pass, email, gender, birthDateLoc);
@@ -197,8 +207,9 @@ public class JdbcUserDao implements Dao<User> {
                 Period period = Period.between(birthDateLoc, LocalDate.now());
                 if(login.equals("admin")) {
                     user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
-                }
-                else if(period.getYears() >= 18) {
+                } else if(isPremium) {
+                    user = new PremiumAdult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                } else if(period.getYears() >= 18) {
                     user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
                 } else {
                     user = new Kid(userId, login, pass, email, gender, birthDateLoc);
