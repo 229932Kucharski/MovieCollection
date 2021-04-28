@@ -82,8 +82,25 @@ public class JdbcCommentDao implements Dao<Comment> {
     }
 
     @Override
-    public Comment findById(int id) {
-        return null;
+    public Comment findById(int commentId) throws SQLException {
+        String getComment ="select * from comment where commentId=?";
+        Comment comment = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getComment)) {
+            preparedStatement.setInt(1, commentId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                int userId = resultSet.getInt(2);
+                int videoId = resultSet.getInt(3);
+                String content = resultSet.getString(4);
+                LocalDate commentDate = resultSet.getDate(5).toLocalDate();
+
+                comment = new Comment(id, userId, videoId, content, commentDate);
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return comment;
     }
 
     @Override

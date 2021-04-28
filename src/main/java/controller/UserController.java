@@ -1,6 +1,7 @@
 package controller;
 
 import model.account.Account;
+import model.account.user.PremiumAdult;
 import model.account.user.User;
 import model.movie.Movie;
 
@@ -13,20 +14,24 @@ public class UserController {
     private static User pickedUser;
     private static List<User> users;
 
+    public static boolean isAdmin() {
+        return loggedUser.getName().equals("admin");
+    }
+
+    public static boolean isPremium() {
+        return loggedUser instanceof PremiumAdult;
+    }
+
+    public static User getLoggedUser() {
+        return loggedUser;
+    }
+
     public static User getPickedUser() {
         return pickedUser;
     }
 
-    public static void setPickedUser(User pickedUser) {
-        UserController.pickedUser = pickedUser;
-    }
-
     public static List<User> getUsers() {
         return users;
-    }
-
-    public static boolean isAdmin() {
-        return loggedUser.getName().equals("admin");
     }
 
     public static List<User> getUsersByName(String name) {
@@ -47,8 +52,8 @@ public class UserController {
         UserController.users = users;
     }
 
-    public static User getLoggedUser() {
-        return loggedUser;
+    public static void setPickedUser(User pickedUser) {
+        UserController.pickedUser = pickedUser;
     }
 
     public static void setLoggedUser(User loggedUser) {

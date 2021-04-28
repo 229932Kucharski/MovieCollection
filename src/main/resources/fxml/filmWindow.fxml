@@ -62,9 +62,10 @@
          </children>
       </HBox>
       <TextArea fx:id="commentTextArea" layoutX="107.0" layoutY="431.0" prefHeight="56.0" prefWidth="329.0" wrapText="true" />
-      <Button layoutX="457.0" layoutY="431.0" mnemonicParsing="false" onAction="#addComment" text="Add Comment" />
+      <Button fx:id="addCommentButton" layoutX="457.0" layoutY="431.0" mnemonicParsing="false" onAction="#addComment" text="Add Comment" />
       <Label fx:id="charactersLeftLabel" layoutX="322.0" layoutY="487.0" prefHeight="17.0" prefWidth="114.0" />
       <VBox fx:id="vBoxComment" layoutX="108.0" layoutY="534.0" prefHeight="233.0" prefWidth="442.0" stylesheets="@../style/textarea.css" />
       <Text fx:id="commentsNumber" layoutX="110.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments (0)" />
+      <Button fx:id="deleteCommentButton" layoutX="445.0" layoutY="462.0" mnemonicParsing="false" onAction="#deleteComment" prefHeight="25.0" prefWidth="114.0" text="Delete Comment" visible="false" />
    </children>
 </AnchorPane>

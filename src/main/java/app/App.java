@@ -50,12 +50,17 @@ public class App extends Application{
             logger.info("Table comment was already created");
         }
 
-        try{
-            JdbcUserDao userDao = new JdbcUserDao();
-            UserController.setUsers(userDao.findAll());
+        try {
+            databaseController.createSeries();
         } catch (SQLException e) {
-            logger.warn("Cant get list of users");
+            logger.info("Tables for series were already created");
         }
+//        try{
+//            JdbcUserDao userDao = new JdbcUserDao();
+//            UserController.setUsers(userDao.findAll());
+//        } catch (SQLException e) {
+//            logger.warn("Cant get list of users");
+//        }
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource("/fxml/loginWindow.fxml"));

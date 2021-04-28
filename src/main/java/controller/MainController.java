@@ -58,18 +58,9 @@ public class MainController {
             addFilmButton.setVisible(true);
         }
 
-        try (JdbcMovieDao movieDao = new JdbcMovieDao()) {
-            movies = movieDao.findAll();
-            MovieController.setMovies(movies);
-        } catch (SQLException e) {
-            logger.warn("Cant get movies from database");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        MovieController.setMovies();
+        movies = MovieController.getMovies();
         addMoviesToListView();
-
     }
 
     private void addMoviesToListView() throws IOException {

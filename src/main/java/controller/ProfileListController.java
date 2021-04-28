@@ -61,7 +61,7 @@ public class ProfileListController {
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
         listView.setEditable(true);
-        boolean isPremium = false;
+        boolean isPremium;
         for(User user : users) {
             isPremium = user instanceof PremiumAdult;
             userList.add(new CustomRow(user.getUserId(), user.getName(), user.getRegisterDate().toString(), user.getEmail(), isPremium));
@@ -124,7 +124,7 @@ public class ProfileListController {
     }
 
     public void promoteUser() throws IOException {
-        if(UserController.getPickedUser() instanceof Kid || UserController.getPickedUser() instanceof Adult) {
+        if(UserController.getPickedUser() instanceof Kid || UserController.getPickedUser() instanceof PremiumAdult) {
             return;
         }
         Adult user = (Adult)UserController.getPickedUser();

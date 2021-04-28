@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +22,8 @@ import model.movie.Comment;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,6 +46,8 @@ public class FilmController {
     public Label charactersLeftLabel;
     public ListView<CustomRow> listView;
     public Button deleteButton;
+    public Button addCommentButton;
+    public Button deleteCommentButton;
 
     private List<Comment> comments;
     private static final ObservableList<CustomRow> commentList = FXCollections.observableArrayList();
@@ -52,6 +57,12 @@ public class FilmController {
 
         if(UserController.isAdmin()) {
             deleteButton.setVisible(true);
+            deleteCommentButton.setVisible(true);
+        } else if(!UserController.isPremium()) {
+            addCommentButton.setDisable(true);
+            commentTextArea.setDisable(true);
+            commentTextArea.setPromptText("You need premium account to comment");
+            commentTextArea.setOpacity(1);
         }
 
         coverImage.setImage(MovieController.getImage(movie));
@@ -79,6 +90,13 @@ public class FilmController {
                 }
             }
         });
+        addCommentsToListView();
+    }
+
+    public void addCommentsToListView() {
+        MovieController.setMovies();
+        Movie movie = MovieController.getPickedMovie();
+        MovieController.setPickedMovie(MovieController.getMovieByTitle(movie.getTitle()));
         comments = MovieController.getPickedMovie().getComments();
         commentsNumber.setText("Comments (" + comments.size() + ")");
         listView = new ListView<CustomRow>(commentList);
@@ -91,7 +109,7 @@ public class FilmController {
             String name;
             try(JdbcUserDao userDao = new JdbcUserDao()){
                 user = (User) userDao.findById(comment.getUserId());
-                
+
             } catch (Exception e) {
                 name = "Account deleted";
                 e.printStackTrace();
@@ -101,7 +119,8 @@ public class FilmController {
             } else {
                 name = "Account deleted";
             }
-            commentList.add(new CustomRow(comment.getContent(), name, comment.getCommentDate().toString()));
+            commentList.add(new CustomRow(comment.getContent(), name, comment.getCommentDate().toString(),
+                    String.valueOf(comment.getCommentId())));
         }
         listView.setItems(commentList);
         vBoxComment.getChildren().add(listView);
@@ -110,6 +129,14 @@ public class FilmController {
             @Override
             public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
                 return new CustomListCell();
+            }
+        });
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomRow>() {
+            @Override
+            public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
+                if(t1 != null) {
+                    MovieController.setPickedComment(Integer.parseInt(t1.getCommentId()));
+                }
             }
         });
     }
@@ -127,9 +154,10 @@ public class FilmController {
         } catch (Exception e) {
             logger.warn("Cant insert comment to database");
         }
+        commentTextArea.setText("");
         MovieController.getPickedMovie().addComment(comment);
         vBoxComment.getChildren().remove(listView);
-        initialize();
+        addCommentsToListView();
     }
 
     public void previous() {
@@ -162,17 +190,35 @@ public class FilmController {
         });
     }
 
+    public void deleteComment() throws Exception {
+        try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+            commentDao.delete(commentDao.findById(MovieController.getPickedComment()));
+        } catch (SQLException e) {
+            logger.warn("Cant delete comment");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        vBoxComment.getChildren().remove(listView);
+        addCommentsToListView();
+    }
+
 
     // KLASA WIERSZA
     public static class CustomRow {
         private String content;
         private String author;
         private String commentDate;
+        private String commentId;
 
-        public CustomRow(String content, String author, String commentDate) {
+        public CustomRow(String content, String author, String commentDate, String commentId) {
             this.content = content;
             this.author = author;
             this.commentDate = commentDate;
+            this.commentId = commentId;
+        }
+
+        public String getCommentId() {
+            return commentId;
         }
 
         public String getContent() {
