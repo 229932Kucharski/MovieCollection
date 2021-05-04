@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.account.user.User;
 import model.dao.JdbcCommentDao;
+import model.dao.JdbcFavourite;
 import model.dao.JdbcMovieDao;
 import model.dao.JdbcUserDao;
 import model.movie.Comment;
@@ -48,12 +49,27 @@ public class FilmController {
     public Button deleteButton;
     public Button addCommentButton;
     public Button deleteCommentButton;
+    public Button addFavouriteButton;
+    public Button delFavouriteButton;
 
     private List<Comment> comments;
     private static final ObservableList<CustomRow> commentList = FXCollections.observableArrayList();
 
     public void initialize() throws Exception {
         Movie movie = MovieController.getPickedMovie();
+
+        JdbcFavourite jdbcFavourite = new JdbcFavourite();
+        boolean isFav = jdbcFavourite.isFavVideo(UserController.getLoggedUser().getUserId(),
+                    MovieController.getPickedMovie().getId());
+        if(isFav) {
+            delFavouriteButton.setVisible(true);
+            addFavouriteButton.setVisible(false);
+        } else {
+            addFavouriteButton.setVisible(true);
+            delFavouriteButton.setVisible(false);
+        }
+
+
 
         if(UserController.isAdmin()) {
             deleteButton.setVisible(true);
@@ -200,6 +216,26 @@ public class FilmController {
         }
         vBoxComment.getChildren().remove(listView);
         addCommentsToListView();
+    }
+
+    public void addFavourite() {
+        try(JdbcFavourite jdbcFavourite = new JdbcFavourite()) {
+            jdbcFavourite.add(UserController.getLoggedUser().getUserId(), MovieController.getPickedMovie().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addFavouriteButton.setVisible(false);
+        delFavouriteButton.setVisible(true);
+    }
+
+    public void delFavourite() {
+        try(JdbcFavourite jdbcFavourite = new JdbcFavourite()) {
+            jdbcFavourite.delete(UserController.getLoggedUser().getUserId(), MovieController.getPickedMovie().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addFavouriteButton.setVisible(true);
+        delFavouriteButton.setVisible(false);
     }
 
 

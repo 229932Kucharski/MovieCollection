@@ -119,8 +119,48 @@ public class JdbcMovieDao implements Dao<Movie>{
     }
 
     @Override
-    public Movie findById(int id) {
-        return null;
+    public Movie findById(int movieId) throws SQLException {
+        String getMovie ="select * from movie where movieId=?";
+        Movie movie = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getMovie)) {
+            preparedStatement.setInt(1, movieId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String title = resultSet.getString(2);
+                String country = resultSet.getString(3);
+                String genre = resultSet.getString(4);
+                String director = resultSet.getString(5);
+                byte[] cover = resultSet.getBytes(6);
+                LocalDate premiereDate = resultSet.getDate(7).toLocalDate();
+                String description = resultSet.getString(8);
+                double avgRate = (double) resultSet.getFloat(9);
+                int ageRestriction = resultSet.getInt(10);
+                int timeDuration = resultSet.getInt(11);
+
+                List<Comment> comments = null;
+                try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+                    comments = commentDao.findAllForMovie(id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(timeDuration != 0) {
+                    FullLengthFilm film = new FullLengthFilm(id, title, country, Genres.valueOf(genre), director,
+                            cover, premiereDate, description, avgRate, ageRestriction, timeDuration);
+                    film.setComments(comments);
+                    movie = film;
+                } else {
+                    ShortFilm film = new ShortFilm(id, title, country, Genres.valueOf(genre), director,
+                            cover, premiereDate, description, avgRate, ageRestriction, timeDuration);
+                    film.setComments(comments);
+                    movie = film;
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+        return movie;
     }
 
     @Override

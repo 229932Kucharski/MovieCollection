@@ -1,22 +1,35 @@
 package controller;
 
 import app.App;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.account.password.PasswordHashing;
 import model.account.user.Adult;
 import model.account.user.User;
+import model.dao.JdbcFavourite;
 import model.dao.JdbcUserDao;
+import model.movie.ImageConverter;
+import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class ProfileController {
@@ -32,10 +45,15 @@ public class ProfileController {
     public PasswordField newPassRepTextField;
     public Button savePassword;
     public Text passwordWarning;
-    User user;
+    public VBox vBoxList;
+    public ListView<CustomRow> listView;
+
+    private List<Movie> movies;
+    private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
+    private User user;
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-    public void initialize(){
+    public void initialize() throws IOException {
         passwordChangeVBox.setVisible(false);
         user = UserController.getLoggedUser();
         nameText.setText(user.getName());
@@ -46,8 +64,37 @@ public class ProfileController {
             Adult adult = (Adult) user;
             phoneNumber.setText(adult.getPhoneNumber());
         }
+
+        try (JdbcFavourite jdbcFavourite = new JdbcFavourite();){
+            movies = jdbcFavourite.getAllFavVideo(UserController.getLoggedUser().getUserId());
+            System.out.println(movies);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addMoviesToListView();
     }
 
+    private void addMoviesToListView() throws IOException {
+        listView = new ListView<CustomRow>(movieList);
+        listView.getItems().clear();
+        listView.setPrefSize(200, 500);
+        listView.setEditable(true);
+        for(Movie movie : movies) {
+            if(movie.getCover() != null) {
+                ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+            }
+            movieList.add(new CustomRow(MovieController.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
+        }
+        listView.setItems(movieList);
+        vBoxList.getChildren().add(listView);
+
+        listView.setCellFactory(new Callback<ListView<CustomRow>, ListCell<CustomRow>>() {
+            @Override
+            public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
+                return new CustomListCell();
+            }
+        });
+    }
 
     public void deleteAccount() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -118,5 +165,63 @@ public class ProfileController {
 
     public void changePassword() {
         passwordChangeVBox.setVisible(true);
+    }
+
+    // KLASA WIERSZA
+    public static class CustomRow {
+        private Image image;
+        private String title;
+        private String genre;
+
+        public CustomRow(Image image, String title, String genre) {
+            this.image = image;
+            this.title = title;
+            this.genre = genre;
+        }
+
+        public Image getImage() {
+            return image;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+    }
+
+    // KLASA KOMORKI
+    private class CustomListCell extends ListCell<CustomRow> {
+        private HBox content;
+        private Text title;
+        private Text genre;
+        private ImageView image;
+
+        public CustomListCell() {
+            super();
+            title = new Text();
+            genre = new Text();
+            image = new ImageView();
+            VBox vBox = new VBox(title, genre);
+            content = new HBox(image, vBox);
+            content.setSpacing(10);
+        }
+
+        @Override
+        protected void updateItem(CustomRow item, boolean empty) {
+            super.updateItem(item, empty);
+            if(item != null && !empty) {
+                title.setText(item.getTitle());
+                genre.setText(item.getGenre());
+                image.setImage(item.getImage());
+                image.setPreserveRatio(true);
+                image.setFitWidth(50);
+                setGraphic(content);
+            } else {
+                setGraphic(null);
+            }
+        }
     }
 }

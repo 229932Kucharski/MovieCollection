@@ -55,6 +55,12 @@ public class App extends Application{
         } catch (SQLException e) {
             logger.info("Tables for series were already created");
         }
+
+        try {
+            databaseController.createUserFav();
+        } catch (SQLException e) {
+            logger.info("Table favourite video was already created");
+        }
 //        try{
 //            JdbcUserDao userDao = new JdbcUserDao();
 //            UserController.setUsers(userDao.findAll());

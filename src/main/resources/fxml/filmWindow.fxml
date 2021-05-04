@@ -67,5 +67,7 @@
       <VBox fx:id="vBoxComment" layoutX="108.0" layoutY="534.0" prefHeight="233.0" prefWidth="442.0" stylesheets="@../style/textarea.css" />
       <Text fx:id="commentsNumber" layoutX="110.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments (0)" />
       <Button fx:id="deleteCommentButton" layoutX="445.0" layoutY="462.0" mnemonicParsing="false" onAction="#deleteComment" prefHeight="25.0" prefWidth="114.0" text="Delete Comment" visible="false" />
+      <Button fx:id="addFavouriteButton" layoutX="492.0" layoutY="21.0" mnemonicParsing="false" onAction="#addFavourite" prefHeight="40.0" prefWidth="114.0" text="Add to favourite" />
+      <Button fx:id="delFavouriteButton" layoutX="492.0" layoutY="21.0" mnemonicParsing="false" onAction="#delFavourite" prefHeight="40.0" prefWidth="114.0" text="Del from favourite" />
    </children>
 </AnchorPane>

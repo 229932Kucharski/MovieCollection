@@ -149,7 +149,6 @@ public abstract class Video {
                 .append("country", country)
                 .append("genre", genre)
                 .append("director", director)
-                .append("cover", cover)
                 .append("premiereDate", premiereDate)
                 .append("description", description)
                 .append("averageRate", averageRate)

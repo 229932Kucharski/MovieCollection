@@ -44,6 +44,16 @@ public class DatabaseController {
         int Result = s.executeUpdate(createAccount);
     }
 
+    public void createUserFav() throws SQLException {
+        String createFav = "USE movieCollection;" +
+                "CREATE TABLE favouriteVideo(" +
+                "userId int FOREIGN KEY REFERENCES account(userId)," +
+                "videoId int FOREIGN KEY REFERENCES movie(movieId)" +
+                ");";
+        Statement s = connection.createStatement();
+        int Result = s.executeUpdate(createFav);
+    }
+
     public void createMovie() throws SQLException {
         String createMovie = "USE movieCollection;" +
                 "CREATE TABLE movie(" +
