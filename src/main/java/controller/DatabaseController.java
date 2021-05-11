@@ -5,7 +5,7 @@ import model.movie.Comment;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class DatabaseController {
+public class DatabaseController implements AutoCloseable{
 
     private final String url = "jdbc:sqlserver://localhost";
     private final String username = "sa";
@@ -16,12 +16,18 @@ public class DatabaseController {
         connection = prepareConnection();
     }
 
+    /**
+     * Method prepare connection to database
+     */
     private Connection prepareConnection() throws SQLException{
         Connection connection = null;
         connection = DriverManager.getConnection(url, username, password);
         return connection;
     }
 
+    /**
+     * Method create database movieCollection
+     */
     public void createDatabase() throws SQLException {
         Statement s = connection.createStatement();
         int Result = s.executeUpdate("CREATE DATABASE movieCollection");
@@ -73,52 +79,6 @@ public class DatabaseController {
         int Result = s.executeUpdate(createMovie);
     }
 
-    public void createSeries() throws SQLException {
-        String createSeries = "USE movieCollection;" +
-                "CREATE TABLE series(" +
-                "seriesId int IDENTITY(1,1) PRIMARY KEY," +
-                "title varchar(50), " +
-                "country varchar(50), " +
-                "genre varchar(50), " +
-                "director varchar(50), " +
-                "cover varbinary(MAX), " +
-                "premiereDate date, " +
-                "description varchar(500), " +
-                "avgRate float, " +
-                "ageRestriction int, " +
-                "numberOfSeasons int" +
-                ");";
-        Statement s = connection.createStatement();
-        int Result = s.executeUpdate(createSeries);
-        createSeason();
-        createEpisode();
-    }
-
-    public void createSeason() throws SQLException {
-        String createSeason = "USE movieCollection;" +
-                "CREATE TABLE season(" +
-                "seasonId int IDENTITY(1,1) PRIMARY KEY," +
-                "number int," +
-                "numberOfEpisodes int," +
-                "seriesId int FOREIGN KEY REFERENCES series(seriesId)" +
-                ");";
-        Statement s = connection.createStatement();
-        int Result = s.executeUpdate(createSeason);
-    }
-
-    public void createEpisode() throws SQLException {
-        String createEpisode = "USE movieCollection;" +
-                "CREATE TABLE episode(" +
-                "episodeId int IDENTITY(1,1) PRIMARY KEY," +
-                "title varchar(70)," +
-                "seasonId int FOREIGN KEY REFERENCES season(seasonId)," +
-                "number int," +
-                "timeDuration int" +
-                ");";
-        Statement s = connection.createStatement();
-        int Result = s.executeUpdate(createEpisode);
-    }
-
     public void createComment() throws SQLException {
         String createAccount = "USE movieCollection;" +
                 "CREATE TABLE comment(" +
@@ -130,5 +90,10 @@ public class DatabaseController {
                 ");";
         Statement s = connection.createStatement();
         int Result = s.executeUpdate(createAccount);
+    }
+
+    @Override
+    public void close() throws Exception {
+        connection.close();
     }
 }

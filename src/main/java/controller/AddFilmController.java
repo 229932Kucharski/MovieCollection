@@ -3,16 +3,14 @@ package controller;
 import app.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import model.dao.JdbcMovieDao;
-import model.movie.FullLengthFilm;
-import model.movie.Genres;
-import model.movie.ImageConverter;
-import model.movie.Movie;
+import model.movie.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,36 +33,47 @@ public class AddFilmController {
     public AnchorPane mainAnchorPane;
     private final FileChooser fileChooser = new FileChooser();
     public ImageView coverImage;
-    public byte[] cover;
     public Label warnMessage;
     private static final Logger logger = LoggerFactory.getLogger(AddFilmController.class);
-    private ObservableList<String> genres;
 
+    private String title;
+    private String country;
+    private String director;
+    private LocalDate date;
+    private String description;
+    private Double rate;
+    private Integer age;
+    private Integer time;
+    private Genres genre;
+    private byte[] cover;
+
+    /**
+     * Method for initializing addFilmWindow
+     */
+    @FXML
     public void initialize() {
         coverImage.setFitWidth(150);
         coverImage.setImage(new Image("/img/noCover.jpg"));
-        genres = FXCollections.observableArrayList("Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Romance", "Mystery",
+        ObservableList<String> genres = FXCollections.observableArrayList("Action", "Adventure", "Comedy", "Drama",
+                "Fantasy", "Horror", "Romance", "Mystery",
                 "Thriller", "Western", "ScienceFiction");
         genreChoiceBox.setItems(genres);
-
-
     }
 
+    /**
+     * Method create movie and add movie to database
+     */
+    @FXML
     public void addFilm() {
         if(!checkForm()) {
             return;
         }
-        String title = titleTextField.getText();
-        String country = countryTextField.getText();
-        String director = directorTextField.getText();
-        LocalDate date = premiereDatePicker.getValue();
-        String description = descriptionTextArea.getText();
-        Double rate = Double.valueOf(avgRateTextField.getText());
-        Integer age = Integer.valueOf(ageTextField.getText());
-        Integer time = Integer.valueOf(timeTextField.getText());
-        Genres genre = Genres.valueOf(genreChoiceBox.getValue());
-
-        Movie movie = new FullLengthFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
+        Movie movie = null;
+        if(time > 55) {
+            movie = new FullLengthFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
+        } else {
+            movie = new ShortFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
+        }
         try(JdbcMovieDao movieDao = new JdbcMovieDao()) {
             movieDao.add(movie);
         } catch (SQLException e) {
@@ -73,33 +82,54 @@ public class AddFilmController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        App.changeScene(mainAnchorPane, "mainWindow");
+        if(cover != null) {
+            App.restartApplication("Please restart application to apply changes");
+        } else {
+            App.changeScene(mainAnchorPane, "mainWindow");
+        }
     }
 
-    boolean checkForm() {
-        if(titleTextField.getText().equals("")) {
-            setWarning("No title");
+    /**
+     * Check fields in form for adding new movie
+     */
+    private boolean checkForm() {
+        title = titleTextField.getText();
+        country = countryTextField.getText();
+        director = directorTextField.getText();
+        date = premiereDatePicker.getValue();
+        description = descriptionTextArea.getText();
+        rate = Double.valueOf(avgRateTextField.getText().replace(',', '.'));
+        age = Integer.valueOf(ageTextField.getText());
+        time = Integer.valueOf(timeTextField.getText());
+        genre = Genres.valueOf(genreChoiceBox.getValue());
+
+        if(title.equals("") || title.length() > 50) {
+            setWarning("Wrong title");
             return false;
-        } else if (countryTextField.getText().equals("")) {
-            setWarning("No country");
+        } else if (country.equals("") || country.length() > 50) {
+            setWarning("Wrong country");
             return false;
-        } else if (directorTextField.getText().equals("")) {
-            setWarning("No director");
+        } else if (director.equals("") || director.length() > 50) {
+            setWarning("Wrong director");
             return false;
         }else if (premiereDatePicker.getValue() == null) {
-            setWarning("No date");
+            setWarning("Wrong date");
             return false;
-        }else if (descriptionTextArea.getText().equals("")) {
-            setWarning("No description");
+        }else if (description.equals("") || description.length() > 500) {
+            setWarning("Wrong description");
             return false;
         } else if (genreChoiceBox.getSelectionModel().isEmpty()) {
-            setWarning("No genre");
+            setWarning("No genre selected");
             return false;
         }
         return true;
     }
 
-    public void chooseCover() throws IOException, InterruptedException {
+    /**
+     * Choose cover for new movie from disk
+     */
+    @FXML
+    public void chooseCover() throws IOException {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image Files", "jpg", "jpeg");
         fileChooser.setSelectedExtensionFilter(filter);
         fileChooser.setTitle("Choose a cover (.jpg)");
@@ -111,17 +141,27 @@ public class AddFilmController {
             return;
         }
         cover = ImageConverter.imageToByteArray(file.getAbsolutePath());
-        ImageConverter.byteArrayToImage(0, cover);
-        coverImage.setImage(new Image("/img/movieCover/0.jpg"));
+//        ImageConverter.byteArrayToImage(0, cover);
+//        coverImage.setImage(new Image("/img/movieCover/0.jpg"));
     }
 
+    /**
+     * Set warning if field is incorrect
+     */
     private void setWarning(String mess) {
         logger.warn(mess);
         warnMessage.setText(mess);
         warnMessage.setStyle("-fx-text-fill: red");
     }
 
+    /**
+     * Return to mainWindow
+     */
     public void previous() {
-        App.changeScene(mainAnchorPane, "mainWindow");
+        if(cover != null) {
+            App.restartApplication("Please restart application to apply changes");
+        } else {
+            App.changeScene(mainAnchorPane, "mainWindow");
+        }
     }
 }

@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import model.dao.JdbcMovieDao;
 import model.movie.Genres;
 import model.movie.ImageConverter;
 import model.movie.Movie;
@@ -21,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 public class MainController {
@@ -39,7 +37,7 @@ public class MainController {
     private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
 
 
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, InterruptedException {
         welcomeText.setText(UserController.getLoggedUser().welcomeText());
         MenuItem mi = new MenuItem(Genres.Action.name());
         MenuItem mi2 = new MenuItem(Genres.Adventure.name());
@@ -63,7 +61,7 @@ public class MainController {
         addMoviesToListView();
     }
 
-    private void addMoviesToListView() throws IOException {
+    private void addMoviesToListView() throws IOException, InterruptedException {
         listView = new ListView<CustomRow>(movieList);
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
@@ -71,7 +69,10 @@ public class MainController {
         for(Movie movie : movies) {
             if(movie.getCover() != null) {
                 ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+
             }
+        }
+        for(Movie movie : movies) {
             movieList.add(new CustomRow(MovieController.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
         }
         listView.setItems(movieList);
@@ -95,7 +96,7 @@ public class MainController {
         });
     }
 
-    public void search() throws IOException {
+    public void search() throws IOException, InterruptedException {
         String searchString = searchTextField.getText();
         movies = MovieController.getMoviesBySearch(searchString);
         vBoxList.getChildren().remove(listView);

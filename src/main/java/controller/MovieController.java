@@ -53,7 +53,6 @@ public class MovieController {
         }
     }
 
-
     public static List<Movie> getMoviesBySearch(String title) {
         List<Movie> tempMovies = new ArrayList<>();
         for(Movie movie : movies) {
@@ -73,13 +72,12 @@ public class MovieController {
         return null;
     }
 
-
-
     public static Image getImage(Movie movie) {
         if(movie.getCover() == null) {
             return new Image("/img/noCover.jpg");
         } else {
-            return new Image("/img/movieCover/" + movie.getId() + ".jpg");
+            Image image = new Image("/img/movieCover/" + movie.getId() + ".jpg");
+            return image;
         }
     }
 }

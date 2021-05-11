@@ -1,14 +1,17 @@
 package app;
 import controller.DatabaseController;
-import controller.UserController;
+import controller.MovieController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import model.dao.JdbcUserDao;
+import model.dao.JdbcMovieDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,56 +21,54 @@ import java.sql.SQLException;
 
 public class App extends Application{
 
-    private DatabaseController databaseController;
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
+    /**
+     * Main method that starts program
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    /**
+     * Main entry point for app
+     */
     @Override
     public void start(Stage stage) throws Exception {
         logger.info("Application is starting");
 
-        try {
-            databaseController = new DatabaseController();
-            databaseController.createDatabase();
+        // Creating database and tables
+        try (DatabaseController databaseController = new DatabaseController()){
+            try {
+                databaseController.createDatabase();
+            } catch (SQLException e) {
+                logger.info("Database was already created");
+            }
+            try {
+                databaseController.createAccount();
+            } catch (SQLException e) {
+                logger.info("Table account was already created");
+            }
+            try {
+                databaseController.createMovie();
+            } catch (SQLException e) {
+                logger.info("Table movie was already created");
+            }
+            try {
+                databaseController.createComment();
+            } catch (SQLException e) {
+                logger.info("Table comment was already created");
+            }
+            try {
+                databaseController.createUserFav();
+            } catch (SQLException e) {
+                logger.info("Table favourite video was already created");
+            }
         } catch (SQLException e) {
-            logger.info("Database was already created");
+            logger.info("Cant connect to database");
         }
 
-        try {
-            databaseController.createAccount();
-        } catch (SQLException e) {
-            logger.info("Table account was already created");
-        }
-
-        try {
-            databaseController.createMovie();
-        } catch (SQLException e) {
-            logger.info("Table movie was already created");
-        }
-
-        try {
-            databaseController.createComment();
-        } catch (SQLException e) {
-            logger.info("Table comment was already created");
-        }
-
-        try {
-            databaseController.createSeries();
-        } catch (SQLException e) {
-            logger.info("Tables for series were already created");
-        }
-
-        try {
-            databaseController.createUserFav();
-        } catch (SQLException e) {
-            logger.info("Table favourite video was already created");
-        }
-//        try{
-//            JdbcUserDao userDao = new JdbcUserDao();
-//            UserController.setUsers(userDao.findAll());
-//        } catch (SQLException e) {
-//            logger.warn("Cant get list of users");
-//        }
-
+        //Opening window for login
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource("/fxml/loginWindow.fxml"));
         AnchorPane anchorPane = loader.load();
@@ -77,10 +78,12 @@ public class App extends Application{
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
+    /**
+     * Method for changing scene
+     * @param old   current pane
+     * @param name  name of new window from /fxml/
+     */
     public static void changeScene(Pane old, String name) {
         Parent root;
         try {
@@ -90,9 +93,28 @@ public class App extends Application{
             stage.show();
         }
         catch (IOException e) {
-            logger.error("Cant load new window");
-            e.printStackTrace();
+            logger.error("Cant load new window.");
+            restartApplication(null);
         }
+    }
+
+    public static void restartApplication(String message) {
+        if (message == null) {
+            message = "Please start application again";
+        }
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Restart application");
+        alert.setContentText(message);
+        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(okButton, noButton);
+        alert.showAndWait().ifPresent(type -> {
+            if (type == okButton) {
+              System.exit(0);
+            } else {
+                alert.close();
+            }
+        });
     }
 
 }

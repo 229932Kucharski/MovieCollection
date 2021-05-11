@@ -67,7 +67,6 @@ public class ProfileController {
 
         try (JdbcFavourite jdbcFavourite = new JdbcFavourite();){
             movies = jdbcFavourite.getAllFavVideo(UserController.getLoggedUser().getUserId());
-            System.out.println(movies);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -25,8 +25,6 @@ public class JdbcMovieDao implements Dao<Movie>{
         return connection;
     }
 
-
-
     @Override
     public void add(Movie obj) throws SQLException {
         String insertMovie ="insert into movie(title, country, genre, director, cover, premiereDate, description, avgRate, ageRestriction, timeDuration) VALUES "
@@ -100,7 +98,7 @@ public class JdbcMovieDao implements Dao<Movie>{
                     e.printStackTrace();
                 }
 
-                if(timeDuration != 0) {
+                if(timeDuration > 55) {
                     FullLengthFilm film = new FullLengthFilm(id, title, country, Genres.valueOf(genre), director,
                             cover, premiereDate, description, avgRate, ageRestriction, timeDuration);
                     film.setComments(comments);
@@ -145,7 +143,7 @@ public class JdbcMovieDao implements Dao<Movie>{
                     e.printStackTrace();
                 }
 
-                if(timeDuration != 0) {
+                if(timeDuration > 55) {
                     FullLengthFilm film = new FullLengthFilm(id, title, country, Genres.valueOf(genre), director,
                             cover, premiereDate, description, avgRate, ageRestriction, timeDuration);
                     film.setComments(comments);

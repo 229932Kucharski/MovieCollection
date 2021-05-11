@@ -5,7 +5,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -74,6 +73,8 @@ public class FilmController {
         if(UserController.isAdmin()) {
             deleteButton.setVisible(true);
             deleteCommentButton.setVisible(true);
+            deleteCommentButton.setDisable(true);
+            addFavouriteButton.setVisible(false);
         } else if(!UserController.isPremium()) {
             addCommentButton.setDisable(true);
             commentTextArea.setDisable(true);
@@ -152,6 +153,7 @@ public class FilmController {
             public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
                 if(t1 != null) {
                     MovieController.setPickedComment(Integer.parseInt(t1.getCommentId()));
+                    deleteCommentButton.setDisable(false);
                 }
             }
         });
@@ -209,6 +211,7 @@ public class FilmController {
     public void deleteComment() throws Exception {
         try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
             commentDao.delete(commentDao.findById(MovieController.getPickedComment()));
+            deleteCommentButton.setDisable(true);
         } catch (SQLException e) {
             logger.warn("Cant delete comment");
         } catch (Exception e) {
