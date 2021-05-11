@@ -95,6 +95,7 @@ public class App extends Application{
         catch (IOException e) {
             logger.error("Cant load new window.");
             restartApplication(null);
+            e.printStackTrace();
         }
     }
 

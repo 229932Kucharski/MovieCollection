@@ -82,11 +82,7 @@ public class AddFilmController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(cover != null) {
-            App.restartApplication("Please restart application to apply changes");
-        } else {
-            App.changeScene(mainAnchorPane, "mainWindow");
-        }
+        App.changeScene(mainAnchorPane, "mainWindow");
     }
 
     /**

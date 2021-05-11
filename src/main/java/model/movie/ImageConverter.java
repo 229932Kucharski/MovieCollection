@@ -13,7 +13,7 @@ public class ImageConverter {
 
     public static byte[] imageToByteArray(int movieId) throws IOException {
 
-        File file = new File("src/main/resources/img/movieCover/" + movieId + ".jpg");
+        File file = new File("src/main/assets/img/movieCover/" + movieId + ".jpg");
         BufferedImage bImage= ImageIO.read(file);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(bImage, "jpg", bos);
@@ -32,7 +32,7 @@ public class ImageConverter {
     public static void byteArrayToImage(int movieId, byte[] data) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
         BufferedImage bImage = ImageIO.read(bis);
-        ImageIO.write(bImage, "jpg", new File("src/main/resources/img/movieCover/" + movieId + ".jpg"));
+        ImageIO.write(bImage, "jpg", new File("src/main/assets/img/movieCover/" + movieId + ".jpg"));
     }
 
 }

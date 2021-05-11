@@ -6,6 +6,7 @@ import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,8 @@ public class MovieController {
         if(movie.getCover() == null) {
             return new Image("/img/noCover.jpg");
         } else {
-            Image image = new Image("/img/movieCover/" + movie.getId() + ".jpg");
+            File imageFile = new File("src/main/assets/img/movieCover/" + movie.getId() + ".jpg");
+            Image image = new Image(imageFile.toURI().toString());
             return image;
         }
     }
