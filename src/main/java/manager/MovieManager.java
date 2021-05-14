@@ -2,6 +2,7 @@ package manager;
 
 import javafx.scene.image.Image;
 import model.dao.JdbcMovieDao;
+import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class responsible for managing movies
+ */
 public class MovieManager {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieManager.class);
@@ -76,17 +80,39 @@ public class MovieManager {
     }
 
     /**
-     * Search movie
+     * Search movie by title, year and genre
      * @param title search phrase
+     * @param year search year
+     * @param genre search genre
      * @return list of movies that contain search phrase
      */
-    public static List<Movie> getMoviesBySearch(String title) {
+    public static List<Movie> getMoviesBySearch(String title, String year, Genres genre) {
         List<Movie> tempMovies = new ArrayList<>();
         for(Movie movie : movies) {
-            if(movie.getTitle().toLowerCase().contains(title.toLowerCase())){
+            if(movie.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 tempMovies.add(movie);
             }
         }
+        if(!year.equals("")) {
+            List<Movie> tempMovies2 = new ArrayList<>();
+            for(Movie movie : tempMovies) {
+                if(movie.getPremiereDate().getYear() == Integer.parseInt(year)) {
+                    tempMovies2.add(movie);
+                }
+            }
+            tempMovies = tempMovies2;
+        }
+
+        if(!genre.equals(Genres.All)) {
+            List<Movie> tempMovies2 = new ArrayList<>();
+            for(Movie movie : tempMovies) {
+                if(movie.getGenre().equals(genre)) {
+                    tempMovies2.add(movie);
+                }
+            }
+            tempMovies = tempMovies2;
+        }
+
         return tempMovies;
     }
 

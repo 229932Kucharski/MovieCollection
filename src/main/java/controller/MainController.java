@@ -1,6 +1,8 @@
 package controller;
 
 import app.App;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -25,12 +27,13 @@ public class MainController {
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     public AnchorPane mainAnchorPane;
-    public SplitMenuButton genreSearcher;
     public Text welcomeText;
     public VBox vBoxList;
     public TextField searchTextField;
     public ListView<CustomRow> listView;
     public Button addFilmButton;
+    public TextField yearTextField;
+    public ChoiceBox<Genres> genreChoiceBox;
 
     private List<Movie> movies;
     private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
@@ -40,24 +43,24 @@ public class MainController {
      */
     public void initialize() throws IOException {
         welcomeText.setText(UserManager.getLoggedUser().welcomeText());
-        MenuItem mi = new MenuItem(Genres.Action.name());
-        MenuItem mi2 = new MenuItem(Genres.Adventure.name());
-        MenuItem mi3 = new MenuItem(Genres.Comedy.name());
-        MenuItem mi4 = new MenuItem(Genres.Drama.name());
-        MenuItem mi5 = new MenuItem(Genres.Fantasy.name());
-        MenuItem mi6 = new MenuItem(Genres.Horror.name());
-        MenuItem mi7 = new MenuItem(Genres.Romance.name());
-        MenuItem mi8 = new MenuItem(Genres.Mystery.name());
-        MenuItem mi9 = new MenuItem(Genres.Thriller.name());
-        MenuItem mi10 = new MenuItem(Genres.Western.name());
-        MenuItem mi11 = new MenuItem(Genres.ScienceFiction.name());
-        genreSearcher.getItems().addAll(mi,mi2,mi3,mi4,mi5,mi6,mi7,mi8,mi9,mi10,mi11);
         if(UserManager.isAdmin()) {
             addFilmButton.setVisible(true);
         }
+
+        ObservableList<Genres> genres = FXCollections.observableArrayList(Genres.values());
+        genreChoiceBox.setItems(genres);
+        genreChoiceBox.setValue(Genres.All);
+
+
         MovieManager.setMovies();
         movies = MovieManager.getMovies();
         addMoviesToListView();
+
+        yearTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                yearTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     /**
@@ -97,7 +100,9 @@ public class MainController {
      */
     public void search() throws IOException {
         String searchString = searchTextField.getText();
-        movies = MovieManager.getMoviesBySearch(searchString);
+        String year = yearTextField.getText();
+        Genres genre = genreChoiceBox.getValue();
+        movies = MovieManager.getMoviesBySearch(searchString, year, genre);
         //Remove current listView and add new one
         vBoxList.getChildren().remove(listView);
         addMoviesToListView();

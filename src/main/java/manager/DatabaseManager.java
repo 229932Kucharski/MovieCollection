@@ -2,6 +2,9 @@ package manager;
 
 import java.sql.*;
 
+/**
+ * Class responsible for creating database and tables
+ */
 public class DatabaseManager implements AutoCloseable{
 
     private final String url = "jdbc:sqlserver://localhost";

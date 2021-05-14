@@ -6,6 +6,9 @@ import model.account.user.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class responsible for managing users
+ */
 public class UserManager {
 
     private static User loggedUser;

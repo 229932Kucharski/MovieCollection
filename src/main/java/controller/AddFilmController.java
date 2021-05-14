@@ -116,6 +116,9 @@ public class AddFilmController {
         } else if (genreChoiceBox.getSelectionModel().isEmpty()) {
             setWarning("No genre selected");
             return false;
+        } else if (time < 0) {
+            setWarning("Time duration cant be lower than 0");
+            return false;
         }
         return true;
     }

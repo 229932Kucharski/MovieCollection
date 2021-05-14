@@ -2,6 +2,7 @@ package model.movie;
 
 
 public enum Genres {
+    All,
     Action,
     Adventure,
     Comedy,
