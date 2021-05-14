@@ -1,39 +1,57 @@
-package controller;
+package manager;
 
-import model.account.Account;
 import model.account.user.PremiumAdult;
 import model.account.user.User;
-import model.movie.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserController {
+public class UserManager {
 
     private static User loggedUser;
     private static User pickedUser;
     private static List<User> users;
 
+    /**
+     * Check if user has admin permission
+     */
     public static boolean isAdmin() {
         return loggedUser.getName().equals("admin");
     }
 
+    /**
+     * Check if user has premium account
+     */
     public static boolean isPremium() {
         return loggedUser instanceof PremiumAdult;
     }
 
+    /**
+     * Get logged user
+     */
     public static User getLoggedUser() {
         return loggedUser;
     }
 
+    /**
+     * Get picked user from listView (admin feature)
+     */
     public static User getPickedUser() {
         return pickedUser;
     }
 
+    /**
+     * Get all users
+     */
     public static List<User> getUsers() {
         return users;
     }
 
+    /**
+     * Find users by name
+     * @param name search phrase
+     * @return List of users that contain specific name
+     */
     public static List<User> getUsersByName(String name) {
         List<User> tempUsers = new ArrayList<>();
         for(User user : users) {
@@ -44,22 +62,30 @@ public class UserController {
         return tempUsers;
     }
 
+    /**
+     * Set users list
+     */
     public static void setUsers(List<User> accounts) {
-        List<model.account.user.User> users = new ArrayList<>();
-        for(Account a : accounts) {
-            users.add((model.account.user.User) a);
-        }
-        UserController.users = users;
+        UserManager.users = new ArrayList<>(accounts);
     }
 
+    /**
+     * Set picked user
+     */
     public static void setPickedUser(User pickedUser) {
-        UserController.pickedUser = pickedUser;
+        UserManager.pickedUser = pickedUser;
     }
 
+    /**
+     * Set logged user
+     */
     public static void setLoggedUser(User loggedUser) {
-        UserController.loggedUser = loggedUser;
+        UserManager.loggedUser = loggedUser;
     }
 
+    /**
+     * Logout user
+     */
     public static void logout() {
         loggedUser = null;
     }

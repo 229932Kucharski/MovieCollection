@@ -1,8 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -13,7 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import manager.MovieManager;
+import manager.UserManager;
 import model.account.password.PasswordHashing;
 import model.account.user.Adult;
 import model.account.user.User;
@@ -43,7 +42,6 @@ public class ProfileController {
     public PasswordField oldPassTexField;
     public PasswordField newPassTextField;
     public PasswordField newPassRepTextField;
-    public Button savePassword;
     public Text passwordWarning;
     public VBox vBoxList;
     public ListView<CustomRow> listView;
@@ -53,9 +51,12 @@ public class ProfileController {
     private User user;
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
+    /**
+     * Initializing window
+     */
     public void initialize() throws IOException {
         passwordChangeVBox.setVisible(false);
-        user = UserController.getLoggedUser();
+        user = UserManager.getLoggedUser();
         nameText.setText(user.getName());
         ageText.setText(String.valueOf(Period.between(user.getBirthDate(), LocalDate.now()).getYears()));
         registerDateText.setText(user.getRegisterDate().toString());
@@ -65,16 +66,20 @@ public class ProfileController {
             phoneNumber.setText(adult.getPhoneNumber());
         }
 
-        try (JdbcFavourite jdbcFavourite = new JdbcFavourite();){
-            movies = jdbcFavourite.getAllFavVideo(UserController.getLoggedUser().getUserId());
+        //Get all favourite movies
+        try (JdbcFavourite jdbcFavourite = new JdbcFavourite()){
+            movies = jdbcFavourite.getAllFavVideo(UserManager.getLoggedUser().getUserId());
         } catch (Exception e) {
             e.printStackTrace();
         }
         addMoviesToListView();
     }
 
+    /**
+     * Add favourite movies to listview
+     */
     private void addMoviesToListView() throws IOException {
-        listView = new ListView<CustomRow>(movieList);
+        listView = new ListView<>(movieList);
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
         listView.setEditable(true);
@@ -82,19 +87,17 @@ public class ProfileController {
             if(movie.getCover() != null) {
                 ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
             }
-            movieList.add(new CustomRow(MovieController.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
+            movieList.add(new CustomRow(MovieManager.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
         }
         listView.setItems(movieList);
         vBoxList.getChildren().add(listView);
 
-        listView.setCellFactory(new Callback<ListView<CustomRow>, ListCell<CustomRow>>() {
-            @Override
-            public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
-                return new CustomListCell();
-            }
-        });
+        listView.setCellFactory(customRowListView -> new CustomListCell());
     }
 
+    /**
+     * Delete account, popup window
+     */
     public void deleteAccount() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete account");
@@ -105,7 +108,7 @@ public class ProfileController {
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
                 try(JdbcUserDao userDao = new JdbcUserDao()){
-                    UserController.logout();
+                    UserManager.logout();
                     userDao.delete(user);
                     logger.info("Account has been deleted");
                     Stage stage = (Stage) profileAnchorPane.getScene().getWindow();
@@ -120,36 +123,36 @@ public class ProfileController {
         });
     }
 
+    /**
+     * Show warning
+     */
     private void setPasswordWarning(String mess) {
         passwordWarning.setText(mess);
         passwordWarning.setStyle("-fx-text-fill: red");
     }
 
-    public void back() {
-        App.changeScene(profileAnchorPane, "mainWindow");
-    }
-
+    /**
+     * Save new password for user
+     */
     public void savePassword() {
+        //Check if fields are correct
         if(oldPassTexField.getText().equals("") || newPassTextField.getText().equals("")
                 || newPassRepTextField.getText().equals("")) {
             setPasswordWarning("The field cant be empty");
             return;
-        }
-        if(!Arrays.equals(PasswordHashing.hashPassword(oldPassTexField.getText()), user.getPassword())) {
+        } else if(!Arrays.equals(PasswordHashing.hashPassword(oldPassTexField.getText()), user.getPassword())) {
             setPasswordWarning("Old password is incorrect");
             return;
-        }
-        if(!newPassTextField.getText().equals(newPassRepTextField.getText())) {
+        } else if(!newPassTextField.getText().equals(newPassRepTextField.getText())) {
             setPasswordWarning("New password is not the same");
             return;
-        }
-        if(newPassTextField.getText().length() < 6) {
+        } else if(newPassTextField.getText().length() < 6) {
             setPasswordWarning("Password is too short");
             return;
         }
 
+        //Set new password
         user.setPassword(newPassTextField.getText());
-
         try {
             JdbcUserDao userDao = new JdbcUserDao();
             userDao.update(user);
@@ -162,15 +165,27 @@ public class ProfileController {
         setPasswordWarning("Password has been changed");
     }
 
+    /**
+     * Return to mainWindow
+     */
+    public void back() {
+        App.changeScene(profileAnchorPane, "mainWindow");
+    }
+
+    /**
+     * Display textFields for password change
+     */
     public void changePassword() {
         passwordChangeVBox.setVisible(true);
     }
 
-    // KLASA WIERSZA
+    /**
+     * Class of custom row displayed on listview
+     */
     public static class CustomRow {
-        private Image image;
-        private String title;
-        private String genre;
+        private final Image image;
+        private final String title;
+        private final String genre;
 
         public CustomRow(Image image, String title, String genre) {
             this.image = image;
@@ -191,12 +206,14 @@ public class ProfileController {
         }
     }
 
-    // KLASA KOMORKI
-    private class CustomListCell extends ListCell<CustomRow> {
-        private HBox content;
-        private Text title;
-        private Text genre;
-        private ImageView image;
+    /**
+     * Class of custom cell displayed in row on listview
+     */
+    private static class CustomListCell extends ListCell<CustomRow> {
+        private final HBox content;
+        private final Text title;
+        private final Text genre;
+        private final ImageView image;
 
         public CustomListCell() {
             super();

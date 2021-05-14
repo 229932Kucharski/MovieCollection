@@ -1,8 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -12,7 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
+import manager.MovieManager;
+import manager.UserManager;
 import model.movie.Genres;
 import model.movie.ImageConverter;
 import model.movie.Movie;
@@ -36,9 +35,11 @@ public class MainController {
     private List<Movie> movies;
     private static final ObservableList<CustomRow> movieList = FXCollections.observableArrayList();
 
-
-    public void initialize() throws IOException, InterruptedException {
-        welcomeText.setText(UserController.getLoggedUser().welcomeText());
+    /**
+     * Initializing window
+     */
+    public void initialize() throws IOException {
+        welcomeText.setText(UserManager.getLoggedUser().welcomeText());
         MenuItem mi = new MenuItem(Genres.Action.name());
         MenuItem mi2 = new MenuItem(Genres.Adventure.name());
         MenuItem mi3 = new MenuItem(Genres.Comedy.name());
@@ -51,81 +52,92 @@ public class MainController {
         MenuItem mi10 = new MenuItem(Genres.Western.name());
         MenuItem mi11 = new MenuItem(Genres.ScienceFiction.name());
         genreSearcher.getItems().addAll(mi,mi2,mi3,mi4,mi5,mi6,mi7,mi8,mi9,mi10,mi11);
-
-        if(UserController.isAdmin()) {
+        if(UserManager.isAdmin()) {
             addFilmButton.setVisible(true);
         }
-
-        MovieController.setMovies();
-        movies = MovieController.getMovies();
+        MovieManager.setMovies();
+        movies = MovieManager.getMovies();
         addMoviesToListView();
     }
 
-    private void addMoviesToListView() throws IOException, InterruptedException {
-        listView = new ListView<CustomRow>(movieList);
+    /**
+     * Add movies from movieList to ListView
+     */
+    private void addMoviesToListView() throws IOException {
+        listView = new ListView<>(movieList);
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
         listView.setEditable(true);
-        for(Movie movie : movies) {
-            if(movie.getCover() != null) {
+        //save all covers to files
+        for (Movie movie : movies) {
+            if (movie.getCover() != null) {
                 ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
-
             }
         }
-        for(Movie movie : movies) {
-            movieList.add(new CustomRow(MovieController.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
+        //add movie to row and add it to listview
+        for (Movie movie : movies) {
+            movieList.add(new CustomRow(MovieManager.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
         }
         listView.setItems(movieList);
         vBoxList.getChildren().add(listView);
 
-        listView.setCellFactory(new Callback<ListView<CustomRow>, ListCell<CustomRow>>() {
-            @Override
-            public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
-                return new CustomListCell();
-            }
-        });
+        listView.setCellFactory(customRowListView -> new CustomListCell());
 
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomRow>() {
-            @Override
-            public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
-                if(t1 != null) {
-                    MovieController.setPickedMovie(MovieController.getMovieByTitle(t1.getTitle()));
-                    App.changeScene(mainAnchorPane, "filmWindow");
-                }
+        //If movie picked, open filmWindow
+        listView.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            if(t1 != null) {
+                MovieManager.setPickedMovie(MovieManager.getMovieByTitle(t1.getTitle()));
+                App.changeScene(mainAnchorPane, "filmWindow");
             }
         });
     }
 
-    public void search() throws IOException, InterruptedException {
+    /**
+     * Search movies by String and add them to listView
+     */
+    public void search() throws IOException {
         String searchString = searchTextField.getText();
-        movies = MovieController.getMoviesBySearch(searchString);
+        movies = MovieManager.getMoviesBySearch(searchString);
+        //Remove current listView and add new one
         vBoxList.getChildren().remove(listView);
         addMoviesToListView();
     }
 
+    /**
+     * Logout current user
+     */
     public void logOut() {
         logger.info("User has been logged out");
-        UserController.logout();
+        UserManager.logout();
         App.changeScene(mainAnchorPane, "loginWindow");
     }
 
-    public void showProfile() throws IOException {
-        if(UserController.isAdmin()) {
+    /**
+     * Open new window that shows user profile. If user is Admin, open users list
+     */
+    public void showProfile() {
+        if(UserManager.isAdmin()) {
             App.changeScene(mainAnchorPane, "profileListWindow");
         } else {
             App.changeScene(mainAnchorPane, "profileWindow");
         }
     }
 
+    /**
+     * Open new window (only admin) to add new film
+     */
     public void addFilm() {
         App.changeScene(mainAnchorPane, "addFilmWindow");
     }
 
-    // KLASA WIERSZA
+
+    /**
+     * Class of custom row displayed on listview
+     */
     public static class CustomRow {
-        private Image image;
-        private String title;
-        private String genre;
+        private final Image image;
+        private final String title;
+        private final String genre;
 
         public CustomRow(Image image, String title, String genre) {
             this.image = image;
@@ -136,22 +148,22 @@ public class MainController {
         public Image getImage() {
             return image;
         }
-
         public String getTitle() {
             return title;
         }
-
         public String getGenre() {
             return genre;
         }
     }
 
-    // KLASA KOMORKI
-    private class CustomListCell extends ListCell<CustomRow> {
-        private HBox content;
-        private Text title;
-        private Text genre;
-        private ImageView image;
+    /**
+     * Class of custom cell displayed in row on listview
+     */
+    private static class CustomListCell extends ListCell<CustomRow> {
+        private final HBox content;
+        private final Text title;
+        private final Text genre;
+        private final ImageView image;
 
         public CustomListCell() {
             super();
@@ -178,5 +190,4 @@ public class MainController {
             }
         }
     }
-
 }

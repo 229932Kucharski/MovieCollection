@@ -1,8 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -12,7 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import manager.MovieManager;
+import manager.UserManager;
 import model.account.user.User;
 import model.dao.JdbcCommentDao;
 import model.dao.JdbcFavourite;
@@ -50,16 +49,16 @@ public class FilmController {
     public Button deleteCommentButton;
     public Button addFavouriteButton;
     public Button delFavouriteButton;
-
-    private List<Comment> comments;
     private static final ObservableList<CustomRow> commentList = FXCollections.observableArrayList();
 
+    /**
+     * Initializing window
+     */
     public void initialize() throws Exception {
-        Movie movie = MovieController.getPickedMovie();
-
+        Movie movie = MovieManager.getPickedMovie();
         JdbcFavourite jdbcFavourite = new JdbcFavourite();
-        boolean isFav = jdbcFavourite.isFavVideo(UserController.getLoggedUser().getUserId(),
-                    MovieController.getPickedMovie().getId());
+        boolean isFav = jdbcFavourite.isFavVideo(UserManager.getLoggedUser().getUserId(),
+                    MovieManager.getPickedMovie().getId());
         if(isFav) {
             delFavouriteButton.setVisible(true);
             addFavouriteButton.setVisible(false);
@@ -67,22 +66,19 @@ public class FilmController {
             addFavouriteButton.setVisible(true);
             delFavouriteButton.setVisible(false);
         }
-
-
-
-        if(UserController.isAdmin()) {
+        if(UserManager.isAdmin()) {
             deleteButton.setVisible(true);
             deleteCommentButton.setVisible(true);
             deleteCommentButton.setDisable(true);
             addFavouriteButton.setVisible(false);
-        } else if(!UserController.isPremium()) {
+        } else if(!UserManager.isPremium()) {
             addCommentButton.setDisable(true);
             commentTextArea.setDisable(true);
             commentTextArea.setPromptText("You need premium account to comment");
             commentTextArea.setOpacity(1);
         }
 
-        coverImage.setImage(MovieController.getImage(movie));
+        coverImage.setImage(MovieManager.getImage(movie));
         coverImage.setFitWidth(250);
         titleText.setText(movie.getTitle());
         directorText.setText(movie.getDirector());
@@ -95,28 +91,28 @@ public class FilmController {
 
         charactersLeftLabel.setText("250 characters left");
         commentTextArea.setText("");
-        commentTextArea.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                int amountOfChars = t1.length();
-                if(amountOfChars > 250) {
-                    commentTextArea.setText(s);
-                    charactersLeftLabel.setText(250 - s.length() + " character left");
-                } else {
-                    charactersLeftLabel.setText(250 - amountOfChars + " character left");
-                }
+        commentTextArea.textProperty().addListener((observableValue, s, t1) -> {
+            int amountOfChars = t1.length();
+            if(amountOfChars > 250) {
+                commentTextArea.setText(s);
+                charactersLeftLabel.setText(250 - s.length() + " character left");
+            } else {
+                charactersLeftLabel.setText(250 - amountOfChars + " character left");
             }
         });
         addCommentsToListView();
     }
 
+    /**
+     * Add comments to listview
+     */
     public void addCommentsToListView() {
-        MovieController.setMovies();
-        Movie movie = MovieController.getPickedMovie();
-        MovieController.setPickedMovie(MovieController.getMovieByTitle(movie.getTitle()));
-        comments = MovieController.getPickedMovie().getComments();
+        MovieManager.setMovies();
+        Movie movie = MovieManager.getPickedMovie();
+        MovieManager.setPickedMovie(MovieManager.getMovieByTitle(movie.getTitle()));
+        List<Comment> comments = MovieManager.getPickedMovie().getComments();
         commentsNumber.setText("Comments (" + comments.size() + ")");
-        listView = new ListView<CustomRow>(commentList);
+        listView = new ListView<>(commentList);
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
         listView.setEditable(false);
@@ -125,10 +121,9 @@ public class FilmController {
             User user = null;
             String name;
             try(JdbcUserDao userDao = new JdbcUserDao()){
-                user = (User) userDao.findById(comment.getUserId());
+                user = userDao.findById(comment.getUserId());
 
             } catch (Exception e) {
-                name = "Account deleted";
                 e.printStackTrace();
             }
             if(user != null) {
@@ -142,30 +137,25 @@ public class FilmController {
         listView.setItems(commentList);
         vBoxComment.getChildren().add(listView);
 
-        listView.setCellFactory(new Callback<ListView<CustomRow>, ListCell<CustomRow>>() {
-            @Override
-            public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
-                return new CustomListCell();
-            }
-        });
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomRow>() {
-            @Override
-            public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
-                if(t1 != null) {
-                    MovieController.setPickedComment(Integer.parseInt(t1.getCommentId()));
-                    deleteCommentButton.setDisable(false);
-                }
+        listView.setCellFactory(customRowListView -> new CustomListCell());
+        listView.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            if(t1 != null) {
+                MovieManager.setPickedComment(Integer.parseInt(t1.getCommentId()));
+                deleteCommentButton.setDisable(false);
             }
         });
     }
 
-    public void addComment() throws Exception {
+    /**
+     * Add new comment
+     */
+    public void addComment() {
         String content = commentTextArea.getText();
         if(content.equals("")) {
             return;
         }
-        int movieId = MovieController.getPickedMovie().getId();
-        int userId = UserController.getLoggedUser().getUserId();
+        int movieId = MovieManager.getPickedMovie().getId();
+        int userId = UserManager.getLoggedUser().getUserId();
         Comment comment = new Comment(1, userId, movieId, content, LocalDate.now());
         try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
             commentDao.add(comment);
@@ -173,16 +163,22 @@ public class FilmController {
             logger.warn("Cant insert comment to database");
         }
         commentTextArea.setText("");
-        MovieController.getPickedMovie().addComment(comment);
+        MovieManager.getPickedMovie().addComment(comment);
         vBoxComment.getChildren().remove(listView);
         addCommentsToListView();
     }
 
+    /**
+     * Return to mainWindow page
+     */
     public void previous() {
-        MovieController.setPickedMovie(null);
+        MovieManager.setPickedMovie(null);
         App.changeScene(mainAnchorPane, "mainWindow");
     }
 
+    /**
+     * Delete movie
+     */
     public void deleteMovie() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete movie");
@@ -193,8 +189,8 @@ public class FilmController {
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
                 try(JdbcMovieDao movieDao = new JdbcMovieDao()){
-                    movieDao.delete(MovieController.getPickedMovie());
-                    MovieController.setPickedMovie(null);
+                    movieDao.delete(MovieManager.getPickedMovie());
+                    MovieManager.setPickedMovie(null);
                     logger.info("Movie has been deleted");
                     Stage stage = (Stage) mainAnchorPane.getScene().getWindow();
                     stage.close();
@@ -208,9 +204,12 @@ public class FilmController {
         });
     }
 
-    public void deleteComment() throws Exception {
+    /**
+     * Delete comment (only for admin)
+     */
+    public void deleteComment() {
         try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
-            commentDao.delete(commentDao.findById(MovieController.getPickedComment()));
+            commentDao.delete(commentDao.findById(MovieManager.getPickedComment()));
             deleteCommentButton.setDisable(true);
         } catch (SQLException e) {
             logger.warn("Cant delete comment");
@@ -221,9 +220,12 @@ public class FilmController {
         addCommentsToListView();
     }
 
+    /**
+     * Add movie to favourite
+     */
     public void addFavourite() {
         try(JdbcFavourite jdbcFavourite = new JdbcFavourite()) {
-            jdbcFavourite.add(UserController.getLoggedUser().getUserId(), MovieController.getPickedMovie().getId());
+            jdbcFavourite.add(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,9 +233,12 @@ public class FilmController {
         delFavouriteButton.setVisible(true);
     }
 
+    /**
+     * Delete movie from favourite
+     */
     public void delFavourite() {
         try(JdbcFavourite jdbcFavourite = new JdbcFavourite()) {
-            jdbcFavourite.delete(UserController.getLoggedUser().getUserId(), MovieController.getPickedMovie().getId());
+            jdbcFavourite.delete(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -242,12 +247,14 @@ public class FilmController {
     }
 
 
-    // KLASA WIERSZA
+    /**
+     * Class of custom row displayed on listview
+     */
     public static class CustomRow {
-        private String content;
-        private String author;
-        private String commentDate;
-        private String commentId;
+        private final String content;
+        private final String author;
+        private final String commentDate;
+        private final String commentId;
 
         public CustomRow(String content, String author, String commentDate, String commentId) {
             this.content = content;
@@ -273,13 +280,14 @@ public class FilmController {
         }
     }
 
-    // KLASA KOMORKI
-    private class CustomListCell extends ListCell<CustomRow> {
-        private VBox vBox;
-        private HBox hBox;
-        private Text content;
-        private Text author;
-        private Text commentDate;
+    /**
+     * Class of custom cell displayed in row on listview
+     */
+    private static class CustomListCell extends ListCell<CustomRow> {
+        private final VBox vBox;
+        private final Text content;
+        private final Text author;
+        private final Text commentDate;
 
         public CustomListCell() {
             super();
@@ -287,7 +295,7 @@ public class FilmController {
             content = new Text();
             author = new Text();
             commentDate = new Text();
-            hBox = new HBox(author, commentDate);
+            HBox hBox = new HBox(author, commentDate);
             vBox = new VBox(content, hBox);
             vBox.setSpacing(10);
             hBox.setSpacing(10);

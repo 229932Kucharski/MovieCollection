@@ -1,6 +1,5 @@
 package model.dao;
 
-import model.account.Account;
 import model.account.supervisor.Administrator;
 import model.account.user.Adult;
 import model.account.user.Kid;
@@ -127,13 +126,16 @@ public class JdbcUserDao implements Dao<User> {
                 if(login.equals("admin")) {
                     user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
                 } else if(isPremium) {
-                    user = new PremiumAdult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new PremiumAdult(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc, phoneNumber);
                     users.add(user);
                 } else if(period.getYears() >= 18) {
-                    user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new Adult(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc, phoneNumber);
                     users.add(user);
                 } else {
-                    user = new Kid(userId, login, pass, email, gender, birthDateLoc);
+                    user = new Kid(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc);
                     users.add(user);
                 }
             }
@@ -168,11 +170,14 @@ public class JdbcUserDao implements Dao<User> {
                 if(login.equals("admin")) {
                     user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
                 } else if(isPremium) {
-                    user = new PremiumAdult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new PremiumAdult(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc, phoneNumber);
                 } else if(period.getYears() >= 18) {
-                    user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new Adult(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc, phoneNumber);
                 } else {
-                    user = new Kid(userId, login, pass, email, gender, birthDateLoc);
+                    user = new Kid(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc);
                 }
             }
         } catch (SQLException e) {
@@ -181,7 +186,6 @@ public class JdbcUserDao implements Dao<User> {
         return user;
     }
 
-    @Override
     public User findByName(String name) throws SQLException {
         String getUser = "select * from account where name=?";
         User user = null;
@@ -208,11 +212,14 @@ public class JdbcUserDao implements Dao<User> {
                 if(login.equals("admin")) {
                     user = new Administrator(userId, login, pass, email, gender, birthDateLoc);
                 } else if(isPremium) {
-                    user = new PremiumAdult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new PremiumAdult(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc, phoneNumber);
                 } else if(period.getYears() >= 18) {
-                    user = new Adult(userId, login, pass, email, gender, birthDateLoc, phoneNumber);
+                    user = new Adult(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc, phoneNumber);
                 } else {
-                    user = new Kid(userId, login, pass, email, gender, birthDateLoc);
+                    user = new Kid(userId, login, pass, registerDate.toLocalDate(),
+                            email, gender, birthDateLoc);
                 }
             }
         } catch (SQLException e) {

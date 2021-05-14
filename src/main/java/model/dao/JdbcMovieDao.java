@@ -162,11 +162,6 @@ public class JdbcMovieDao implements Dao<Movie>{
     }
 
     @Override
-    public Movie findByName(String name) throws SQLException {
-        return null;
-    }
-
-    @Override
     public void close() throws Exception {
         connection.close();
     }

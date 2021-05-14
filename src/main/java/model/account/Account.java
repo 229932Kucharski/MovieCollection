@@ -12,16 +12,16 @@ public abstract class Account {
     private byte[] password;
     private final LocalDate registerDate;
 
-    public Account(String name, String password) throws PasswordException{
+    public Account(String name, String password, LocalDate regDate) throws PasswordException{
         this.name = name;
         setPassword(password);
-        registerDate = LocalDate.now();
+        registerDate = regDate;
     }
 
-    public Account(String name, byte[] password) throws PasswordException{
+    public Account(String name, byte[] password, LocalDate regDate) throws PasswordException{
         this.name = name;
         setPassword(password);
-        registerDate = LocalDate.now();
+        registerDate = regDate;
     }
 
     public abstract String welcomeText();

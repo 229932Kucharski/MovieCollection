@@ -103,11 +103,6 @@ public class JdbcCommentDao implements Dao<Comment> {
         return comment;
     }
 
-    @Override
-    public Comment findByName(String name) throws SQLException {
-        return null;
-    }
-
 
     public List<Comment> findAllForMovie(int movieId) throws SQLException {
         String getComments ="select * from comment where videoId=?";

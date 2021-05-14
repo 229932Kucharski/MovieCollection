@@ -9,21 +9,23 @@ import java.time.Period;
 
 public abstract class User extends Account {
 
-    private int userId;
+    private final int userId;
     private String email;
     private char gender;
     private LocalDate birthDate;
 
-    public User(int id, String name, String password, String email, char gender, LocalDate birthDate) throws IllegalArgumentException{
-        super(name, password);
+    public User(int id, String name, String password, LocalDate regDate,  String email, char gender,
+                LocalDate birthDate) throws IllegalArgumentException{
+        super(name, password, regDate);
         this.userId = id;
         setEmail(email);
         setGender(gender);
         setBirthDate(birthDate);
     }
 
-    public User(int id, String name, byte[] password, String email, char gender, LocalDate birthDate) throws IllegalArgumentException{
-        super(name, password);
+    public User(int id, String name, byte[] password, LocalDate regDate,  String email, char gender,
+                LocalDate birthDate) throws IllegalArgumentException{
+        super(name, password, regDate);
         this.userId = id;
         setEmail(email);
         setGender(gender);

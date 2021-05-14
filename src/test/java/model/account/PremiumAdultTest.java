@@ -12,8 +12,10 @@ public class PremiumAdultTest {
 
     @Test
     public void welcomeTextTest() {
-        PremiumAdult user = new PremiumAdult(2,"Jan", "qwerty".getBytes(), "test@wp.pl", 'M', date, "111222333");
-        Adult user2 = new Adult(1, "Jan", "qwerty".getBytes(), "test@wp.pl", 'M', date, "111222333");
+        PremiumAdult user = new PremiumAdult(2,"Jan", "qwerty".getBytes(), LocalDate.now(),
+                "test@wp.pl", 'M', date, "111222333");
+        Adult user2 = new Adult(1, "Jan", "qwerty".getBytes(), LocalDate.now(),
+                "test@wp.pl", 'M', date, "111222333");
         Assert.assertNotEquals(user.welcomeText(), user2.welcomeText());
     }
 }

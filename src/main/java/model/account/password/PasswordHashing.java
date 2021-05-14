@@ -3,14 +3,11 @@ package model.account.password;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 public class PasswordHashing {
 
-    private final static int ITERATION_COUNT = 5;
-
     public static byte[] hashPassword(String password) {
-        MessageDigest md = null;
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {

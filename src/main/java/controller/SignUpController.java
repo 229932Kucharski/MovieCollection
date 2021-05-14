@@ -4,7 +4,6 @@ import app.App;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import model.account.Account;
 import model.account.user.Adult;
 import model.account.user.Kid;
 import model.account.user.User;
@@ -35,7 +34,9 @@ public class SignUpController {
     public Label passwordInfoLabel;
     private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
 
-    @FXML
+    /**
+     * Initializing window
+     */
     public void initialize() {
         loginWarning.setStyle("-fx-text-fill: red");
         dateDatePicker.valueProperty().addListener((ov, oldVal, newVal) -> {
@@ -63,10 +64,16 @@ public class SignUpController {
         });
     }
 
+    /**
+     * Return to loginWindow
+     */
     public void signIn() {
         App.changeScene(signUpAnchorPane, "loginWindow");
     }
 
+    /**
+     * Mehtod that checks filed in form
+     */
     public boolean checkForm() {
         String login = loginTextField.getText();
         String pass = passwordField.getText();
@@ -92,6 +99,9 @@ public class SignUpController {
         return true;
     }
 
+    /**
+     * Sign up new user
+     */
     public void signUp() {
 
         if(!checkForm()) {
@@ -123,11 +133,11 @@ public class SignUpController {
             return;
         }
 
-        User newUser = null;
+        User newUser;
         Period period = Period.between(dateOfBirth, LocalDate.now());
         if (period.getYears() >= 18) {
             try{
-                newUser = new Adult(1, login, pass, email, gender, dateOfBirth, phoneNum);
+                newUser = new Adult(1, login, pass, LocalDate.now(), email, gender, dateOfBirth, phoneNum);
             } catch (PasswordException e) {
                 loginWarning.setText("Password is too short");
                 return;
@@ -141,7 +151,7 @@ public class SignUpController {
 
         } else {
             try{
-                newUser = new Kid(1, login, pass, email, gender, dateOfBirth);
+                newUser = new Kid(1, login, pass, LocalDate.now(), email, gender, dateOfBirth);
             } catch (PasswordException e) {
                 loginWarning.setText("Password is too short");
                 return;
@@ -162,6 +172,5 @@ public class SignUpController {
         }
 
         App.changeScene(signUpAnchorPane, "loginWindow");
-
     }
 }

@@ -5,15 +5,15 @@ import java.util.Calendar;
 
 public class Adult extends User {
 
-    private String phoneNumber;
+    private final String phoneNumber;
 
-    public Adult(int id, String name, String password, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
-        super(id, name, password, email, gender, birthDate);
+    public Adult(int id, String name, String password, LocalDate regDate, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
+        super(id, name, password, regDate, email, gender, birthDate);
         this.phoneNumber = phoneNumber;
     }
 
-    public Adult(int id, String name, byte[] password, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
-        super(id, name, password, email, gender, birthDate);
+    public Adult(int id, String name, byte[] password, LocalDate regDate, String email, char gender, LocalDate birthDate, String phoneNumber) throws IllegalArgumentException{
+        super(id, name, password, regDate, email, gender, birthDate);
         this.phoneNumber = phoneNumber;
     }
 
@@ -36,7 +36,4 @@ public class Adult extends User {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }

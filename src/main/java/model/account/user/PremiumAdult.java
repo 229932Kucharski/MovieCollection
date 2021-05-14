@@ -6,10 +6,8 @@ import java.util.Calendar;
 
 public class PremiumAdult extends Adult {
 
-    //byte[] avatar;
-
-    public PremiumAdult(int id, String name, byte[] password, String email, char gender, LocalDate birthDate, String phoneNumber) {
-        super(id, name, password, email, gender, birthDate, phoneNumber);
+    public PremiumAdult(int id, String name, byte[] password, LocalDate regDate, String email, char gender, LocalDate birthDate, String phoneNumber) {
+        super(id, name, password, regDate, email, gender, birthDate, phoneNumber);
     }
 
     @Override

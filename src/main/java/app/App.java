@@ -1,6 +1,6 @@
 package app;
-import controller.DatabaseController;
-import controller.MovieController;
+
+import manager.DatabaseManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,10 +11,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import model.dao.JdbcMovieDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -38,29 +36,29 @@ public class App extends Application{
         logger.info("Application is starting");
 
         // Creating database and tables
-        try (DatabaseController databaseController = new DatabaseController()){
+        try (DatabaseManager databaseManager = new DatabaseManager()){
             try {
-                databaseController.createDatabase();
+                databaseManager.createDatabase();
             } catch (SQLException e) {
                 logger.info("Database was already created");
             }
             try {
-                databaseController.createAccount();
+                databaseManager.createAccount();
             } catch (SQLException e) {
                 logger.info("Table account was already created");
             }
             try {
-                databaseController.createMovie();
+                databaseManager.createMovie();
             } catch (SQLException e) {
                 logger.info("Table movie was already created");
             }
             try {
-                databaseController.createComment();
+                databaseManager.createComment();
             } catch (SQLException e) {
                 logger.info("Table comment was already created");
             }
             try {
-                databaseController.createUserFav();
+                databaseManager.createUserFav();
             } catch (SQLException e) {
                 logger.info("Table favourite video was already created");
             }
@@ -99,6 +97,10 @@ public class App extends Application{
         }
     }
 
+    /**
+     * Method showing pop up window to restart application
+     * @param message   message to display
+     */
     public static void restartApplication(String message) {
         if (message == null) {
             message = "Please start application again";

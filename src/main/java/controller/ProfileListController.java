@@ -1,11 +1,8 @@
 package controller;
 
 import app.App;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -16,8 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
-import model.account.Account;
+import manager.UserManager;
 import model.account.user.Adult;
 import model.account.user.Kid;
 import model.account.user.PremiumAdult;
@@ -27,8 +23,6 @@ import model.dao.JdbcUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -42,11 +36,14 @@ public class ProfileListController {
     public ListView<CustomRow> listView;
     private static final ObservableList<CustomRow> userList = FXCollections.observableArrayList();
 
-    public void initialize() throws IOException {
-        UserController.setPickedUser(null);
+    /**
+     * Initializing window
+     */
+    public void initialize() {
+        UserManager.setPickedUser(null);
         try (JdbcUserDao userDao = new JdbcUserDao()) {
             users = userDao.findAll();
-            UserController.setUsers(users);
+            UserManager.setUsers(users);
         } catch (SQLException e) {
             logger.warn("Cant get users from database");
             e.printStackTrace();
@@ -56,7 +53,10 @@ public class ProfileListController {
         addUsersToListView();
     }
 
-    private void addUsersToListView() throws IOException {
+    /**
+     * Add users to listview
+     */
+    private void addUsersToListView() {
         listView = new ListView<>(userList);
         listView.getItems().clear();
         listView.setPrefSize(200, 500);
@@ -64,53 +64,51 @@ public class ProfileListController {
         boolean isPremium;
         for(User user : users) {
             isPremium = user instanceof PremiumAdult;
-            userList.add(new CustomRow(user.getUserId(), user.getName(), user.getRegisterDate().toString(), user.getEmail(), isPremium));
+            userList.add(new CustomRow(user.getUserId(), user.getName(), user.getRegisterDate().toString(),
+                    user.getEmail(), isPremium));
         }
         listView.setItems(userList);
         vBoxList.getChildren().add(listView);
-        listView.setCellFactory(new Callback<ListView<CustomRow>, ListCell<CustomRow>>() {
-            @Override
-            public ListCell<CustomRow> call(ListView<CustomRow> customRowListView) {
-                return new CustomListCell();
-            }
-        });
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomRow>() {
-            @Override
-            public void changed(ObservableValue<? extends CustomRow> observableValue, CustomRow s, CustomRow t1) {
-                if(t1 != null) {
-                    User user = UserController.getUsersByName(t1.getName()).get(0);
-                    if(user instanceof Kid || user instanceof PremiumAdult)  {
-                        promoteButton.setDisable(true);
-                    } else {
-                        promoteButton.setDisable(false);
-                    }
-                    UserController.setPickedUser(UserController.getUsersByName(t1.getName()).get(0));
-                }
+        listView.setCellFactory(customRowListView -> new CustomListCell());
+        listView.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            if(t1 != null) {
+                User user = UserManager.getUsersByName(t1.getName()).get(0);
+                promoteButton.setDisable(user instanceof Kid || user instanceof PremiumAdult);
+                UserManager.setPickedUser(UserManager.getUsersByName(t1.getName()).get(0));
             }
         });
     }
 
+    /**
+     * Return to mainWindow
+     */
     public void previous() {
         App.changeScene(mainAnchorPane, "mainWindow");
     }
 
-    public void searchByName() throws IOException {
+    /**
+     * Search user by name
+     */
+    public void searchByName() {
         String username = usernameTextField.getText();
-        users = UserController.getUsersByName(username);
+        users = UserManager.getUsersByName(username);
         vBoxList.getChildren().remove(listView);
         addUsersToListView();
     }
 
-    public void deleteUser() throws IOException {
-        if(UserController.getPickedUser() == null) {
+    /**
+     * Delete picked user
+     */
+    public void deleteUser() {
+        if(UserManager.getPickedUser() == null) {
             return;
         }
         try(JdbcUserDao userDao = new JdbcUserDao()) {
             try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
-                commentDao.deleteCommentsOfUser(UserController.getPickedUser().getUserId());
+                commentDao.deleteCommentsOfUser(UserManager.getPickedUser().getUserId());
             }
-            userDao.delete(UserController.getPickedUser());
-            UserController.setUsers(userDao.findAll());
+            userDao.delete(UserManager.getPickedUser());
+            UserManager.setUsers(userDao.findAll());
         } catch (SQLException e) {
             logger.warn("Cant delete user");
             e.printStackTrace();
@@ -118,21 +116,24 @@ public class ProfileListController {
             e.printStackTrace();
         }
         vBoxList.getChildren().remove(listView);
-        UserController.setPickedUser(null);
-        users = UserController.getUsers();
+        UserManager.setPickedUser(null);
+        users = UserManager.getUsers();
         addUsersToListView();
     }
 
-    public void promoteUser() throws IOException {
-        if(UserController.getPickedUser() instanceof Kid || UserController.getPickedUser() instanceof PremiumAdult) {
+    /**
+     * Promote user to premium account
+     */
+    public void promoteUser() {
+        if(UserManager.getPickedUser() instanceof Kid || UserManager.getPickedUser() instanceof PremiumAdult) {
             return;
         }
-        Adult user = (Adult)UserController.getPickedUser();
-        PremiumAdult premiumAdult = new PremiumAdult(user.getUserId(), user.getName(), user.getPassword(), user.getEmail(),
-                user.getGender(), user.getBirthDate(), user.getPhoneNumber());
+        Adult user = (Adult) UserManager.getPickedUser();
+        PremiumAdult premiumAdult = new PremiumAdult(user.getUserId(), user.getName(), user.getPassword(),
+                user.getRegisterDate(), user.getEmail(), user.getGender(), user.getBirthDate(), user.getPhoneNumber());
         try(JdbcUserDao userDao = new JdbcUserDao()){
             userDao.update(premiumAdult);
-            UserController.setUsers(userDao.findAll());
+            UserManager.setUsers(userDao.findAll());
         } catch (SQLException e) {
             logger.warn("Cant promote user");
             e.printStackTrace();
@@ -140,18 +141,20 @@ public class ProfileListController {
             e.printStackTrace();
         }
         vBoxList.getChildren().remove(listView);
-        UserController.setPickedUser(null);
-        users = UserController.getUsers();
+        UserManager.setPickedUser(null);
+        users = UserManager.getUsers();
         addUsersToListView();
     }
 
-    // KLASA WIERSZA
+    /**
+     * Class of custom row displayed on listview
+     */
     public static class CustomRow {
-        private int id;
-        private String name;
-        private String registerDate;
-        private String email;
-        private boolean premium;
+        private final int id;
+        private final String name;
+        private final String registerDate;
+        private final String email;
+        private final boolean premium;
 
         public CustomRow(int id, String name, String registerDate, String email, boolean premium) {
             this.id = id;
@@ -181,14 +184,17 @@ public class ProfileListController {
             return premium;
         }
     }
-    // KLASA KOMORKI
-    private class CustomListCell extends ListCell<CustomRow> {
-        private HBox content;
-        private Text id;
-        private Text name;
+
+    /**
+     * Class of custom cell displayed in row on listview
+     */
+    private static class CustomListCell extends ListCell<CustomRow> {
+        private final HBox content;
+        private final Text id;
+        private final Text name;
         private Text date;
-        private Text email;
-        private Text premium;
+        private final Text email;
+        private final Text premium;
 
         public CustomListCell() {
             super();

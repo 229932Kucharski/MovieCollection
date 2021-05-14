@@ -10,5 +10,4 @@ public interface Dao<T> extends AutoCloseable{
     void delete(T obj) throws SQLException;
     List<T> findAll() throws SQLException;
     T findById(int id) throws SQLException;
-    T findByName(String name) throws SQLException;
 }

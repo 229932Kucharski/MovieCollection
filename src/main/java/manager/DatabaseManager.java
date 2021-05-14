@@ -1,18 +1,15 @@
-package controller;
-
-import model.movie.Comment;
+package manager;
 
 import java.sql.*;
-import java.time.LocalDate;
 
-public class DatabaseController implements AutoCloseable{
+public class DatabaseManager implements AutoCloseable{
 
     private final String url = "jdbc:sqlserver://localhost";
     private final String username = "sa";
     private final String password = "qwerty";
     private final Connection connection;
 
-    public DatabaseController() throws SQLException {
+    public DatabaseManager() throws SQLException {
         connection = prepareConnection();
     }
 
@@ -26,13 +23,16 @@ public class DatabaseController implements AutoCloseable{
     }
 
     /**
-     * Method create database movieCollection
+     * Create database movieCollection
      */
     public void createDatabase() throws SQLException {
         Statement s = connection.createStatement();
         int Result = s.executeUpdate("CREATE DATABASE movieCollection");
     }
 
+    /**
+     * Create table account
+     */
     public void createAccount() throws SQLException {
         String createAccount = "USE movieCollection;" +
                 "CREATE TABLE account(" +
@@ -50,6 +50,9 @@ public class DatabaseController implements AutoCloseable{
         int Result = s.executeUpdate(createAccount);
     }
 
+    /**
+     * Create table user favourite videos
+     */
     public void createUserFav() throws SQLException {
         String createFav = "USE movieCollection;" +
                 "CREATE TABLE favouriteVideo(" +
@@ -60,6 +63,9 @@ public class DatabaseController implements AutoCloseable{
         int Result = s.executeUpdate(createFav);
     }
 
+    /**
+     * Create table movie
+     */
     public void createMovie() throws SQLException {
         String createMovie = "USE movieCollection;" +
                 "CREATE TABLE movie(" +
@@ -79,6 +85,9 @@ public class DatabaseController implements AutoCloseable{
         int Result = s.executeUpdate(createMovie);
     }
 
+    /**
+     * Create table comment
+     */
     public void createComment() throws SQLException {
         String createAccount = "USE movieCollection;" +
                 "CREATE TABLE comment(" +
@@ -92,6 +101,9 @@ public class DatabaseController implements AutoCloseable{
         int Result = s.executeUpdate(createAccount);
     }
 
+    /**
+     * Close connection
+     */
     @Override
     public void close() throws Exception {
         connection.close();
