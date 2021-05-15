@@ -62,6 +62,11 @@ public class App extends Application{
             } catch (SQLException e) {
                 logger.info("Table favourite video was already created");
             }
+            try {
+                databaseManager.createUserRates();
+            } catch (SQLException e) {
+                logger.info("Table user rates was already created");
+            }
         } catch (SQLException e) {
             logger.info("Cant connect to database");
         }

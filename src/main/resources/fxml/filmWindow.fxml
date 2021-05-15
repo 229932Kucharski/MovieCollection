@@ -50,7 +50,7 @@
             <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Give a rate" wrappingWidth="66.4609375" />
             <ChoiceBox fx:id="rateChoiceBox" prefWidth="150.0" />
-            <Button fx:id="giveRate" mnemonicParsing="false" text="Submit" />
+            <Button mnemonicParsing="false" onAction="#giveRate" text="Submit" />
          </children>
       </HBox>
       <TextArea fx:id="commentTextArea" layoutX="107.0" layoutY="431.0" prefHeight="56.0" prefWidth="329.0" wrapText="true" />

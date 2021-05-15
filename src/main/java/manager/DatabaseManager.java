@@ -67,6 +67,20 @@ public class DatabaseManager implements AutoCloseable{
     }
 
     /**
+     * Create table user rates
+     */
+    public void createUserRates() throws SQLException {
+        String createRates = "USE movieCollection;" +
+                "CREATE TABLE userRates(" +
+                "userId int FOREIGN KEY REFERENCES account(userId)," +
+                "videoId int FOREIGN KEY REFERENCES movie(movieId)," +
+                "rate int" +
+                ");";
+        Statement s = connection.createStatement();
+        int Result = s.executeUpdate(createRates);
+    }
+
+    /**
      * Create table movie
      */
     public void createMovie() throws SQLException {

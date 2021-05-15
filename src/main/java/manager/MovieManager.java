@@ -1,7 +1,10 @@
 package manager;
 
 import javafx.scene.image.Image;
+import model.account.user.User;
+import model.dao.JdbcFavourite;
 import model.dao.JdbcMovieDao;
+import model.dao.JdbcUserRates;
 import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
@@ -10,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,6 +82,30 @@ public class MovieManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isMovieFav(User user) throws SQLException {
+        JdbcFavourite jdbcFavourite = new JdbcFavourite();
+        return jdbcFavourite.isFavVideo(UserManager.getLoggedUser().getUserId(),
+                MovieManager.getPickedMovie().getId());
+    }
+
+    public static int getUserRate(User user) throws SQLException {
+        JdbcUserRates userRates = new JdbcUserRates();
+        return userRates.findRateForMovie(user.getUserId(), pickedMovie.getId());
+    }
+
+    public static double getAvgRate() throws SQLException {
+        JdbcUserRates userRates = new JdbcUserRates();
+        List<Integer> rates = userRates.getRatesForMovie(pickedMovie.getId());
+        if(rates.size() == 0) {
+            return 0;
+        }
+        double sum = 0;
+        for(Integer rate : rates) {
+            sum += rate;
+        }
+        return Math.round((sum / rates.size()) * 100.0) / 100.0;
     }
 
     /**

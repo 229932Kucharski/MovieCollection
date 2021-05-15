@@ -3,6 +3,7 @@ package controller;
 import app.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -13,17 +14,16 @@ import javafx.stage.Stage;
 import manager.MovieManager;
 import manager.UserManager;
 import model.account.user.User;
-import model.dao.JdbcCommentDao;
-import model.dao.JdbcFavourite;
-import model.dao.JdbcMovieDao;
-import model.dao.JdbcUserDao;
+import model.dao.*;
 import model.movie.Comment;
+import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FilmController {
@@ -50,15 +50,33 @@ public class FilmController {
     public Button addFavouriteButton;
     public Button delFavouriteButton;
     private static final ObservableList<CustomRow> commentList = FXCollections.observableArrayList();
+    public ChoiceBox<String> rateChoiceBox;
+    public Text rateText;
 
     /**
      * Initializing window
      */
     public void initialize() throws Exception {
         Movie movie = MovieManager.getPickedMovie();
-        JdbcFavourite jdbcFavourite = new JdbcFavourite();
-        boolean isFav = jdbcFavourite.isFavVideo(UserManager.getLoggedUser().getUserId(),
-                    MovieManager.getPickedMovie().getId());
+        boolean isFav = MovieManager.isMovieFav(UserManager.getLoggedUser());
+        int userRate = MovieManager.getUserRate(UserManager.getLoggedUser());
+        double avgRate = MovieManager.getAvgRate();
+
+        ObservableList<String> rateOpt = FXCollections.observableArrayList();
+        rateOpt.add("No rate");
+        for (int i = 1; i < 11; i++) {
+            rateOpt.add(String.valueOf(i));
+        }
+
+        rateChoiceBox.setItems(rateOpt);
+        if(userRate != 0) {
+            rateChoiceBox.setValue(String.valueOf(userRate));
+        } else {
+            rateChoiceBox.setValue("No rate");
+        }
+
+        rateText.setText(String.valueOf(avgRate));
+
         if(isFav) {
             delFavouriteButton.setVisible(true);
             addFavouriteButton.setVisible(false);
@@ -244,6 +262,19 @@ public class FilmController {
         }
         addFavouriteButton.setVisible(true);
         delFavouriteButton.setVisible(false);
+    }
+
+    public void giveRate() throws Exception {
+        String rateString = rateChoiceBox.getValue();
+        int rate = 0;
+        if(!rateString.equals("No rate")) {
+            rate = Integer.parseInt(rateString);
+        }
+        JdbcUserRates userRates = new JdbcUserRates();
+        userRates.deleteOfUser(UserManager.getLoggedUser().getUserId());
+        userRates.add(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId(), rate);
+        vBoxComment.getChildren().remove(listView);
+        initialize();
     }
 
 
