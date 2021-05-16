@@ -58,7 +58,9 @@ public class LoginController {
         //Set logged user and open mainWindow
         UserManager.setLoggedUser(user);
         logger.info("User " + user.getName() + " has logged in");
+
         App.changeScene(loginAnchorPane, "mainWindow");
+        loginAnchorPane.getStylesheets().add("style/style.css");
     }
 
     /**

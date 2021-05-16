@@ -3,22 +3,27 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainAnchorPane" prefHeight="734.0" prefWidth="658.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileListController">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="734.0" prefWidth="658.0" style="-fx-background-color: #222222;" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileListController">
    <children>
-      <Text layoutX="204.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User list" textAlignment="CENTER" wrappingWidth="250.13671875">
-         <font>
-            <Font size="41.0" />
-         </font>
-      </Text>
-      <VBox fx:id="vBoxList" layoutX="57.0" layoutY="191.0" prefHeight="529.0" prefWidth="544.0" />
-      <Button layoutX="39.0" layoutY="30.0" mnemonicParsing="false" onAction="#previous" prefHeight="55.0" prefWidth="79.0" text="Return" />
-      <TextField fx:id="usernameTextField" layoutX="79.0" layoutY="134.0" prefHeight="25.0" prefWidth="282.0" promptText="Write username" />
-      <Button layoutX="373.0" layoutY="134.0" mnemonicParsing="false" onAction="#searchByName" text="Search" />
-      <Button layoutX="482.0" layoutY="45.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="42.0" prefWidth="99.0" text="Delete" />
-      <Button fx:id="promoteButton" layoutX="482.0" layoutY="92.0" mnemonicParsing="false" onAction="#promoteUser" prefHeight="42.0" prefWidth="99.0" text="Promote" />
+      <VBox fx:id="vBoxList" layoutX="57.0" layoutY="191.0" prefHeight="452.0" prefWidth="544.0" />
+      <TextField fx:id="usernameTextField" layoutX="79.0" layoutY="134.0" prefHeight="25.0" prefWidth="282.0" promptText="Write username" styleClass="button-pro" />
+      <Button layoutX="373.0" layoutY="134.0" mnemonicParsing="false" onAction="#searchByName" style="-fx-base: #444444;" styleClass="button-pro" text="Search" />
+      <Button layoutX="482.0" layoutY="91.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="36.0" prefWidth="99.0" style="-fx-base: brown;" styleClass="button-pro" text="Delete" />
+      <Button fx:id="promoteButton" layoutX="482.0" layoutY="141.0" mnemonicParsing="false" onAction="#promoteUser" prefHeight="36.0" prefWidth="99.0" style="-fx-base: brown;" styleClass="button-pro" text="Promote" />
+      <Button layoutX="51.0" layoutY="673.0" mnemonicParsing="false" onAction="#previous" prefHeight="36.0" prefWidth="90.0" style="-fx-base: brown;" styleClass="button-pro" text="Return" />
+      <HBox alignment="CENTER" layoutY="-3.0" prefHeight="74.0" prefWidth="658.0" style="-fx-background-color: #444444;">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="User list" textAlignment="CENTER" wrappingWidth="250.13671875">
+               <font>
+                  <Font name="Monospaced Regular" size="33.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

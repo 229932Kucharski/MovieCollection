@@ -1,5 +1,5 @@
 package app;
-
+import javafx.scene.image.Image;
 import manager.DatabaseManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -75,9 +76,15 @@ public class App extends Application{
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource("/fxml/loginWindow.fxml"));
         AnchorPane anchorPane = loader.load();
+
         Scene scene = new Scene(anchorPane);
+
+        scene.getStylesheets().add("style/style.css");
         stage.setScene(scene);
-        stage.setTitle("Sign in");
+        stage.getIcons().add(new Image("/img/cam.png"));
+        stage.setTitle("MOVIECOLLECTION");
+        stage.setResizable(false);
+        //stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
 
@@ -97,15 +104,11 @@ public class App extends Application{
         }
         catch (IOException e) {
             logger.error("Cant load new window.");
-            restartApplication(null);
+           // restartApplication(null);
             e.printStackTrace();
         }
     }
 
-    /**
-     * Method showing pop up window to restart application
-     * @param message   message to display
-     */
     public static void restartApplication(String message) {
         if (message == null) {
             message = "Please start application again";

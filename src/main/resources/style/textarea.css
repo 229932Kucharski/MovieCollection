@@ -1,12 +1,18 @@
 .text-area{
-    -fx-background-color: #fff, #fff;
+    -fx-prompt-text-fill: gray;
+    -fx-background-color: #444444, #444444;
+    -fx-text-fill: white;
+    -fx-border-color: grey;
     -fx-opacity: 1;
+
 }
 
 .text-area .content {
-    -fx-background-color: #fff;
+    -fx-background-color: #444444;
+    -fx-font-family: monospace;
 }
 
 .text-area:focused .content {
-    -fx-background-color: #fff;
+    -fx-background-color: #444444;
+
 }

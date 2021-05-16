@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -100,6 +101,8 @@ public class ProfileController {
      */
     public void deleteAccount() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ((Stage) alert.getDialogPane().getScene()
+                .getWindow()).getIcons().add(new Image("/img/cam.png"));
         alert.setTitle("Delete account");
         alert.setContentText("Do you want to delete you account?");
         ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);

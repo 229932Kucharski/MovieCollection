@@ -8,58 +8,65 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="mainAnchorPane" prefHeight="788.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FilmController">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="854.0" prefWidth="729.0" style="-fx-background-color: #222222;" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FilmController">
    <children>
-      <Button fx:id="deleteButton" layoutX="550.0" layoutY="21.0" mnemonicParsing="false" onAction="#deleteMovie" prefHeight="40.0" prefWidth="91.0" text="Delete" visible="false" />
-      <Button layoutX="37.0" layoutY="33.0" mnemonicParsing="false" onAction="#previous" text="Back" />
+      <Button fx:id="deleteButton" layoutX="272.0" layoutY="796.0" mnemonicParsing="false" onAction="#deleteMovie" prefHeight="30.0" prefWidth="114.0" style="-fx-base: brown;" styleClass="button-pro" text="Delete film" />
+      <Button layoutX="37.0" layoutY="796.0" mnemonicParsing="false" onAction="#previous" prefHeight="30.0" prefWidth="91.0" style="-fx-base: brown;" styleClass="button-pro" text="Back" />
       <Text layoutX="314.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <HBox layoutX="265.0" layoutY="177.0" prefHeight="145.0" prefWidth="359.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="92.0" spacing="4.0">
+            <VBox prefHeight="200.0" prefWidth="92.0" spacing="4.0" styleClass="text-id2">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Director:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Genre:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Country:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Release date:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time duration:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Age restriction:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Users rate:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Title:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Director:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Genre:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Country:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Release date:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Time duration:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Age restriction:" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="User rate:" />
                </children>
             </VBox>
             <VBox prefHeight="200.0" prefWidth="269.0" spacing="4.0">
                <children>
-                  <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="272.0" />
-                  <Text fx:id="directorText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="273.0" />
-                  <Text fx:id="genreText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="276.0" />
-                  <Text fx:id="countryText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="276.0" />
-                  <Text fx:id="releaseDateText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="276.0" />
-                  <Text fx:id="timeText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="276.0" />
-                  <Text fx:id="ageText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="277.0" />
-                  <Text fx:id="rateText" strokeType="OUTSIDE" strokeWidth="0.0" />
+                  <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="272.0" />
+                  <Text fx:id="directorText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="273.0" />
+                  <Text fx:id="genreText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="276.0" />
+                  <Text fx:id="countryText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="276.0" />
+                  <Text fx:id="releaseDateText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="276.0" />
+                  <Text fx:id="timeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="276.0" />
+                  <Text fx:id="ageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="277.0" />
+                  <Text fx:id="rateText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" />
                </children>
             </VBox>
          </children>
       </HBox>
       <ImageView fx:id="coverImage" fitHeight="272.0" fitWidth="220.0" layoutX="37.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true" />
-      <TextArea fx:id="descriptionText" disable="true" layoutX="265.0" layoutY="74.0" prefHeight="96.0" prefWidth="342.0" stylesheets="@../style/textarea.css" wrapText="true" />
-      <HBox layoutX="138.0" layoutY="369.0" prefHeight="30.0" prefWidth="348.0" spacing="10.0">
+      <TextArea fx:id="descriptionText" disable="true" layoutX="265.0" layoutY="74.0" prefHeight="96.0" prefWidth="342.0" style="-fx-control-inner-background: #444444;" stylesheets="@../style/textarea.css" wrapText="true">
+         <font>
+            <Font name="Monospaced Regular" size="12.0" />
+         </font></TextArea>
+      <HBox alignment="CENTER" layoutX="138.0" layoutY="369.0" prefHeight="30.0" prefWidth="377.0" spacing="10.0">
          <children>
             <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Give a rate" wrappingWidth="66.4609375" />
-            <ChoiceBox fx:id="rateChoiceBox" prefWidth="150.0" />
-            <Button mnemonicParsing="false" onAction="#giveRate" text="Submit" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Average note:" />
+            <ChoiceBox fx:id="rateChoiceBox" prefHeight="23.0" prefWidth="68.0" style="-fx-base: brown;" styleClass="button-pro" />
+            <Button mnemonicParsing="false" style="-fx-base: brown;" styleClass="button-pro" text="Submit" />
          </children>
       </HBox>
-      <TextArea fx:id="commentTextArea" layoutX="107.0" layoutY="431.0" prefHeight="56.0" prefWidth="329.0" wrapText="true" />
-      <Button fx:id="addCommentButton" layoutX="457.0" layoutY="431.0" mnemonicParsing="false" onAction="#addComment" text="Add Comment" />
-      <Label fx:id="charactersLeftLabel" layoutX="322.0" layoutY="487.0" prefHeight="17.0" prefWidth="114.0" />
-      <VBox fx:id="vBoxComment" layoutX="108.0" layoutY="534.0" prefHeight="233.0" prefWidth="442.0" stylesheets="@../style/textarea.css" />
-      <Text fx:id="commentsNumber" layoutX="110.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments (0)" />
-      <Button fx:id="deleteCommentButton" layoutX="445.0" layoutY="462.0" mnemonicParsing="false" onAction="#deleteComment" prefHeight="25.0" prefWidth="114.0" text="Delete Comment" visible="false" />
-      <Button fx:id="addFavouriteButton" layoutX="492.0" layoutY="21.0" mnemonicParsing="false" onAction="#addFavourite" prefHeight="40.0" prefWidth="114.0" text="Add to favourite" />
-      <Button fx:id="delFavouriteButton" layoutX="492.0" layoutY="21.0" mnemonicParsing="false" onAction="#delFavourite" prefHeight="40.0" prefWidth="114.0" text="Del from favourite" />
+      <TextArea fx:id="commentTextArea" layoutX="107.0" layoutY="431.0" prefHeight="56.0" prefWidth="329.0" style="-fx-base: black;" stylesheets="@../style/textarea.css" wrapText="true">
+         <font>
+            <Font name="Monospaced Regular" size="12.0" />
+         </font></TextArea>
+      <Button fx:id="addCommentButton" layoutX="454.0" layoutY="431.0" mnemonicParsing="false" onAction="#addComment" style="-fx-base: brown;" styleClass="button-pro" text="Add Comment" />
+      <Label fx:id="charactersLeftLabel" layoutX="322.0" layoutY="487.0" prefHeight="17.0" prefWidth="114.0" textFill="WHITE" />
+      <VBox fx:id="vBoxComment" layoutX="108.0" layoutY="534.0" prefHeight="233.0" prefWidth="442.0" />
+      <Text fx:id="commentsNumber" layoutX="110.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Comments (0)" />
+      <Button fx:id="deleteCommentButton" layoutX="451.0" layoutY="459.0" mnemonicParsing="false" onAction="#deleteComment" prefHeight="25.0" prefWidth="128.0" style="-fx-base: brown;" styleClass="button-pro" text="Delete Comment" visible="false" />
+      <Button fx:id="addFavouriteButton" layoutX="507.0" layoutY="797.0" mnemonicParsing="false" onAction="#addFavourite" prefHeight="30.0" prefWidth="157.0" style="-fx-base: brown;" styleClass="button-pro" text="Add to favourite" />
+      <Button fx:id="delFavouriteButton" layoutX="507.0" layoutY="796.0" mnemonicParsing="false" onAction="#delFavourite" prefHeight="30.0" prefWidth="157.0" style="-fx-base: brown;" styleClass="button-pro" text="Del from favourite" />
    </children>
 </AnchorPane>

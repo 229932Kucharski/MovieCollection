@@ -1,0 +1,83 @@
+
+#bgMain {
+    -fx-background-image: url("../img/cinema.jpg");
+    -fx-background-size: 100% 100%;
+}
+
+#profileAnchorPane {
+    -fx-background-image: url("../img/cinema.jpg");
+    -fx-background-size: 100% 100%;
+}
+.text-id {
+    -fx-text-fill: white;
+    -fx-fill: white;
+   -fx-font-family: "monospace";
+    -fx-font-size: 16px;
+}
+
+.text-id2 {
+    -fx-text-fill: white;
+    -fx-fill: white;
+    -fx-font-family: "monospace";
+    -fx-font-size: 14px;
+}
+.button-pro {
+    -fx-font-family: "monospace";
+    -fx-accent: brown;
+    -fx-focus-color: brown;
+}
+.list-view {
+    -fx-font-family: monospace;
+    -fx-fill: white;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: rgba(30,30,30,0.7);
+}
+.list-view .list-cell:odd:hover {
+
+    -fx-background-color: rgba(160,10,10,0.7);
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: rgba(60,60,60,0.7);
+}
+.list-view .list-cell:even:hover {
+    -fx-background-color: rgba(160,10,10,0.7);
+
+}
+#searcher {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+#searchImage {
+    -fx-background-image: url("../img/loupe.png");
+    -fx-background-size: 100% 100%;
+}
+#searchImage:hover {
+    -fx-background-size: 105%,105%;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+.root {
+    -fx-accent: brown;
+    -fx-focus-color: brown;
+}
+.text-area {
+    -fx-font-family: monospace;
+}
+.text-field {
+    -fx-prompt-text-fill: gray;
+    -fx-base:  rgba(0,0,0,0.6);
+    -fx-border-color: grey;
+    -fx-text-fill: white;
+    -fx-accent: brown;
+    -fx-focus-color: brown;
+}
+
+.scroll-bar  {
+    -fx-base: #333333;
+    -fx-accent: brown;
+    -fx-focus-color: brown;
+}

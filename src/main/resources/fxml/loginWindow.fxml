@@ -1,21 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="loginAnchorPane" prefHeight="557.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+<AnchorPane fx:id="loginAnchorPane" prefHeight="488.0" prefWidth="466.0" style="-fx-background-color: #222222;" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
-      <TextField fx:id="loginTextField" layoutX="163.0" layoutY="122.0" />
-      <Text layoutX="163.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" />
-      <Text layoutX="163.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" wrappingWidth="72.951171875" />
-      <ToggleButton layoutX="224.0" layoutY="240.0" mnemonicParsing="false" onAction="#login" prefHeight="52.0" prefWidth="88.0" text="Login" />
-      <ToggleButton layoutX="336.0" layoutY="457.0" mnemonicParsing="false" onAction="#signUp" prefHeight="52.0" prefWidth="88.0" text="Sign up" />
-      <Text layoutX="336.0" layoutY="447.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No account?" />
-      <PasswordField fx:id="passwordField" layoutX="161.0" layoutY="183.0" />
-      <Label fx:id="loginInfoLabel" layoutX="161.0" layoutY="217.0" prefHeight="17.0" prefWidth="149.0" />
+      <TextField fx:id="loginTextField" layoutX="127.0" layoutY="172.0" prefHeight="31.0" prefWidth="186.0" style="-fx-border-color: gray; -fx-base: rgba(0,0,0,0.6);" styleClass="text-id2">
+         <font>
+            <Font size="13.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.09" />
+         </effect></TextField>
+      <Text layoutX="127.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Login" />
+      <Text layoutX="127.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Password" wrappingWidth="72.951171875" />
+      <ToggleButton layoutX="220.0" layoutY="291.0" mnemonicParsing="false" onAction="#login" prefHeight="37.0" prefWidth="88.0" style="-fx-base: #881111;" styleClass="button-pro" text="Login" />
+      <ToggleButton layoutX="306.0" layoutY="406.0" mnemonicParsing="false" onAction="#signUp" prefHeight="37.0" prefWidth="88.0" style="-fx-base: #881111;" styleClass="button-pro" text="Sign up" />
+      <Text layoutX="304.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="No account?" />
+      <PasswordField fx:id="passwordField" layoutX="125.0" layoutY="233.0" prefHeight="31.0" prefWidth="186.0" style="-fx-border-color: gray; -fx-base: rgba(0,0,0,0.6);" styleClass="text-id2">
+         <font>
+            <Font size="13.0" />
+         </font></PasswordField>
+      <Label fx:id="loginInfoLabel" layoutX="125.0" layoutY="267.0" prefHeight="17.0" prefWidth="149.0" />
+      <Line endX="-100.0" endY="418.0" layoutX="132.0" layoutY="75.0" startX="-100.0" startY="-11.0" stroke="RED" strokeWidth="3.0" visible="false">
+         <effect>
+            <DropShadow color="#ff0e0e" height="23.6" radius="9.1675" width="15.07" />
+         </effect>
+      </Line>
+      <Line endX="-100.0" endY="418.0" layoutX="530.0" layoutY="75.0" startX="-100.0" startY="-11.0" stroke="RED" strokeWidth="3.0" visible="false">
+         <effect>
+            <DropShadow color="#ff0e0e" height="23.6" radius="9.1675" width="15.07" />
+         </effect>
+      </Line>
+      <Line endX="-108.5" endY="409.5" layoutX="141.0" layoutY="85.0" startX="289.5" startY="409.5" stroke="RED" strokeWidth="3.0" visible="false">
+         <effect>
+            <DropShadow color="#ff0e0e" height="32.13" radius="11.3" width="15.07" />
+         </effect>
+      </Line>
+      <HBox alignment="CENTER" prefHeight="63.0" prefWidth="466.0" spacing="20.0" style="-fx-background-color: #333333;">
+         <children>
+            <ImageView fitHeight="51.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/cam.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="-30.0" />
+               </HBox.margin>
+               <effect>
+                  <Glow level="0.0" />
+               </effect>
+            </ImageView>
+            <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="MOVIECOLLECTION">
+               <font>
+                  <Font name="Monospaced Bold" size="26.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

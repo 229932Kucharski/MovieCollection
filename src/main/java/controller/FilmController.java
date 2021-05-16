@@ -103,7 +103,7 @@ public class FilmController {
         genreText.setText(movie.getGenre().toString());
         countryText.setText(movie.getCountry());
         releaseDateText.setText(movie.getPremiereDate().toString());
-        timeText.setText(movie.getTimeDuration() + "min");
+        timeText.setText(movie.getTimeDuration() + " min");
         ageText.setText(movie.getAgeRestriction().toString());
         descriptionText.setText(movie.getDescription());
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -9,32 +10,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="profileAnchorPane" prefHeight="664.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
+<AnchorPane fx:id="profileAnchorPane" prefHeight="700.0" prefWidth="820.0" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfileController">
    <children>
-      <VBox layoutX="24.0" layoutY="105.0" prefHeight="125.0" prefWidth="330.0" spacing="6.0">
+      <VBox layoutX="89.0" layoutY="107.0" prefHeight="196.0" prefWidth="379.0" spacing="6.0">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Username: ">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Age:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="ageText" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -43,26 +30,12 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register date:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Age: ">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Text fx:id="registerDateText" strokeType="OUTSIDE" strokeWidth="0.0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="emailText" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <Text fx:id="ageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -71,45 +44,89 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Register date: ">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Text fx:id="phoneNumber" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <Text fx:id="registerDateText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#changePassword" text="Change password" />
-            <Button mnemonicParsing="false" onAction="#deleteAccount" text="Delete account" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Email: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="emailText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Phone number: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="phoneNumber" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" onAction="#changePassword" style="-fx-base: #444444;" styleClass="button-pro" text="Change password">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></Button>
+            <Button mnemonicParsing="false" onAction="#deleteAccount" style="-fx-base: #444444;" styleClass="button-pro" text="Delete account" />
          </children>
       </VBox>
-      <Text layoutX="24.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Favourite videos:">
+      <Text layoutX="89.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id" text="Favourite videos:">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <VBox fx:id="vBoxList" layoutX="24.0" layoutY="342.0" prefHeight="286.0" prefWidth="536.0" />
-      <Text layoutX="229.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your profile">
-         <font>
-            <Font size="26.0" />
-         </font>
-      </Text>
-      <VBox fx:id="passwordChangeVBox" layoutX="372.0" layoutY="105.0" prefHeight="242.0" prefWidth="196.0">
+      <VBox fx:id="vBoxList" layoutX="89.0" layoutY="344.0" prefHeight="297.0" prefWidth="637.0" style="-fx-background-color: rgba(128,128,128,0.8); -fx-border-color: black; -fx-border-width: 3; -fx-opacity: 0.95;" />
+      <VBox fx:id="passwordChangeVBox" layoutX="532.0" layoutY="122.0" prefHeight="213.0" prefWidth="196.0">
          <children>
-            <Label text="Old password:" />
-            <PasswordField fx:id="oldPassTexField" />
-            <Label text="New password:" />
-            <PasswordField fx:id="newPassTextField" />
-            <Label text="Repeat new password:" />
+            <Label prefHeight="26.0" prefWidth="132.0" styleClass="text-id2" text="Old password:" textFill="WHITE" />
+            <PasswordField fx:id="oldPassTexField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></PasswordField>
+            <Label styleClass="text-id2" text="New password:" textFill="WHITE" />
+            <PasswordField fx:id="newPassTextField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></PasswordField>
+            <Label styleClass="text-id2" text="Repeat new password:" textFill="WHITE" />
             <PasswordField fx:id="newPassRepTextField" />
-            <Button mnemonicParsing="false" onAction="#savePassword" text="Save password" />
+            <Button mnemonicParsing="false" onAction="#savePassword" style="-fx-base: #444444;" styleClass="button-pro" text="Save password">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin></Button>
             <Text fx:id="passwordWarning" strokeType="OUTSIDE" strokeWidth="0.0" />
          </children>
       </VBox>
-      <Button layoutX="31.0" layoutY="39.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <Button layoutX="24.0" layoutY="654.0" mnemonicParsing="false" onAction="#back" prefHeight="25.0" prefWidth="76.0" style="-fx-base: brown;" styleClass="button-pro" text="Back" />
+      <VBox alignment="CENTER" layoutY="-2.0" prefHeight="65.0" prefWidth="820.0" style="-fx-background-color: #333333;">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Your profile">
+               <font>
+                  <Font name="Monospaced Regular" size="26.0" />
+               </font>
+            </Text>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

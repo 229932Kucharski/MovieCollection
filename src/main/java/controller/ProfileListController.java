@@ -205,6 +205,7 @@ public class ProfileListController {
             date = new Text();
             premium = new Text();
             content = new HBox(id, name, email, date, premium);
+            content.setSpacing(10);
             content.setPrefHeight(50);
             content.setPadding(new Insets(20, 20, 20, 20));
             HBox.setHgrow(name, Priority.ALWAYS);
