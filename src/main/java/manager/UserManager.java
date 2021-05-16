@@ -1,8 +1,16 @@
 package manager;
 
+import controller.ProfileController;
 import model.account.user.PremiumAdult;
 import model.account.user.User;
+import model.dao.JdbcCommentDao;
+import model.dao.JdbcFavourite;
+import model.dao.JdbcUserDao;
+import model.dao.JdbcUserRates;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +22,7 @@ public class UserManager {
     private static User loggedUser;
     private static User pickedUser;
     private static List<User> users;
+    private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
 
     /**
      * Check if user has admin permission
@@ -63,6 +72,35 @@ public class UserManager {
             }
         }
         return tempUsers;
+    }
+
+    /**
+     * Method delete user from db. Param user can be null, then method takes logged user.
+     * @param user user that you want to delete. If null, take logged user.
+     */
+    public static void deleteUser(User user) {
+        if (user == null) {
+            user = getLoggedUser();
+            logout();
+        }
+        try(JdbcUserDao userDao = new JdbcUserDao()) {
+            try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+                commentDao.deleteCommentsOfUser(user.getUserId());
+            }
+            try(JdbcFavourite userFav = new JdbcFavourite()) {
+                userFav.deleteOfUser(user.getUserId());
+            }
+            try(JdbcUserRates userRates = new JdbcUserRates()) {
+                userRates.deleteOfUser(user.getUserId());
+            }
+            userDao.delete(user);
+            UserManager.setUsers(userDao.findAll());
+        } catch (SQLException e) {
+            logger.warn("Cant delete user");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

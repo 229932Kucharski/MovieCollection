@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -110,9 +109,8 @@ public class ProfileController {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
-                try(JdbcUserDao userDao = new JdbcUserDao()){
-                    UserManager.logout();
-                    userDao.delete(user);
+                try{
+                    UserManager.deleteUser(null);
                     logger.info("Account has been deleted");
                     Stage stage = (Stage) profileAnchorPane.getScene().getWindow();
                     stage.close();

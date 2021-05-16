@@ -3,7 +3,6 @@ package controller;
 import app.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -16,14 +15,12 @@ import manager.UserManager;
 import model.account.user.User;
 import model.dao.*;
 import model.movie.Comment;
-import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FilmController {
@@ -264,6 +261,9 @@ public class FilmController {
         delFavouriteButton.setVisible(false);
     }
 
+    /**
+     * Give rate to movie
+     */
     public void giveRate() throws Exception {
         String rateString = rateChoiceBox.getValue();
         int rate = 0;

@@ -20,6 +20,7 @@ import model.account.user.PremiumAdult;
 import model.account.user.User;
 import model.dao.JdbcCommentDao;
 import model.dao.JdbcUserDao;
+import model.dao.JdbcUserRates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,18 +104,7 @@ public class ProfileListController {
         if(UserManager.getPickedUser() == null) {
             return;
         }
-        try(JdbcUserDao userDao = new JdbcUserDao()) {
-            try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
-                commentDao.deleteCommentsOfUser(UserManager.getPickedUser().getUserId());
-            }
-            userDao.delete(UserManager.getPickedUser());
-            UserManager.setUsers(userDao.findAll());
-        } catch (SQLException e) {
-            logger.warn("Cant delete user");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UserManager.deleteUser(UserManager.getPickedUser());
         vBoxList.getChildren().remove(listView);
         UserManager.setPickedUser(null);
         users = UserManager.getUsers();
