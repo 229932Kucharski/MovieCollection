@@ -203,8 +203,8 @@ public class FilmController {
         alert.getButtonTypes().setAll(okButton, noButton);
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
-                try(JdbcMovieDao movieDao = new JdbcMovieDao()){
-                    movieDao.delete(MovieManager.getPickedMovie());
+                try{
+                    MovieManager.deleteMovie();
                     MovieManager.setPickedMovie(null);
                     logger.info("Movie has been deleted");
                     Stage stage = (Stage) mainAnchorPane.getScene().getWindow();

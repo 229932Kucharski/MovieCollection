@@ -2,9 +2,7 @@ package manager;
 
 import javafx.scene.image.Image;
 import model.account.user.User;
-import model.dao.JdbcFavourite;
-import model.dao.JdbcMovieDao;
-import model.dao.JdbcUserRates;
+import model.dao.*;
 import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
@@ -149,6 +147,27 @@ public class MovieManager {
         }
 
         return tempMovies;
+    }
+
+    public static void deleteMovie() {
+        Movie movie = getPickedMovie();
+        try(JdbcMovieDao movieDao = new JdbcMovieDao()) {
+            try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+                commentDao.deleteCommentsFromMovie(movie.getId());
+            }
+            try(JdbcFavourite userFav = new JdbcFavourite()) {
+                userFav.deleteForMovie(movie.getId());
+            }
+            try(JdbcUserRates userRates = new JdbcUserRates()) {
+                userRates.deleteForMovie(movie.getId());
+            }
+            movieDao.delete(movie);
+        } catch (SQLException e) {
+            logger.warn("Cant delete movie");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

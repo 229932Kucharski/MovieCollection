@@ -59,6 +59,16 @@ public class JdbcUserRates implements AutoCloseable{
         }
     }
 
+    public void deleteForMovie(int movieId) throws SQLException {
+        String deleteRates ="DELETE FROM userRates WHERE videoId=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteRates)) {
+            preparedStatement.setInt(1, movieId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
     public int findRateForMovie(int userId, int movieId) throws SQLException {
         String getRate ="select * from userRates WHERE userid=? AND videoId=?";
         int rate = 0;

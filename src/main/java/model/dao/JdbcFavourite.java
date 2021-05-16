@@ -56,6 +56,16 @@ public class JdbcFavourite implements AutoCloseable{
         }
     }
 
+    public void deleteForMovie(int movieId) throws SQLException {
+        String deleteFav ="DELETE FROM favouriteVideo WHERE videoId=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteFav)) {
+            preparedStatement.setInt(1, movieId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
     public boolean isFavVideo(int userId, int movieId) throws SQLException {
         String isFav ="SELECT * FROM favouriteVideo WHERE userid=? AND videoId=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(isFav)) {
