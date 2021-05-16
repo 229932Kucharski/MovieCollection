@@ -1,6 +1,5 @@
 package manager;
 
-import controller.ProfileController;
 import model.account.user.PremiumAdult;
 import model.account.user.User;
 import model.dao.JdbcCommentDao;

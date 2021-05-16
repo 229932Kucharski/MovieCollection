@@ -68,7 +68,7 @@ public class AddFilmController {
         if(!checkForm()) {
             return;
         }
-        Movie movie = null;
+        Movie movie;
         if(time > 55) {
             movie = new FullLengthFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
         } else {
@@ -140,12 +140,15 @@ public class AddFilmController {
             return;
         }
         cover = ImageConverter.imageToByteArray(file.getAbsolutePath());
-//        ImageConverter.byteArrayToImage(0, cover);
-//        coverImage.setImage(new Image("/img/movieCover/0.jpg"));
+        ImageConverter.byteArrayToImage(0, cover);
+        File imageFile = new File("src/main/assets/img/movieCover/0.jpg");
+        Image image = new Image(imageFile.toURI().toString());
+        coverImage.setImage(image);
     }
 
     /**
      * Set warning if field is incorrect
+     * @param mess warning message
      */
     private void setWarning(String mess) {
         logger.warn(mess);
@@ -157,10 +160,6 @@ public class AddFilmController {
      * Return to mainWindow
      */
     public void previous() {
-        if(cover != null) {
-            App.restartApplication("Please restart application to apply changes");
-        } else {
-            App.changeScene(mainAnchorPane, "mainWindow");
-        }
+        App.changeScene(mainAnchorPane, "mainWindow");
     }
 }

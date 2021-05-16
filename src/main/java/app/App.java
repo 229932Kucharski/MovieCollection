@@ -5,9 +5,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -84,7 +81,6 @@ public class App extends Application{
         stage.getIcons().add(new Image("/img/cam.png"));
         stage.setTitle("MOVIECOLLECTION");
         stage.setResizable(false);
-        //stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
 
@@ -104,28 +100,7 @@ public class App extends Application{
         }
         catch (IOException e) {
             logger.error("Cant load new window.");
-           // restartApplication(null);
             e.printStackTrace();
         }
     }
-
-    public static void restartApplication(String message) {
-        if (message == null) {
-            message = "Please start application again";
-        }
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Restart application");
-        alert.setContentText(message);
-        ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.YES);
-        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-        alert.getButtonTypes().setAll(okButton, noButton);
-        alert.showAndWait().ifPresent(type -> {
-            if (type == okButton) {
-              System.exit(0);
-            } else {
-                alert.close();
-            }
-        });
-    }
-
 }

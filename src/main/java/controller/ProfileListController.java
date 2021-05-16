@@ -18,9 +18,7 @@ import model.account.user.Adult;
 import model.account.user.Kid;
 import model.account.user.PremiumAdult;
 import model.account.user.User;
-import model.dao.JdbcCommentDao;
 import model.dao.JdbcUserDao;
-import model.dao.JdbcUserRates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

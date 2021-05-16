@@ -9,12 +9,9 @@ import model.movie.Genres;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,17 +81,26 @@ public class MovieManager {
         }
     }
 
+    /**
+     * Check if picked movie is add to user favourite list
+     */
     public static boolean isMovieFav(User user) throws SQLException {
         JdbcFavourite jdbcFavourite = new JdbcFavourite();
-        return jdbcFavourite.isFavVideo(UserManager.getLoggedUser().getUserId(),
+        return jdbcFavourite.isFavVideo(user.getUserId(),
                 MovieManager.getPickedMovie().getId());
     }
 
+    /**
+     * Check user rate for movie
+     */
     public static int getUserRate(User user) throws SQLException {
         JdbcUserRates userRates = new JdbcUserRates();
         return userRates.findRateForMovie(user.getUserId(), pickedMovie.getId());
     }
 
+    /**
+     * Get average rate for movie
+     */
     public static double getAvgRate() throws SQLException {
         JdbcUserRates userRates = new JdbcUserRates();
         List<Integer> rates = userRates.getRatesForMovie(pickedMovie.getId());
