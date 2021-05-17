@@ -1,20 +1,18 @@
 package controller;
 
 import app.App;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import manager.UserManager;
 import model.account.user.Adult;
 import model.account.user.Kid;
 import model.account.user.User;
-import model.dao.JdbcUserDao;
 import model.exception.AgeException;
 import model.exception.EmailException;
 import model.exception.PasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -103,11 +101,9 @@ public class SignUpController {
      * Sign up new user
      */
     public void signUp() {
-
         if(!checkForm()) {
             return;
         }
-
         String login = loginTextField.getText();
         String pass = passwordField.getText();
         String email = emailTextField.getText();
@@ -119,16 +115,7 @@ public class SignUpController {
         }
         LocalDate dateOfBirth = dateDatePicker.getValue();
         String phoneNum = phoneNumber.getText();
-
-        User user = null;
-        try (JdbcUserDao userDao = new JdbcUserDao()) {
-            user = userDao.findByName(login);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (user != null) {
+        if (!UserManager.isLoginAvailable(login)) {
             loginWarning.setText("Login already in use");
             return;
         }
@@ -163,13 +150,7 @@ public class SignUpController {
                 return;
             }
         }
-        try (JdbcUserDao userDao = new JdbcUserDao()) {
-            logger.info("Adding new user");
-            userDao.add(newUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("Cant add new user");
-        }
+        UserManager.signUpUser(newUser);
 
         App.changeScene(signUpAnchorPane, "loginWindow");
     }

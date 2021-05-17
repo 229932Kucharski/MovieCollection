@@ -30,10 +30,6 @@ public abstract class Video {
         setAgeRestriction(ageRestriction);
     }
 
-
-    public void deleteComment(Integer id) {
-    }
-
     public void addComment(Comment comment) {
         comments.add(0, comment);
     }
@@ -135,10 +131,6 @@ public abstract class Video {
             throw new IllegalArgumentException("Podano nieprawidłowe ograniczenie wiekowe");
         }
         this.ageRestriction = ageRestriction;
-    }
-    //TO DO
-    public void updateRate() {
-
     }
 
     @Override

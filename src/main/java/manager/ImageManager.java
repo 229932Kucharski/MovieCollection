@@ -1,4 +1,7 @@
-package model.movie;
+package manager;
+
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -7,7 +10,30 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageConverter {
+public class ImageManager {
+
+    /**
+     * Read file .jpg from file and convert it to byte array
+     * @return image in byte array
+     */
+    public static byte[] chooseCoverFromFile() throws IOException {
+        byte[] cover;
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image Files", "jpg", "jpeg");
+        fileChooser.setSelectedExtensionFilter(filter);
+        fileChooser.setTitle("Choose a cover (.jpg)");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+        );
+        File file = fileChooser.showOpenDialog(null);
+        if (file == null) {
+            return null;
+        }
+        cover = ImageManager.imageToByteArray(file.getAbsolutePath());
+        byteArrayToImage(0, cover);
+
+        return cover;
+    }
 
     /**
      * Convert image to byte array

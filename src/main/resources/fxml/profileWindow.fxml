@@ -115,7 +115,7 @@
                <VBox.margin>
                   <Insets top="15.0" />
                </VBox.margin></Button>
-            <Text fx:id="passwordWarning" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Label fx:id="passwordWarning" prefHeight="17.0" prefWidth="188.0" />
          </children>
       </VBox>
       <Button layoutX="24.0" layoutY="654.0" mnemonicParsing="false" onAction="#back" prefHeight="25.0" prefWidth="76.0" style="-fx-base: brown;" styleClass="button-pro" text="Back" />

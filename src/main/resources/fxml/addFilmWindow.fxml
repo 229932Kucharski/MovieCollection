@@ -42,7 +42,7 @@
       <Text layoutX="452.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Average rate" wrappingWidth="117.0" />
       <Text layoutX="452.0" layoutY="492.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Age restriction" wrappingWidth="135.0" />
       <Text layoutX="452.0" layoutY="550.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Time duration" wrappingWidth="117.0" />
-      <Label fx:id="warnMessage" layoutX="443.0" layoutY="642.0" prefHeight="17.0" prefWidth="98.0" />
+      <Label fx:id="warnMessage" layoutX="443.0" layoutY="642.0" prefHeight="43.0" prefWidth="152.0" />
       <HBox alignment="CENTER" prefHeight="66.0" prefWidth="629.0" style="-fx-background-color: #444444;">
          <children>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Add new film" textAlignment="CENTER" wrappingWidth="392.08984375">

@@ -16,9 +16,9 @@ import manager.UserManager;
 import model.account.password.PasswordHashing;
 import model.account.user.Adult;
 import model.account.user.User;
-import model.dao.JdbcFavourite;
+import model.dao.JdbcUserFav;
 import model.dao.JdbcUserDao;
-import model.movie.ImageConverter;
+import manager.ImageManager;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class ProfileController {
     public PasswordField oldPassTexField;
     public PasswordField newPassTextField;
     public PasswordField newPassRepTextField;
-    public Text passwordWarning;
+    public Label passwordWarning;
     public VBox vBoxList;
     public ListView<CustomRow> listView;
 
@@ -67,8 +67,8 @@ public class ProfileController {
         }
 
         //Get all favourite movies
-        try (JdbcFavourite jdbcFavourite = new JdbcFavourite()){
-            movies = jdbcFavourite.getAllFavVideo(UserManager.getLoggedUser().getUserId());
+        try (JdbcUserFav jdbcUserFav = new JdbcUserFav()){
+            movies = jdbcUserFav.getAllFavVideo(UserManager.getLoggedUser().getUserId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class ProfileController {
         listView.setEditable(true);
         for(Movie movie : movies) {
             if(movie.getCover() != null) {
-                ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+                ImageManager.byteArrayToImage(movie.getId(), movie.getCover());
             }
             movieList.add(new CustomRow(MovieManager.getImage(movie), movie.getTitle(), movie.getGenre().toString()));
         }
@@ -152,18 +152,10 @@ public class ProfileController {
             return;
         }
 
-        //Set new password
-        user.setPassword(newPassTextField.getText());
-        try {
-            JdbcUserDao userDao = new JdbcUserDao();
-            userDao.update(user);
-        } catch (SQLException e) {
-            logger.warn("Cant change password");
-            e.printStackTrace();
-        }
-
+        UserManager.changePassword(newPassTextField.getText());
         logger.info("User " + user.getName() + " changed password");
         setPasswordWarning("Password has been changed");
+        passwordWarning.setStyle("-fx-text-fill: green");
     }
 
     /**

@@ -1,10 +1,6 @@
 package model.dao;
 
-import model.movie.Comment;
-import model.movie.Movie;
-
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

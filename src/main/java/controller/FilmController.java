@@ -166,30 +166,12 @@ public class FilmController {
      */
     public void addComment() {
         String content = commentTextArea.getText();
-        if(content.equals("")) {
-            return;
-        }
-        int movieId = MovieManager.getPickedMovie().getId();
-        int userId = UserManager.getLoggedUser().getUserId();
-        Comment comment = new Comment(1, userId, movieId, content, LocalDate.now());
-        try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
-            commentDao.add(comment);
-        } catch (Exception e) {
-            logger.warn("Cant insert comment to database");
-        }
+        MovieManager.addComment(content);
         commentTextArea.setText("");
-        MovieManager.getPickedMovie().addComment(comment);
         vBoxComment.getChildren().remove(listView);
         addCommentsToListView();
     }
 
-    /**
-     * Return to mainWindow page
-     */
-    public void previous() {
-        MovieManager.setPickedMovie(null);
-        App.changeScene(mainAnchorPane, "mainWindow");
-    }
 
     /**
      * Delete movie
@@ -223,14 +205,8 @@ public class FilmController {
      * Delete comment (only for admin)
      */
     public void deleteComment() {
-        try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
-            commentDao.delete(commentDao.findById(MovieManager.getPickedComment()));
-            deleteCommentButton.setDisable(true);
-        } catch (SQLException e) {
-            logger.warn("Cant delete comment");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MovieManager.deleteComment();
+        deleteCommentButton.setDisable(true);
         vBoxComment.getChildren().remove(listView);
         addCommentsToListView();
     }
@@ -239,11 +215,7 @@ public class FilmController {
      * Add movie to favourite
      */
     public void addFavourite() {
-        try(JdbcFavourite jdbcFavourite = new JdbcFavourite()) {
-            jdbcFavourite.add(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MovieManager.addToFavourite();
         addFavouriteButton.setVisible(false);
         delFavouriteButton.setVisible(true);
     }
@@ -252,11 +224,7 @@ public class FilmController {
      * Delete movie from favourite
      */
     public void delFavourite() {
-        try(JdbcFavourite jdbcFavourite = new JdbcFavourite()) {
-            jdbcFavourite.delete(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MovieManager.delFromFavourite();
         addFavouriteButton.setVisible(true);
         delFavouriteButton.setVisible(false);
     }
@@ -270,13 +238,18 @@ public class FilmController {
         if(!rateString.equals("No rate")) {
             rate = Integer.parseInt(rateString);
         }
-        JdbcUserRates userRates = new JdbcUserRates();
-        userRates.deleteOfUser(UserManager.getLoggedUser().getUserId());
-        userRates.add(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId(), rate);
+        MovieManager.rateMovie(rate);
         vBoxComment.getChildren().remove(listView);
         initialize();
     }
 
+    /**
+     * Return to mainWindow page
+     */
+    public void previous() {
+        MovieManager.setPickedMovie(null);
+        App.changeScene(mainAnchorPane, "mainWindow");
+    }
 
     /**
      * Class of custom row displayed on listview

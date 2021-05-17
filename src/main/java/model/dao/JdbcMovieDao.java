@@ -1,5 +1,6 @@
 package model.dao;
 
+import manager.ImageManager;
 import model.movie.*;
 
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class JdbcMovieDao implements Dao<Movie>{
     public void update(Movie obj) throws SQLException {
         String deleteUser ="UPDATE movie SET cover = ? WHERE movieId = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUser)) {
-            preparedStatement.setBytes(1, ImageConverter.imageToByteArray(obj.getId()));
+            preparedStatement.setBytes(1, ImageManager.imageToByteArray(obj.getId()));
             preparedStatement.setInt(2, obj.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException | IOException e) {

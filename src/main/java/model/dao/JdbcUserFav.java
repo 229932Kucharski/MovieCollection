@@ -6,14 +6,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcFavourite implements AutoCloseable{
+public class JdbcUserFav implements AutoCloseable{
 
     private final String url = "jdbc:sqlserver://localhost;databaseName=movieCollection";
     private final String username = "sa";
     private final String password = "qwerty";
     private final Connection connection;
 
-    public JdbcFavourite() throws SQLException {
+    public JdbcUserFav() throws SQLException {
         connection = prepareConnection();
     }
 

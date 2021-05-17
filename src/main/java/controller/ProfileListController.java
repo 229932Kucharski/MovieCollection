@@ -117,17 +117,7 @@ public class ProfileListController {
             return;
         }
         Adult user = (Adult) UserManager.getPickedUser();
-        PremiumAdult premiumAdult = new PremiumAdult(user.getUserId(), user.getName(), user.getPassword(),
-                user.getRegisterDate(), user.getEmail(), user.getGender(), user.getBirthDate(), user.getPhoneNumber());
-        try(JdbcUserDao userDao = new JdbcUserDao()){
-            userDao.update(premiumAdult);
-            UserManager.setUsers(userDao.findAll());
-        } catch (SQLException e) {
-            logger.warn("Cant promote user");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        UserManager.promoteUser(user);
         vBoxList.getChildren().remove(listView);
         UserManager.setPickedUser(null);
         users = UserManager.getUsers();

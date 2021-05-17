@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import manager.ImageManager;
+import manager.MovieManager;
 import model.dao.JdbcMovieDao;
 import model.movie.*;
 import org.slf4j.Logger;
@@ -50,7 +52,6 @@ public class AddFilmController {
     /**
      * Method for initializing addFilmWindow
      */
-    @FXML
     public void initialize() {
         coverImage.setFitWidth(150);
         coverImage.setImage(new Image("/img/noCover.jpg"));
@@ -63,25 +64,11 @@ public class AddFilmController {
     /**
      * Method create movie and add movie to database
      */
-    @FXML
     public void addFilm() {
         if(!checkForm()) {
             return;
         }
-        Movie movie;
-        if(time > 55) {
-            movie = new FullLengthFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
-        } else {
-            movie = new ShortFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
-        }
-        try(JdbcMovieDao movieDao = new JdbcMovieDao()) {
-            movieDao.add(movie);
-        } catch (SQLException e) {
-            logger.warn("Cant add movie");
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MovieManager.addMovie(0, title, country, genre, director, cover, date, description, rate, age, time);
         App.changeScene(mainAnchorPane, "mainWindow");
     }
 
@@ -94,10 +81,18 @@ public class AddFilmController {
         director = directorTextField.getText();
         date = premiereDatePicker.getValue();
         description = descriptionTextArea.getText();
-        rate = Double.valueOf(avgRateTextField.getText().replace(',', '.'));
-        age = Integer.valueOf(ageTextField.getText());
-        time = Integer.valueOf(timeTextField.getText());
-        genre = Genres.valueOf(genreChoiceBox.getValue());
+
+        if(!timeTextField.getText().equals("")) {
+            time = Integer.valueOf(timeTextField.getText());
+        } else {
+            time = 0;
+        }
+        if(!avgRateTextField.getText().equals("")) {
+            rate = Double.valueOf(avgRateTextField.getText().replace(',', '.'));
+        }
+        if(!ageTextField.getText().equals("")) {
+            age = Integer.valueOf(ageTextField.getText());
+        }
 
         if(title.equals("") || title.length() > 50) {
             setWarning("Wrong title");
@@ -121,6 +116,14 @@ public class AddFilmController {
             setWarning("Time duration cant be lower than 0");
             return false;
         }
+        else if (avgRateTextField.getText().equals("") || rate < 0 || rate > 10) {
+            setWarning("Wrong rate");
+            return false;
+        } else if (ageTextField.getText().equals("")) {
+            setWarning("Wrong age restriction");
+            return false;
+        }
+        genre = Genres.valueOf(genreChoiceBox.getValue());
         return true;
     }
 
@@ -129,18 +132,10 @@ public class AddFilmController {
      */
     @FXML
     public void chooseCover() throws IOException {
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image Files", "jpg", "jpeg");
-        fileChooser.setSelectedExtensionFilter(filter);
-        fileChooser.setTitle("Choose a cover (.jpg)");
-        fileChooser.setInitialDirectory(
-                new File(System.getProperty("user.home"))
-        );
-        File file = fileChooser.showOpenDialog(null);
-        if (file == null) {
+        cover = ImageManager.chooseCoverFromFile();
+        if(cover == null) {
             return;
         }
-        cover = ImageConverter.imageToByteArray(file.getAbsolutePath());
-        ImageConverter.byteArrayToImage(0, cover);
         File imageFile = new File("src/main/assets/img/movieCover/0.jpg");
         Image image = new Image(imageFile.toURI().toString());
         coverImage.setImage(image);

@@ -6,14 +6,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import manager.UserManager;
-import model.account.password.PasswordHashing;
-import model.account.user.User;
-import model.dao.JdbcUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.util.Arrays;
 
 
 public class LoginController {
@@ -30,34 +24,11 @@ public class LoginController {
     public void login() {
         String login = loginTextField.getText();
         String password = passwordField.getText();
-
         //Check if fields are not empty
-        if(login.equals("") || password.equals("")) {
+        if(login.equals("") || password.equals("") || !UserManager.loginUser(login, password)) {
             setLoginWarning("Login or password incorrect");
             return;
         }
-        User user;
-        //Check if user login exist in database
-        try(JdbcUserDao userDao = new JdbcUserDao()) {
-            user = userDao.findByName(login);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            setLoginWarning("Login or password incorrect");
-            return;
-        } catch (Exception e) {
-            e.printStackTrace();
-            setLoginWarning("Some error occured, please restart application");
-            return;
-        }
-        //Check if password is correct
-        if(user == null || !Arrays.equals(user.getPassword(), PasswordHashing.hashPassword(password))) {
-            setLoginWarning("Login or password incorrect");
-            return;
-        }
-
-        //Set logged user and open mainWindow
-        UserManager.setLoggedUser(user);
-        logger.info("User " + user.getName() + " has logged in");
 
         App.changeScene(loginAnchorPane, "mainWindow");
         loginAnchorPane.getStylesheets().add("style/style.css");

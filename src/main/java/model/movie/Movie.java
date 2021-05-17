@@ -18,8 +18,8 @@ public abstract class Movie extends Video {
     }
 
     public void setTimeDuration(Integer timeDuration) {
-        if(timeDuration <= 0) {
-            throw new IllegalArgumentException("Czas trwania filmu nie moe byc zerowy");
+        if(timeDuration < 0) {
+            throw new IllegalArgumentException("Czas trwania filmu nie moze byc mniejszy niz zero");
         }
         this.timeDuration = timeDuration;
     }

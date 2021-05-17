@@ -1,3 +1,6 @@
+.label {
+    -fx-font-family: "monospace";
+}
 
 #bgMain {
     -fx-background-image: url("../img/cinema.jpg");

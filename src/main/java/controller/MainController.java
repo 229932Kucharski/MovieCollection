@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import manager.MovieManager;
 import manager.UserManager;
 import model.movie.Genres;
-import model.movie.ImageConverter;
+import manager.ImageManager;
 import model.movie.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,6 @@ public class MainController {
         genreChoiceBox.setItems(genres);
         genreChoiceBox.setValue(Genres.All);
 
-
         MovieManager.setMovies();
         movies = MovieManager.getMovies();
         addMoviesToListView();
@@ -72,7 +71,7 @@ public class MainController {
         //save all covers to files
         for (Movie movie : movies) {
             if (movie.getCover() != null) {
-                ImageConverter.byteArrayToImage(movie.getId(), movie.getCover());
+                ImageManager.byteArrayToImage(movie.getId(), movie.getCover());
             }
         }
         //add movie to row and add it to listview
@@ -130,9 +129,10 @@ public class MainController {
      * Open new window (only admin) to add new film
      */
     public void addFilm() {
-        App.changeScene(mainAnchorPane, "addFilmWindow");
+        if(UserManager.isAdmin()) {
+            App.changeScene(mainAnchorPane, "addFilmWindow");
+        }
     }
-
 
     /**
      * Class of custom row displayed on listview

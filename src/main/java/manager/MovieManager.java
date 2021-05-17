@@ -3,12 +3,12 @@ package manager;
 import javafx.scene.image.Image;
 import model.account.user.User;
 import model.dao.*;
-import model.movie.Genres;
-import model.movie.Movie;
+import model.movie.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,45 +23,43 @@ public class MovieManager {
     private static List<Movie> movies;
 
     /**
-     * Get all movies
+     * Add movie
      */
-    public static List<Movie> getMovies() {
-        return movies;
+    public static void addMovie(int id, String title, String country, Genres genre, String director,
+                                byte[] cover, LocalDate date, String description, double rate,
+                                int age, int time) {
+        Movie movie;
+        if(time == 0 || time > 55) {
+            movie = new FullLengthFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
+        } else {
+            movie = new ShortFilm(0, title, country, genre, director, cover, date, description, rate, age, time);
+        }
+        try(JdbcMovieDao movieDao = new JdbcMovieDao()) {
+            movieDao.add(movie);
+        } catch (SQLException e) {
+            logger.warn("Cant add movie");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Get picked movie on listview
+     * Add comment to pickedMovie
      */
-    public static Movie getPickedMovie() {
-        return pickedMovie;
-    }
-
-    /**
-     * Get picked comment (admin feature)
-     */
-    public static int getPickedComment() {
-        return pickedComment;
-    }
-
-    /**
-     * Set picked comment (admin feature)
-     */
-    public static void setPickedComment(int pickedComment) {
-        MovieManager.pickedComment = pickedComment;
-    }
-
-    /**
-     * Set movies
-     */
-    public static void setMovies(List<Movie> movies) {
-        MovieManager.movies = movies;
-    }
-
-    /**
-     * Set picked movie
-     */
-    public static void setPickedMovie(Movie movie) {
-        MovieManager.pickedMovie = movie;
+    public static void addComment(String content) {
+        if(content.equals("")) {
+            return;
+        }
+        int movieId = MovieManager.getPickedMovie().getId();
+        int userId = UserManager.getLoggedUser().getUserId();
+        Comment comment = new Comment(1, userId, movieId, content, LocalDate.now());
+        try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+            commentDao.add(comment);
+        } catch (Exception e) {
+            logger.warn("Cant insert comment to database");
+        }
+        getPickedMovie().addComment(comment);
     }
 
     /**
@@ -83,8 +81,8 @@ public class MovieManager {
      * Check if picked movie is add to user favourite list
      */
     public static boolean isMovieFav(User user) throws SQLException {
-        JdbcFavourite jdbcFavourite = new JdbcFavourite();
-        return jdbcFavourite.isFavVideo(user.getUserId(),
+        JdbcUserFav jdbcUserFav = new JdbcUserFav();
+        return jdbcUserFav.isFavVideo(user.getUserId(),
                 MovieManager.getPickedMovie().getId());
     }
 
@@ -149,13 +147,16 @@ public class MovieManager {
         return tempMovies;
     }
 
+    /**
+     * Delete movie, comments, rates and favourite list
+     */
     public static void deleteMovie() {
         Movie movie = getPickedMovie();
         try(JdbcMovieDao movieDao = new JdbcMovieDao()) {
             try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
                 commentDao.deleteCommentsFromMovie(movie.getId());
             }
-            try(JdbcFavourite userFav = new JdbcFavourite()) {
+            try(JdbcUserFav userFav = new JdbcUserFav()) {
                 userFav.deleteForMovie(movie.getId());
             }
             try(JdbcUserRates userRates = new JdbcUserRates()) {
@@ -168,6 +169,59 @@ public class MovieManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Delete picked comment
+     */
+    public static void deleteComment() {
+        if(UserManager.isAdmin()) {
+            try(JdbcCommentDao commentDao = new JdbcCommentDao()) {
+                commentDao.delete(commentDao.findById(MovieManager.getPickedComment()));
+            } catch (SQLException e) {
+                logger.warn("Cant delete comment");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Add movie to logged user favourite list
+     */
+    public static void addToFavourite() {
+        try(JdbcUserFav jdbcUserFav = new JdbcUserFav()) {
+            jdbcUserFav.add(UserManager.getLoggedUser().getUserId(), getPickedMovie().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add movie to logged user favourite list
+     */
+    public static void delFromFavourite() {
+        try(JdbcUserFav jdbcUserFav = new JdbcUserFav()) {
+            jdbcUserFav.delete(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Rate movie
+     */
+    public static void rateMovie(int rate) {
+        try(JdbcUserRates userRates = new JdbcUserRates()) {
+            userRates.deleteOfUser(UserManager.getLoggedUser().getUserId());
+            userRates.add(UserManager.getLoggedUser().getUserId(), MovieManager.getPickedMovie().getId(), rate);
+        } catch (SQLException e) {
+            logger.warn("Cant rate movie");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -197,4 +251,47 @@ public class MovieManager {
             return new Image(imageFile.toURI().toString());
         }
     }
+
+    /**
+     * Get all movies
+     */
+    public static List<Movie> getMovies() {
+        return movies;
+    }
+
+    /**
+     * Get picked movie on listview
+     */
+    public static Movie getPickedMovie() {
+        return pickedMovie;
+    }
+
+    /**
+     * Get picked comment (admin feature)
+     */
+    public static int getPickedComment() {
+        return pickedComment;
+    }
+
+    /**
+     * Set picked comment (admin feature)
+     */
+    public static void setPickedComment(int pickedComment) {
+        MovieManager.pickedComment = pickedComment;
+    }
+
+    /**
+     * Set movies
+     */
+    public static void setMovies(List<Movie> movies) {
+        MovieManager.movies = movies;
+    }
+
+    /**
+     * Set picked movie
+     */
+    public static void setPickedMovie(Movie movie) {
+        MovieManager.pickedMovie = movie;
+    }
+
 }
