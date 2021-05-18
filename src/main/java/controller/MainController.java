@@ -9,6 +9,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import manager.MovieManager;
 import manager.UserManager;
@@ -183,7 +187,10 @@ public class MainController {
             super.updateItem(item, empty);
             if(item != null && !empty) {
                 title.setText(item.getTitle());
+                title.setFont(Font.font("monospaced", FontWeight.BOLD, 15));
+                //title.setFill(Color.WHITESMOKE);
                 genre.setText(item.getGenre());
+               // genre.setFill(Color.WHITESMOKE);
                 image.setImage(item.getImage());
                 image.setPreserveRatio(true);
                 image.setFitWidth(100);

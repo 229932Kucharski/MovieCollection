@@ -27,7 +27,7 @@
                      <font>
                         <Font name="Monospaced Regular" size="12.0" />
                      </font></TextField>
-                  <HBox id="searchImage" layoutX="591.0" layoutY="150.0" prefHeight="35.0" prefWidth="35.0" stylesheets="@../style/style.css">
+                  <HBox id="searchImage" layoutX="588.0" layoutY="120.0" prefHeight="35.0" prefWidth="35.0" stylesheets="@../style/style.css">
                      <children>
                         <ToggleButton id="searcher" mnemonicParsing="false" onAction="#search" prefHeight="60.0" prefWidth="60.0">
                            <effect>
@@ -39,7 +39,7 @@
                         <ColorAdjust brightness="-0.41" />
                      </effect>
                   </HBox>
-                  <VBox fx:id="vBoxList" layoutX="133.0" layoutY="228.0" prefHeight="353.0" prefWidth="573.0" style="-fx-background-color: rgba(100,100,100,0.8); -fx-opacity: 0.95;" />
+                  <VBox fx:id="vBoxList" layoutX="133.0" layoutY="230.0" prefHeight="351.0" prefWidth="573.0" style="-fx-background-color: rgba(100,100,100,0.8); -fx-opacity: 0.95; -fx-border-color: #444444; -fx-border-width: 5;" />
                   <Button fx:id="addFilmButton" layoutX="755.0" layoutY="91.0" mnemonicParsing="false" onAction="#addFilm" prefHeight="31.0" prefWidth="101.0" style="-fx-base: brown;" styleClass="button-pro" text="Add film" visible="false" />
                   <HBox alignment="CENTER" layoutX="-3.0" layoutY="-2.0" prefHeight="63.0" prefWidth="926.0" spacing="20.0" style="-fx-background-color: #333333;">
                      <children>
@@ -63,13 +63,8 @@
                         <Font name="Monospaced Regular" size="12.0" />
                      </font>
                   </Text>
-                  <ChoiceBox fx:id="genreChoiceBox" layoutX="133.0" layoutY="155.0" prefHeight="25.0" prefWidth="412.0" style="-fx-base: #444444;" styleClass="button-pro" />
-                  <TextField fx:id="yearTextField" layoutX="133.0" layoutY="190.0" prefHeight="27.0" prefWidth="409.0" promptText="Search by year" styleClass="button-pro" />
-                  <Text layoutX="133.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Search by genre">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Text>
+                  <ChoiceBox fx:id="genreChoiceBox" layoutX="134.0" layoutY="148.5" prefHeight="25.0" prefWidth="412.0" style="-fx-base: #444444;" styleClass="button-pro" />
+                  <TextField fx:id="yearTextField" layoutX="134.0" layoutY="185.0" prefHeight="27.0" prefWidth="119.0" promptText="Search by year" styleClass="button-pro" />
                </children>
             </AnchorPane>
         </content>

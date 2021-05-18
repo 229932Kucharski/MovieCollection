@@ -16,14 +16,19 @@
    <children>
       <Button fx:id="deleteButton" layoutX="272.0" layoutY="796.0" mnemonicParsing="false" onAction="#deleteMovie" prefHeight="30.0" prefWidth="114.0" style="-fx-base: brown;" styleClass="button-pro" text="Delete film" visible="false" />
       <Button layoutX="37.0" layoutY="796.0" mnemonicParsing="false" onAction="#previous" prefHeight="30.0" prefWidth="91.0" style="-fx-base: brown;" styleClass="button-pro" text="Back" />
-      <HBox layoutX="265.0" layoutY="177.0" prefHeight="145.0" prefWidth="359.0">
+      <HBox layoutX="265.0" layoutY="177.0" prefHeight="167.0" prefWidth="417.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="92.0" spacing="4.0" styleClass="text-id2">
+            <VBox prefHeight="164.0" prefWidth="136.0" spacing="4.0" styleClass="text-id2">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Title:" wrappingWidth="135.408203125">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Text>
+                  <VBox prefHeight="26.0" prefWidth="136.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Title:" wrappingWidth="135.408203125">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Director:" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Genre:" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Country:" />
@@ -35,10 +40,15 @@
             </VBox>
             <VBox prefHeight="164.0" prefWidth="277.0" spacing="4.0">
                <children>
-                  <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="281.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Text>
+                  <VBox prefHeight="26.0" prefWidth="281.0">
+                     <children>
+                        <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="281.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
                   <Text fx:id="directorText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="273.0" />
                   <Text fx:id="genreText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="276.0" />
                   <Text fx:id="countryText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" wrappingWidth="276.0" />
@@ -68,7 +78,7 @@
             <Font name="Monospaced Regular" size="12.0" />
          </font></TextArea>
       <Button fx:id="addCommentButton" layoutX="454.0" layoutY="431.0" mnemonicParsing="false" onAction="#addComment" style="-fx-base: brown;" styleClass="button-pro" text="Add Comment" />
-      <Label fx:id="charactersLeftLabel" layoutX="322.0" layoutY="487.0" prefHeight="17.0" prefWidth="114.0" textFill="WHITE" />
+      <Label fx:id="charactersLeftLabel" layoutX="292.0" layoutY="487.0" prefHeight="17.0" prefWidth="144.0" textFill="WHITE" />
       <VBox fx:id="vBoxComment" layoutX="108.0" layoutY="534.0" prefHeight="233.0" prefWidth="442.0" />
       <Text fx:id="commentsNumber" layoutX="110.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-id2" text="Comments (0)" />
       <Button fx:id="deleteCommentButton" layoutX="451.0" layoutY="459.0" mnemonicParsing="false" onAction="#deleteComment" prefHeight="25.0" prefWidth="128.0" style="-fx-base: brown;" styleClass="button-pro" text="Delete Comment" visible="false" />

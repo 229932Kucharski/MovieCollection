@@ -33,7 +33,7 @@
          <font>
             <Font size="13.0" />
          </font></PasswordField>
-      <Label fx:id="loginInfoLabel" layoutX="125.0" layoutY="267.0" prefHeight="17.0" prefWidth="149.0" />
+      <Label fx:id="loginInfoLabel" layoutX="125.0" layoutY="267.0" prefHeight="17.0" prefWidth="209.0" />
       <Line endX="-100.0" endY="418.0" layoutX="132.0" layoutY="75.0" startX="-100.0" startY="-11.0" stroke="RED" strokeWidth="3.0" visible="false">
          <effect>
             <DropShadow color="#ff0e0e" height="23.6" radius="9.1675" width="15.07" />
