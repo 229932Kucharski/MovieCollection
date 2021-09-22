@@ -11,14 +11,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import manager.ImageManager;
 import manager.MovieManager;
-import model.dao.JdbcMovieDao;
-import model.movie.*;
+import model.movie.Genres;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class AddFilmController {

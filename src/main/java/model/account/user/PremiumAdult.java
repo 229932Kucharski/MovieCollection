@@ -3,7 +3,9 @@ package model.account.user;
 import java.time.LocalDate;
 import java.util.Calendar;
 
-
+/**
+ * Premium adult can be created only by admin by promote method
+ */
 public class PremiumAdult extends Adult {
 
     public PremiumAdult(int id, String name, byte[] password, LocalDate regDate, String email, char gender, LocalDate birthDate, String phoneNumber) {

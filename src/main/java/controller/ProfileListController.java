@@ -39,6 +39,7 @@ public class ProfileListController {
      * Initializing window
      */
     public void initialize() {
+        promoteButton.setDisable(true);
         UserManager.setPickedUser(null);
         try (JdbcUserDao userDao = new JdbcUserDao()) {
             users = userDao.findAll();
