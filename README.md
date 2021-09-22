@@ -14,6 +14,8 @@ rate, comment or create movie favourite list
 * Maven
 * Junit 4
 * MsSql 9.2.1
+* CSS
+* Logback
 
 ## Demo
 
